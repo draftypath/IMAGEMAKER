@@ -601,6 +601,7 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
             BRUSH_MIN: 5,
             BRUSH_MAX: 250,
             HISTORY_LIMIT: 15,
+            DEBOUNCE_DELAY: 500, // Delay for debounced save in milliseconds
             availableFonts: [
                 { name: 'VT323', value: "'VT323', monospace" }, { name: 'Yomogi', value: "'Yomogi', cursive" },
                 { name: 'Young Serif', value: "'Young Serif', serif" }, { name: 'Times New Roman', value: "Times New Roman, serif" },
@@ -675,7 +676,11 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
         },
 
         injectNonCriticalStyles() {
-            const nonCriticalCSS = `textarea#text-content, #font-select-trigger span {color:var(--ink)}.window{position:relative;background:var(--light);border:1px solid var(--ink);box-shadow:2px 2px 0 var(--shadow);width:100%;max-width:1600px;margin:0 auto;height:calc(100vh - 20px);display:flex;flex-direction:column;overflow:hidden;transition:background-color .3s,border-color .3s,box-shadow .3s;border-radius:3px}.titlebar{height:28px;background:var(--mid);display:flex;align-items:center;justify-content:space-between;padding:0 8px;border-bottom:1px solid var(--ink);font-size:20px;flex-shrink:0;cursor:default;position:relative;transition:background-color .3s,border-color .3s}.titlebar-controls{display:flex;align-items:center;gap:8px}.controls-fake{display:flex;gap:4px}.btn-square{width:16px;height:16px;background:var(--light);border:1px solid var(--ink)}.controls-fake .btn-square:first-child{background-color:var(--success-color)}.controls-fake .btn-square:last-child{background-color:var(--danger-color)}#shortcuts-btn,#visuals-btn,#text-btn,#toggle-view-btn,#erase-tool-btn,#ai-tools-btn{font-family:inherit;font-size:1.1rem;background:var(--light);border:1px solid;border-color:var(--mid) var(--ink) var(--ink) var(--mid);padding:0 8px;cursor:pointer;transition:all .2s;color:var(--ink);border-radius:3px;transform:translateY(-1px)}#shortcuts-btn:hover,#visuals-btn:hover,#text-btn:hover,#toggle-view-btn:hover,#erase-tool-btn:hover,#ai-tools-btn:hover{transform:translateY(-2px);filter:brightness(1.1)}#shortcuts-btn:active,#visuals-btn:active,#text-btn:active,#toggle-view-btn:active,#erase-tool-btn:active,#ai-tools-btn:active,#erase-tool-btn.active{transform:translateY(0);border-color:var(--ink) var(--mid) var(--mid) var(--ink)}#toggle-view-btn{padding:0 4px;font-size:18px}#shortcuts-dropdown{right:8px}#shortcuts-dropdown.visible{display:block}#shortcuts-dropdown h5{margin:0 0 .5rem 0;font-size:1.25rem;text-align:center}#shortcuts-dropdown ul{margin:0;padding:0;list-style:none;font-size:1rem}#shortcuts-dropdown li{display:flex;justify-content:space-between;padding:2px 0}#shortcuts-dropdown li kbd{font-family:inherit;border:1px solid var(--ink);padding:0 4px;background:var(--bg)}#visuals-dropdown,#text-dropdown,#shortcuts-dropdown,#erase-tool-dropdown,#ai-tools-dropdown{display:none;position:absolute;top:28px;background:rgba(var(--light-rgb),.3);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);border:1px solid var(--ink);box-shadow:2px 2px 0 var(--shadow);padding:.5rem 1rem;z-index:100;width:250px;transition:background .2s,backdrop-filter .2s,box-shadow .2s,border-color .2s;border-radius:4px}#visuals-dropdown{right:382px}#erase-tool-dropdown{right:288px}#ai-tools-dropdown{right:198px}#text-dropdown{right:74px}#visuals-dropdown.visible,#text-dropdown.visible,#erase-tool-dropdown.visible,#ai-tools-dropdown.visible{display:block}#visuals-dropdown h5,#visuals-dropdown h6,#visuals-dropdown .slider-container,#text-dropdown h5,#text-dropdown h6,#text-dropdown .slider-container,#erase-tool-dropdown h5,#erase-tool-dropdown h6,#erase-tool-dropdown .eraser-mode-controls,#erase-tool-dropdown>.mg-btn,#ai-tools-dropdown h5{transition:opacity .2s}#visuals-dropdown h5,#text-dropdown h5,#erase-tool-dropdown h5,#ai-tools-dropdown h5{margin:0 0 .5rem 0;font-size:1.25rem;text-align:center}#visuals-dropdown h6,#text-dropdown h6,#erase-tool-dropdown h6{font-size:1.15rem;font-weight:700;text-align:left;margin-top:.5rem;margin-bottom:.5rem;border-bottom:1px solid var(--mid);padding-bottom:2px}#visuals-dropdown label,#text-dropdown label,#erase-tool-dropdown label{display:block;margin-top:.5rem;font-size:1rem}#visuals-dropdown.is-scrubbing,#text-dropdown.is-scrubbing,#erase-tool-dropdown.is-scrubbing{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:none;border-color:transparent}#visuals-dropdown.is-scrubbing>h5,#visuals-dropdown.is-scrubbing #visuals-tabs,#visuals-dropdown.is-scrubbing>div>div>h6,#visuals-dropdown.is-scrubbing .slider-container:not(.is-active-slider){opacity:0;pointer-events:none}#text-dropdown.is-scrubbing>h5,#text-dropdown.is-scrubbing #text-layer-manager,#text-dropdown.is-scrubbing .slider-container:not(.is-active-slider){opacity:0;pointer-events:none}#erase-tool-dropdown.is-scrubbing>h5,#erase-tool-dropdown.is-scrubbing .eraser-mode-selector,#erase-tool-dropdown.is-scrubbing #eraser-controls-wrapper>.slider-container:not(.is-active-slider){opacity:0;pointer-events:none}#visuals-dropdown.is-scrubbing .slider-container.is-active-slider,#text-dropdown.is-scrubbing .slider-container.is-active-slider,#erase-tool-dropdown.is-scrubbing .slider-container.is-active-slider{opacity:1;pointer-events:auto;transition:opacity .1s}#visuals-dropdown input[type=range],#text-dropdown input[type=range],#erase-tool-dropdown input[type=range],#mg-eraser-hud input[type=range]{width:100%;-webkit-appearance:none;appearance:none;height:2px;background:var(--ink);outline:0}#visuals-dropdown input[type=range]::-webkit-slider-thumb,#text-dropdown input[type=range]::-webkit-slider-thumb,#erase-tool-dropdown input[type=range]::-webkit-slider-thumb,#mg-eraser-hud input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;background:var(--ink);border-radius:50%;cursor:pointer}#visuals-dropdown input[type=range]::-moz-range-thumb,#text-dropdown input[type=range]::-moz-range-thumb,#erase-tool-dropdown input[type=range]::-moz-range-thumb,#mg-eraser-hud input[type=range]::-moz-range-thumb{width:16px;height:16px;background:var(--ink);border-radius:50%;cursor:pointer;border:none}#asset-visuals-controls.disabled,#text-visuals-controls.disabled,#eraser-controls-wrapper.disabled{opacity:.5;pointer-events:none}.mg-btn{font-family:inherit;font-size:18px;background:var(--light);border:1px solid;border-color:var(--mid) var(--ink) var(--ink) var(--mid);padding:8px 16px;margin:4px;cursor:pointer;text-decoration:none;color:var(--ink);transition:all .2s;transform:translateY(-2px);border-radius:3px}.mg-btn:hover{filter:brightness(1.1);transform:translateY(-3px)}.mg-btn:disabled,.mg-btn.disabled{opacity:.5;pointer-events:none;transform:none;border-color:var(--mid)}.mg-btn:active,.mg-btn.active{transform:translateY(0);border-color:var(--ink) var(--mid) var(--mid) var(--ink);background-color:var(--action-color);color:var(--light)}body[data-theme-is-dark=true] .mg-btn.active{color:var(--bg)}.mg-btn.success{background-color:var(--success-color)}.mg-btn.generate{background-color:var(--ink);color:var(--light)}.mg-btn.generate:active{background-color:var(--ink);color:var(--light)}.hidden{display:none!important}#studio-container{display:grid;grid-template-columns:320px 1fr;grid-template-rows:minmax(0,1fr);gap:1.5rem;padding:1.5rem;flex-grow:1;min-height:0}#controls-panel{display:flex;flex-direction:column;gap:1rem;overflow-y:auto;min-height:0}#canvas-panel{display:flex;align-items:center;justify-content:center;border:1px solid var(--ink);background-color:var(--mid);position:relative;min-height:0;transition:background-color .5s ease-in-out;overflow:hidden}#controls-panel fieldset{background:var(--light);border:1px solid var(--ink);padding:.8rem;margin:0;text-align:left;transition:background-color .3s,border-color .3s,color .3s,opacity .3s;border-radius:3px}#controls-panel legend{font-size:1.2rem;font-weight:400;padding:0 .5rem;margin-left:.5rem;background:var(--light)}.placeholder-text{color:var(--mid);font-size:1.1rem;text-align:center;padding:1rem;width:100%}body[data-theme-is-dark=true] #layer-instructions{color:var(--ink)}#mg-asset-palette,#mg-local-asset-palette,#mg-local-background-palette{display:flex;gap:.5rem;flex-wrap:wrap;min-height:70px;align-content:flex-start}.palette-slot,.layer-thumb{width:60px;height:60px;border:1px solid var(--ink);background:color-mix(in srgb, var(--light) 90%, var(--ink) 10%);cursor:pointer;position:relative;border-radius:3px;box-shadow:3px 3px 0 var(--ink);transform:translate(0,0);transition:transform .15s ease-out,box-shadow .15s ease-out}.palette-slot.empty{display:flex;align-items:center;justify-content:center;font-size:3rem;line-height:1;color:var(--mid)}.layer-thumb:hover,.palette-slot.empty:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink)}.layer-thumb.active{transform:translate(1px,1px);box-shadow:none;border:2px solid var(--action-color)}.layer-thumb{cursor:grab}.layer-thumb img{width:100%;height:100%;object-fit:cover;pointer-events:none}.layer-controls{position:absolute;top:-5px;right:-5px;display:flex;gap:2px}.layer-btn{background-color:var(--danger-color);border:1px solid var(--ink);color:#fff;font-size:.8rem;font-weight:700;line-height:1;padding:1px 4px;cursor:pointer;width:18px;height:18px;text-align:center}#mg-movie-canvas,#mg-controls-overlay-canvas,#mg-pasteboard-overlay-canvas{position:absolute}#mg-controls-overlay-canvas,#mg-pasteboard-overlay-canvas{pointer-events:none}#mg-movie-canvas{pointer-events:auto}#mg-asset-picker-actions{display:none}#mg-local-asset-grid,#mg-local-asset-grid-assets,#mg-local-asset-grid-backgrounds{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:1rem;overflow-y:auto;padding:1rem;flex-grow:1}.mg-template{position:relative;aspect-ratio:1/1;border:1px solid var(--mid);background-color:var(--bg);box-shadow:3px 3px 0 var(--ink);transition:transform .15s ease-out,box-shadow .15s ease-out;border-radius:3px}.mg-template:hover{transform:translate(-2px,-2px) scale(1.03);box-shadow:5px 5px 0 var(--ink)}.mg-template img{display:block;width:100%;height:100%;object-fit:cover;cursor:pointer}.mg-template .layer-btn.delete{position:absolute;top:4px;right:4px;z-index:5;width:22px;height:22px;font-size:1rem;display:flex;align-items:center;justify-content:center;border-radius:2px}.mg-btn.tab{color:var(--ink);opacity:.7;background:transparent;box-shadow:1px 1px 0 var(--shadow);transform:translateY(0);transition:transform .1s ease,box-shadow .1s ease,background-color .2s,opacity .2s}.mg-btn.tab:hover{opacity:1;transform:translateY(-1px);box-shadow:1px 1px 0 var(--shadow)}.mg-btn.tab.active{background-color:var(--mid);opacity:1;transform:translateY(1px);box-shadow:0 0 0 var(--shadow)}#mg-toast{visibility:hidden;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--light);border:1px solid var(--ink);padding:.5rem 1rem;color:var(--ink);font-size:1rem;z-index:2000;box-shadow:2px 2px 0 var(--shadow)}#canvas-placeholder{position:absolute;width:calc(100% - 20px);height:calc(100% - 20px);border:2px dashed var(--mid);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;cursor:pointer;color:var(--mid);transition:all .2s;padding:2rem;overflow:hidden;position:relative}#canvas-placeholder h3,#canvas-placeholder p{position:relative;z-index:2}#canvas-placeholder img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:1;opacity:.6}#canvas-placeholder h3{font-size:2.2rem;margin:0 0 .5rem}#canvas-placeholder p{font-size:1.3rem}#canvas-placeholder:hover,#canvas-panel.drag-over #canvas-placeholder{border-color:var(--ink);color:var(--ink);background-color:rgba(255,255,255,.5)}#canvas-panel.drag-over{background-color:var(--shadow)}#layer-instructions{padding:0 0 .5rem 0;margin:0;font-size:1.1rem}#mg-confirmation-overlay,#mg-asset-action-overlay{z-index:5000}#mg-confirmation-dialog,#mg-asset-action-dialog{padding:1.5rem;text-align:center;width:90%;max-width:400px;height:auto}#mg-confirmation-dialog p,#mg-asset-action-dialog p{font-size:1.2rem;margin:0 0 1.5rem}#mg-confirmation-dialog .action-buttons,#mg-asset-action-dialog .action-buttons{display:flex;justify-content:center;gap:.5rem}#text-content,#text-font{transition:background-color .3s,border-color .3s,color .3s}#text-layer-manager{display:flex;gap:.5rem;align-items:center;padding-bottom:.5rem;margin-bottom:.5rem;border-bottom:1px solid var(--mid)}#text-layer-palette{display:flex;gap:.5rem;flex-wrap:wrap;flex-grow:1;min-height:44px}#add-new-text-layer-btn{width:40px;height:40px;flex-shrink:0;font-size:2rem;line-height:1;padding:0}.text-thumb{width:60px;height:40px;display:flex;align-items:center;justify-content:center;overflow:hidden;background-color:var(--ink);color:var(--light);font-size:.8rem;padding:2px;text-align:center}.text-thumb span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none}.palette-slot.empty:disabled{opacity:.4;cursor:default;pointer-events:none;background-color:var(--light)}.palette-slot.empty:disabled:hover{background-color:var(--light);color:var(--mid)}#shortcuts-btn:disabled,#visuals-btn:disabled,#text-btn:disabled,#erase-tool-btn:disabled,#ai-tools-btn:disabled{opacity:.5;pointer-events:none;cursor:default}.layer-thumb.dragging{opacity:.4;transform:rotate(-3deg) scale(1.05);box-shadow:0 8px 20px rgba(0,0,0,.3);cursor:grabbing}.layer-thumb.drag-over{border:3px dashed var(--action-color);transform:scale(1.02);background-color:rgba(var(--action-color-rgb),.1)}#mg-pasteboard-overlay-canvas{position:absolute;pointer-events:none;display:none}#canvas-panel.is-zoomed-out{background-color:var(--shadow)}#mg-movie-canvas,#mg-controls-overlay-canvas,#mg-pasteboard-overlay-canvas{transition:transform .3s ease-in-out,box-shadow .3s ease-in-out}#canvas-panel.is-zoomed-out #mg-movie-canvas,#canvas-panel.is-zoomed-out #mg-controls-overlay-canvas,#canvas-panel.is-zoomed-out #mg-pasteboard-overlay-canvas{transform:scale(.8);box-shadow:0 0 15px rgba(0,0,0,.5)}#canvas-panel.is-zoomed-out #mg-controls-overlay-canvas{display:none}#canvas-panel.is-zoomed-out #mg-pasteboard-overlay-canvas{display:block}#toggle-view-btn:disabled,#toggle-view-btn:disabled:hover{opacity:.5;pointer-events:none;cursor:default}.effects-checkbox{display:flex;align-items:center;margin-top:.5rem}.effects-checkbox input{margin-right:.5rem}.effects-controls{padding-left:1.5rem;border-left:1px solid var(--mid);margin-left:.5rem}.effects-controls.disabled{opacity:.5;pointer-events:none}#erase-tool-btn.active{background-color:var(--action-color);color:var(--light)}#mg-movie-canvas.erase-cursor{cursor:none}#erase-tool-dropdown .mg-btn{margin-top:.5rem}.eraser-mode-selector{display:flex;gap:.5rem;margin-bottom:.5rem}.eraser-mode-selector .mg-btn{width:50%;margin:0;padding:4px 8px;font-size:16px}.eraser-mode-selector .mg-btn:active,.eraser-mode-selector .mg-btn.active{background-color:var(--action-color);color:var(--light);transform:none;box-shadow:inset 1px 1px 0 rgba(0,0,0,.2)}#mg-eraser-hud .mg-btn.active{background-color:var(--action-color);color:var(--light);transform:translateY(1px);box-shadow:none}body[data-theme-is-dark=true] .mg-eraser-hud .mg-btn.active{color:var(--bg)}#assets-folder-actions{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}#assets-folder-actions p{font-size:1.1rem;margin:0}#assets-folder-fieldset.disabled legend{color:var(--shadow)}#mg-eraser-zoom,#mg-eraser-hud{position:absolute;z-index:5;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .2s,visibility 0s .2s}#mg-eraser-zoom.visible,#mg-eraser-hud.visible{opacity:1;visibility:visible;pointer-events:auto;transition:opacity .2s,visibility 0s 0s}#mg-eraser-zoom{right:12px;bottom:12px;width:160px;height:160px;border:1px solid var(--ink);background:var(--light);box-shadow:2px 2px 0 var(--shadow)}#mg-eraser-hud{right:12px;bottom:184px;background:var(--light);border:1px solid var(--ink);padding:6px 8px;box-shadow:2px 2px 0 var(--shadow);z-index:6;transition:background .2s,border-color .2s,box-shadow .2s,opacity .2s,visibility 0s .2s}#mg-eraser-hud .row{display:flex;align-items:center;gap:.5rem;transition:opacity .2s}#mg-eraser-hud button{font-family:inherit;font-size:14px;background:transparent;color:var(--ink);border:1px solid var(--ink);padding:2px 8px;cursor:pointer;box-shadow:1px 1px 0 var(--shadow)}#mg-eraser-hud.is-scrubbing{background:transparent;border-color:transparent;box-shadow:none}#mg-eraser-hud.is-scrubbing .row:not(.is-active-slider){opacity:0;pointer-events:none}#mg-eraser-hud.is-scrubbing .row.is-active-slider{opacity:1;pointer-events:auto}footer{padding:.5rem 1.5rem;display:flex;justify-content:space-between;align-items:center;font-size:.9rem;flex-shrink:0;flex-wrap:wrap;gap:1rem;background-color:var(--light);color:var(--ink);transition:background-color .3s,color .3s;border-top:none}.footer-links,.footer-right{display:flex;flex-wrap:wrap;gap:1.5rem;align-items:center}footer a{color:var(--ink);text-decoration:none;transition:opacity .2s;opacity:.7}footer a:hover{opacity:1}footer a i{margin-right:.5em}@media (max-width:980px){footer{justify-content:center}}#theme-popup-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.5);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:none;justify-content:center;align-items:center;z-index:7000}#theme-popup-content{background:var(--bg);border:1px solid var(--ink);box-shadow:2px 2px 0 var(--shadow);padding:1rem;width:90%;max-width:400px;max-height:80vh;display:flex;flex-direction:column;transition:background-color .3s}#theme-list{list-style:none;margin:0;padding:0;overflow-y:auto}#theme-list li{padding:.75rem 1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background-color .2s;border-radius:4px}#theme-list li.active{background-color:var(--action-color);color:var(--light)}body[data-theme-is-dark=true] #theme-list li.active{color:var(--bg)}#theme-list li.active span{flex-grow:1}#theme-list li.active::before{content:'✓';margin-right:.5rem}#theme-list li:not(.active):hover{background-color:var(--mid)}.theme-colors{display:flex;gap:.5rem}.theme-color-dot{width:16px;height:16px;border-radius:50%;border:1px solid var(--ink)}#version-popup-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.7);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:none;justify-content:center;align-items:center;z-index:6000}#version-popup-content{background-color:var(--bg);padding:2rem;border:1px solid var(--ink);box-shadow:2px 2px 0 var(--shadow);width:80%;height:80%;max-width:800px;position:relative;color:var(--ink);overflow-y:auto}#version-popup-content h4{font-size:2rem;margin-bottom:.5rem}#version-popup-content h6{font-size:1rem;margin-top:0;opacity:.7;margin-bottom:1.5rem}#version-popup-content h5{font-size:1.5rem;margin-top:1.5rem;border-bottom:1px solid var(--mid);padding-bottom:.25rem}#version-popup-content ul{list-style:none;padding-left:0}#version-popup-content li{margin-bottom:.75rem;line-height:1.4}#close-popup{position:absolute;top:1rem;right:1.5rem;font-size:2rem;color:var(--ink);cursor:pointer;font-family:'VT323',monospace;line-height:1;transition:opacity .2s}#close-popup:hover{opacity:.6}#custom-font-select{position:relative}#font-select-trigger{background:var(--bg);border:1px solid var(--ink);padding:4px 8px;font-size:1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background-color .3s,border-color .3s}#font-select-trigger:focus,#custom-font-select.open #font-select-trigger{border-color:var(--action-color)}#font-select-trigger span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#font-select-trigger i{transition:transform .2s ease-in-out;font-size:.8em}#custom-font-select.open #font-select-trigger i{transform:rotate(180deg)}#font-select-dropdown{position:absolute;top:calc(100% + 2px);left:0;right:0;background:var(--light);border:1px solid var(--ink);z-index:101;max-height:250px;overflow-y:auto;box-shadow:2px 2px 0 var(--shadow)}#font-select-list{list-style:none;margin:0;padding:0}#font-select-list li{padding:6px 10px;cursor:pointer;transition:background-color .2s;white-space:nowrap;font-size:.9rem}#font-select-list li:hover,#font-select-list li.hover-preview{background-color:var(--mid)}#font-select-list li.selected{background-color:var(--action-color);color:var(--light)}body[data-theme-is-dark=true] #font-select-list li.selected{color:var(--bg)}`;
+            const nonCriticalCSS = `textarea#text-content, #font-select-trigger span {color:var(--ink)}.window{position:relative;background:var(--light);border:1px solid var(--ink);box-shadow:2px 2px 0 var(--shadow);width:100%;max-width:1600px;margin:0 auto;height:calc(100vh - 20px);display:flex;flex-direction:column;overflow:hidden;transition:background-color .3s,border-color .3s,box-shadow .3s;border-radius:3px}.titlebar{height:28px;background:var(--mid);display:flex;align-items:center;justify-content:space-between;padding:0 8px;border-bottom:1px solid var(--ink);font-size:20px;flex-shrink:0;cursor:default;position:relative;transition:background-color .3s,border-color .3s}.titlebar-controls{display:flex;align-items:center;gap:8px}.controls-fake{display:flex;gap:4px}.btn-square{width:16px;height:16px;background:var(--light);border:1px solid var(--ink)}.controls-fake .btn-square:first-child{background-color:var(--success-color)}.controls-fake .btn-square:last-child{background-color:var(--danger-color)}#shortcuts-btn,#visuals-btn,#text-btn,#toggle-view-btn,#erase-tool-btn,#ai-tools-btn{font-family:inherit;font-size:1.1rem;background:var(--light);border:1px solid;border-color:var(--mid) var(--ink) var(--ink) var(--mid);padding:0 8px;cursor:pointer;transition:all .2s;color:var(--ink);border-radius:3px;transform:translateY(-1px)}#shortcuts-btn:hover,#visuals-btn:hover,#text-btn:hover,#toggle-view-btn:hover,#erase-tool-btn:hover,#ai-tools-btn:hover{transform:translateY(-2px);filter:brightness(1.1)}#shortcuts-btn:active,#visuals-btn:active,#text-btn:active,#toggle-view-btn:active,#erase-tool-btn:active,#ai-tools-btn:active,#erase-tool-btn.active{transform:translateY(0);border-color:var(--ink) var(--mid) var(--mid) var(--ink)}#toggle-view-btn{padding:0 4px;font-size:18px}#shortcuts-dropdown{right:8px}#shortcuts-dropdown.visible{display:block}#shortcuts-dropdown h5{margin:0 0 .5rem 0;font-size:1.25rem;text-align:center}#shortcuts-dropdown ul{margin:0;padding:0;list-style:none;font-size:1rem}#shortcuts-dropdown li{display:flex;justify-content:space-between;padding:2px 0}#shortcuts-dropdown li kbd{font-family:inherit;border:1px solid var(--ink);padding:0 4px;background:var(--bg)}#visuals-dropdown,#text-dropdown,#shortcuts-dropdown,#erase-tool-dropdown,#ai-tools-dropdown{display:none;position:absolute;top:28px;background:rgba(var(--light-rgb),.3);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);border:1px solid var(--ink);box-shadow:2px 2px 0 var(--shadow);padding:.5rem 1rem;z-index:100;width:250px;transition:background .2s,backdrop-filter .2s,box-shadow .2s,border-color .2s;border-radius:4px}#visuals-dropdown{right:382px}#erase-tool-dropdown{right:288px}#ai-tools-dropdown{right:198px}#text-dropdown{right:74px}#visuals-dropdown.visible,#text-dropdown.visible,#erase-tool-dropdown.visible,#ai-tools-dropdown.visible{display:block}#visuals-dropdown h5,#visuals-dropdown h6,#visuals-dropdown .slider-container,#text-dropdown h5,#text-dropdown h6,#text-dropdown .slider-container,#erase-tool-dropdown h5,#erase-tool-dropdown h6,#erase-tool-dropdown .eraser-mode-controls,#erase-tool-dropdown>.mg-btn,#ai-tools-dropdown h5{transition:opacity .2s}#visuals-dropdown h5,#text-dropdown h5,#erase-tool-dropdown h5,#ai-tools-dropdown h5{margin:0 0 .5rem 0;font-size:1.25rem;text-align:center}#visuals-dropdown h6,#text-dropdown h6,#erase-tool-dropdown h6{font-size:1.15rem;font-weight:700;text-align:left;margin-top:.5rem;margin-bottom:.5rem;border-bottom:1px solid var(--mid);padding-bottom:2px}#visuals-dropdown label,#text-dropdown label,#erase-tool-dropdown label{display:block;margin-top:.5rem;font-size:1rem}#visuals-dropdown.is-scrubbing,#text-dropdown.is-scrubbing,#erase-tool-dropdown.is-scrubbing{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:none;border-color:transparent}
+            /* FIX: This rule now hides all non-slider UI in the visuals dropdown during scrubbing */
+            #visuals-dropdown.is-scrubbing>h5,#visuals-dropdown.is-scrubbing #visuals-tabs,#visuals-dropdown.is-scrubbing h6,#visuals-dropdown.is-scrubbing .effects-checkbox,#visuals-dropdown.is-scrubbing input[type=color],#visuals-dropdown.is-scrubbing .slider-container:not(.is-active-slider){opacity:0;pointer-events:none}
+            #text-dropdown.is-scrubbing>h5,#text-dropdown.is-scrubbing #text-layer-manager,#text-dropdown.is-scrubbing h6,#text-dropdown.is-scrubbing .effects-checkbox,#text-dropdown.is-scrubbing #text-move-forward,#text-dropdown.is-scrubbing #text-move-back,#text-dropdown.is-scrubbing .slider-container:not(.is-active-slider){opacity:0;pointer-events:none}
+            #erase-tool-dropdown.is-scrubbing>h5,#erase-tool-dropdown.is-scrubbing .eraser-mode-selector,#erase-tool-dropdown.is-scrubbing #eraser-controls-wrapper>.slider-container:not(.is-active-slider){opacity:0;pointer-events:none}#visuals-dropdown.is-scrubbing .slider-container.is-active-slider,#text-dropdown.is-scrubbing .slider-container.is-active-slider,#erase-tool-dropdown.is-scrubbing .slider-container.is-active-slider{opacity:1;pointer-events:auto;transition:opacity .1s}#visuals-dropdown input[type=range],#text-dropdown input[type=range],#erase-tool-dropdown input[type=range],#mg-eraser-hud input[type=range]{width:100%;-webkit-appearance:none;appearance:none;height:2px;background:var(--ink);outline:0}#visuals-dropdown input[type=range]::-webkit-slider-thumb,#text-dropdown input[type=range]::-webkit-slider-thumb,#erase-tool-dropdown input[type=range]::-webkit-slider-thumb,#mg-eraser-hud input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;background:var(--ink);border-radius:50%;cursor:pointer}#visuals-dropdown input[type=range]::-moz-range-thumb,#text-dropdown input[type=range]::-moz-range-thumb,#erase-tool-dropdown input[type=range]::-moz-range-thumb,#mg-eraser-hud input[type=range]::-moz-range-thumb{width:16px;height:16px;background:var(--ink);border-radius:50%;cursor:pointer;border:none}#asset-visuals-controls.disabled,#text-visuals-controls.disabled,#eraser-controls-wrapper.disabled{opacity:.5;pointer-events:none}.mg-btn{font-family:inherit;font-size:18px;background:var(--light);border:1px solid;border-color:var(--mid) var(--ink) var(--ink) var(--mid);padding:8px 16px;margin:4px;cursor:pointer;text-decoration:none;color:var(--ink);transition:all .2s;transform:translateY(-2px);border-radius:3px}.mg-btn:hover{filter:brightness(1.1);transform:translateY(-3px)}.mg-btn:disabled,.mg-btn.disabled{opacity:.5;pointer-events:none;transform:none;border-color:var(--mid)}.mg-btn:active,.mg-btn.active{transform:translateY(0);border-color:var(--ink) var(--mid) var(--mid) var(--ink);background-color:var(--action-color);color:var(--light)}body[data-theme-is-dark=true] .mg-btn.active{color:var(--bg)}.mg-btn.success{background-color:var(--success-color)}.mg-btn.generate{background-color:var(--ink);color:var(--light)}.mg-btn.generate:active{background-color:var(--ink);color:var(--light)}.hidden{display:none!important}#studio-container{display:grid;grid-template-columns:320px 1fr;grid-template-rows:minmax(0,1fr);gap:1.5rem;padding:1.5rem;flex-grow:1;min-height:0}#controls-panel{display:flex;flex-direction:column;gap:1rem;overflow-y:auto;min-height:0}#canvas-panel{display:flex;align-items:center;justify-content:center;border:1px solid var(--ink);background-color:var(--mid);position:relative;min-height:0;transition:background-color .5s ease-in-out;overflow:hidden}#controls-panel fieldset{background:var(--light);border:1px solid var(--ink);padding:.8rem;margin:0;text-align:left;transition:background-color .3s,border-color .3s,color .3s,opacity .3s;border-radius:3px}#controls-panel legend{font-size:1.2rem;font-weight:400;padding:0 .5rem;margin-left:.5rem;background:var(--light)}.placeholder-text{color:var(--mid);font-size:1.1rem;text-align:center;padding:1rem;width:100%}body[data-theme-is-dark=true] #layer-instructions{color:var(--ink)}#mg-asset-palette,#mg-local-asset-palette,#mg-local-background-palette{display:flex;gap:.5rem;flex-wrap:wrap;min-height:70px;align-content:flex-start}.palette-slot,.layer-thumb{width:60px;height:60px;border:1px solid var(--ink);background:color-mix(in srgb, var(--light) 90%, var(--ink) 10%);cursor:pointer;position:relative;border-radius:3px;box-shadow:3px 3px 0 var(--ink);transform:translate(0,0);transition:transform .15s ease-out,box-shadow .15s ease-out}.palette-slot.empty{display:flex;align-items:center;justify-content:center;font-size:3rem;line-height:1;color:var(--mid)}.layer-thumb:hover,.palette-slot.empty:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink)}.layer-thumb.active{transform:translate(1px,1px);box-shadow:none;border:2px solid var(--action-color)}.layer-thumb{cursor:grab}.layer-thumb img{width:100%;height:100%;object-fit:cover;pointer-events:none}.layer-controls{position:absolute;top:-5px;right:-5px;display:flex;gap:2px}.layer-btn{background-color:var(--danger-color);border:1px solid var(--ink);color:#fff;font-size:.8rem;font-weight:700;line-height:1;padding:1px 4px;cursor:pointer;width:18px;height:18px;text-align:center}#mg-movie-canvas,#mg-controls-overlay-canvas,#mg-pasteboard-overlay-canvas{position:absolute}#mg-controls-overlay-canvas,#mg-pasteboard-overlay-canvas{pointer-events:none}#mg-movie-canvas{pointer-events:auto}#mg-asset-picker-actions{display:none}#mg-local-asset-grid,#mg-local-asset-grid-assets,#mg-local-asset-grid-backgrounds{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:1rem;overflow-y:auto;padding:1rem;flex-grow:1}.mg-template{position:relative;aspect-ratio:1/1;border:1px solid var(--mid);background-color:var(--bg);box-shadow:3px 3px 0 var(--ink);transition:transform .15s ease-out,box-shadow .15s ease-out;border-radius:3px}.mg-template:hover{transform:translate(-2px,-2px) scale(1.03);box-shadow:5px 5px 0 var(--ink)}.mg-template img{display:block;width:100%;height:100%;object-fit:cover;cursor:pointer}.mg-template .layer-btn.delete{position:absolute;top:4px;right:4px;z-index:5;width:22px;height:22px;font-size:1rem;display:flex;align-items:center;justify-content:center;border-radius:2px}.mg-btn.tab{color:var(--ink);opacity:.7;background:transparent;box-shadow:1px 1px 0 var(--shadow);transform:translateY(0);transition:transform .1s ease,box-shadow .1s ease,background-color .2s,opacity .2s}.mg-btn.tab:hover{opacity:1;transform:translateY(-1px);box-shadow:1px 1px 0 var(--shadow)}.mg-btn.tab.active{background-color:var(--mid);opacity:1;transform:translateY(1px);box-shadow:0 0 0 var(--shadow)}#mg-toast{visibility:hidden;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--light);border:1px solid var(--ink);padding:.5rem 1rem;color:var(--ink);font-size:1rem;z-index:2000;box-shadow:2px 2px 0 var(--shadow)}#canvas-placeholder{position:absolute;width:calc(100% - 20px);height:calc(100% - 20px);border:2px dashed var(--mid);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;cursor:pointer;color:var(--mid);transition:all .2s;padding:2rem;overflow:hidden;position:relative}#canvas-placeholder h3,#canvas-placeholder p{position:relative;z-index:2}#canvas-placeholder img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:1;opacity:.6}#canvas-placeholder h3{font-size:2.2rem;margin:0 0 .5rem}#canvas-placeholder p{font-size:1.3rem}#canvas-placeholder:hover,#canvas-panel.drag-over #canvas-placeholder{border-color:var(--ink);color:var(--ink);background-color:rgba(255,255,255,.5)}#canvas-panel.drag-over{background-color:var(--shadow)}#layer-instructions{padding:0 0 .5rem 0;margin:0;font-size:1.1rem}#mg-confirmation-overlay,#mg-asset-action-overlay{z-index:5000}#mg-confirmation-dialog,#mg-asset-action-dialog{padding:1.5rem;text-align:center;width:90%;max-width:400px;height:auto}#mg-confirmation-dialog p,#mg-asset-action-dialog p{font-size:1.2rem;margin:0 0 1.5rem}#mg-confirmation-dialog .action-buttons,#mg-asset-action-dialog .action-buttons{display:flex;justify-content:center;gap:.5rem}#text-content,#text-font{transition:background-color .3s,border-color .3s,color .3s}#text-layer-manager{display:flex;gap:.5rem;align-items:center;padding-bottom:.5rem;margin-bottom:.5rem;border-bottom:1px solid var(--mid)}#text-layer-palette{display:flex;gap:.5rem;flex-wrap:wrap;flex-grow:1;min-height:44px}#add-new-text-layer-btn{width:40px;height:40px;flex-shrink:0;font-size:2rem;line-height:1;padding:0}.text-thumb{width:60px;height:40px;display:flex;align-items:center;justify-content:center;overflow:hidden;background-color:var(--ink);color:var(--light);font-size:.8rem;padding:2px;text-align:center}.text-thumb span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none}.palette-slot.empty:disabled{opacity:.4;cursor:default;pointer-events:none;background-color:var(--light)}.palette-slot.empty:disabled:hover{background-color:var(--light);color:var(--mid)}#shortcuts-btn:disabled,#visuals-btn:disabled,#text-btn:disabled,#erase-tool-btn:disabled,#ai-tools-btn:disabled{opacity:.5;pointer-events:none;cursor:default}.layer-thumb.dragging{opacity:.4;transform:rotate(-3deg) scale(1.05);box-shadow:0 8px 20px rgba(0,0,0,.3);cursor:grabbing}.layer-thumb.drag-over{border:3px dashed var(--action-color);transform:scale(1.02);background-color:rgba(var(--action-color-rgb),.1)}#mg-pasteboard-overlay-canvas{position:absolute;pointer-events:none;display:none}#canvas-panel.is-zoomed-out{background-color:var(--shadow)}#mg-movie-canvas,#mg-controls-overlay-canvas,#mg-pasteboard-overlay-canvas{transition:transform .3s ease-in-out,box-shadow .3s ease-in-out}#canvas-panel.is-zoomed-out #mg-movie-canvas,#canvas-panel.is-zoomed-out #mg-controls-overlay-canvas,#canvas-panel.is-zoomed-out #mg-pasteboard-overlay-canvas{transform:scale(.8);box-shadow:0 0 15px rgba(0,0,0,.5)}#canvas-panel.is-zoomed-out #mg-controls-overlay-canvas{display:none}#canvas-panel.is-zoomed-out #mg-pasteboard-overlay-canvas{display:block}#toggle-view-btn:disabled,#toggle-view-btn:disabled:hover{opacity:.5;pointer-events:none;cursor:default}.effects-checkbox{display:flex;align-items:center;margin-top:.5rem}.effects-checkbox input{margin-right:.5rem}.effects-controls{padding-left:1.5rem;border-left:1px solid var(--mid);margin-left:.5rem}.effects-controls.disabled{opacity:.5;pointer-events:none}#erase-tool-btn.active{background-color:var(--action-color);color:var(--light)}#mg-movie-canvas.erase-cursor{cursor:none}#erase-tool-dropdown .mg-btn{margin-top:.5rem}.eraser-mode-selector{display:flex;gap:.5rem;margin-bottom:.5rem}.eraser-mode-selector .mg-btn{width:50%;margin:0;padding:4px 8px;font-size:16px}.eraser-mode-selector .mg-btn:active,.eraser-mode-selector .mg-btn.active{background-color:var(--action-color);color:var(--light);transform:none;box-shadow:inset 1px 1px 0 rgba(0,0,0,.2)}#mg-eraser-hud .mg-btn.active{background-color:var(--action-color);color:var(--light);transform:translateY(1px);box-shadow:none}body[data-theme-is-dark=true] .mg-eraser-hud .mg-btn.active{color:var(--bg)}#assets-folder-actions{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}#assets-folder-actions p{font-size:1.1rem;margin:0}#assets-folder-fieldset.disabled legend{color:var(--shadow)}#mg-eraser-zoom,#mg-eraser-hud{position:absolute;z-index:5;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .2s,visibility 0s .2s}#mg-eraser-zoom.visible,#mg-eraser-hud.visible{opacity:1;visibility:visible;pointer-events:auto;transition:opacity .2s,visibility 0s 0s}#mg-eraser-zoom{right:12px;bottom:12px;width:160px;height:160px;border:1px solid var(--ink);background:var(--light);box-shadow:2px 2px 0 var(--shadow)}#mg-eraser-hud{right:12px;bottom:184px;background:var(--light);border:1px solid var(--ink);padding:6px 8px;box-shadow:2px 2px 0 var(--shadow);z-index:6;transition:background .2s,border-color .2s,box-shadow .2s,opacity .2s,visibility 0s .2s}#mg-eraser-hud .row{display:flex;align-items:center;gap:.5rem;transition:opacity .2s}#mg-eraser-hud button{font-family:inherit;font-size:14px;background:transparent;color:var(--ink);border:1px solid var(--ink);padding:2px 8px;cursor:pointer;box-shadow:1px 1px 0 var(--shadow)}#mg-eraser-hud.is-scrubbing{background:transparent;border-color:transparent;box-shadow:none}#mg-eraser-hud.is-scrubbing .row:not(.is-active-slider){opacity:0;pointer-events:none}#mg-eraser-hud.is-scrubbing .row.is-active-slider{opacity:1;pointer-events:auto}footer{padding:.5rem 1.5rem;display:flex;justify-content:space-between;align-items:center;font-size:.9rem;flex-shrink:0;flex-wrap:wrap;gap:1rem;background-color:var(--light);color:var(--ink);transition:background-color .3s,color .3s;border-top:none}.footer-links,.footer-right{display:flex;flex-wrap:wrap;gap:1.5rem;align-items:center}footer a{color:var(--ink);text-decoration:none;transition:opacity .2s;opacity:.7}footer a:hover{opacity:1}footer a i{margin-right:.5em}@media (max-width:980px){footer{justify-content:center}}#theme-popup-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.5);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:none;justify-content:center;align-items:center;z-index:7000}#theme-popup-content{background:var(--bg);border:1px solid var(--ink);box-shadow:2px 2px 0 var(--shadow);padding:1rem;width:90%;max-width:400px;max-height:80vh;display:flex;flex-direction:column;transition:background-color .3s}#theme-list{list-style:none;margin:0;padding:0;overflow-y:auto}#theme-list li{padding:.75rem 1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background-color .2s;border-radius:4px}#theme-list li.active{background-color:var(--action-color);color:var(--light)}body[data-theme-is-dark=true] #theme-list li.active{color:var(--bg)}#theme-list li.active span{flex-grow:1}#theme-list li.active::before{content:'✓';margin-right:.5rem}#theme-list li:not(.active):hover{background-color:var(--mid)}.theme-colors{display:flex;gap:.5rem}.theme-color-dot{width:16px;height:16px;border-radius:50%;border:1px solid var(--ink)}#version-popup-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.7);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:none;justify-content:center;align-items:center;z-index:6000}#version-popup-content{background-color:var(--bg);padding:2rem;border:1px solid var(--ink);box-shadow:2px 2px 0 var(--shadow);width:80%;height:80%;max-width:800px;position:relative;color:var(--ink);overflow-y:auto}#version-popup-content h4{font-size:2rem;margin-bottom:.5rem}#version-popup-content h6{font-size:1rem;margin-top:0;opacity:.7;margin-bottom:1.5rem}#version-popup-content h5{font-size:1.5rem;margin-top:1.5rem;border-bottom:1px solid var(--mid);padding-bottom:.25rem}#version-popup-content ul{list-style:none;padding-left:0}#version-popup-content li{margin-bottom:.75rem;line-height:1.4}#close-popup{position:absolute;top:1rem;right:1.5rem;font-size:2rem;color:var(--ink);cursor:pointer;font-family:'VT323',monospace;line-height:1;transition:opacity .2s}#close-popup:hover{opacity:.6}#custom-font-select{position:relative}#font-select-trigger{background:var(--bg);border:1px solid var(--ink);padding:4px 8px;font-size:1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background-color .3s,border-color .3s}#font-select-trigger:focus,#custom-font-select.open #font-select-trigger{border-color:var(--action-color)}#font-select-trigger span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#font-select-trigger i{transition:transform .2s ease-in-out;font-size:.8em}#custom-font-select.open #font-select-trigger i{transform:rotate(180deg)}#font-select-dropdown{position:absolute;top:calc(100% + 2px);left:0;right:0;background:var(--light);border:1px solid var(--ink);z-index:101;max-height:250px;overflow-y:auto;box-shadow:2px 2px 0 var(--shadow)}#font-select-list{list-style:none;margin:0;padding:0}#font-select-list li{padding:6px 10px;cursor:pointer;transition:background-color .2s;white-space:nowrap;font-size:.9rem}#font-select-list li:hover,#font-select-list li.hover-preview{background-color:var(--mid)}#font-select-list li.selected{background-color:var(--action-color);color:var(--light)}body[data-theme-is-dark=true] #font-select-list li.selected{color:var(--bg)}`;
             const style = document.createElement('style');
             style.textContent = nonCriticalCSS;
             document.head.appendChild(style);
@@ -1695,33 +1700,22 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
         },
         stopRenderLoop() { cancelAnimationFrame(this.state.animationFrameId); this.state.animationFrameId = null; this.drawFrame(); },
 
-        drawControlsOverlay() {
+               drawControlsOverlay() {
             const isPasteboard = this.state.isCanvasViewZoomedOut;
             const ctx = isPasteboard ? this.dom.pasteboardCtx : this.dom.controlsCtx;
             const canvas = isPasteboard ? this.dom.pasteboardOverlayCanvas : this.dom.controlsOverlayCanvas;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
         
-            if (this.state.eraserMode !== 'none') {
-                const canvasPoint = this.getMovieCanvasPoint({clientX: this.state.eraseBrushPos.x + this.dom.movieCanvas.getBoundingClientRect().left, clientY: this.state.eraseBrushPos.y + this.dom.movieCanvas.getBoundingClientRect().top});
-                ctx.save();
-                if (isPasteboard) ctx.translate(this.config.PASTEBOARD_MARGIN, this.config.PASTEBOARD_MARGIN);
-                const brushColor = this.state.eraserMode === 'unerase' ? 'rgba(85, 204, 85, 0.9)' : 'white';
-                ctx.beginPath();
-                ctx.arc(canvasPoint.x, canvasPoint.y, this.dom.eraserSizeDropdown.value / 2, 0, 2 * Math.PI);
-                ctx.strokeStyle = brushColor;
-                ctx.lineWidth = 2;
-                ctx.stroke();
-                ctx.beginPath();
-                ctx.arc(canvasPoint.x, canvasPoint.y, this.dom.eraserSizeDropdown.value / 2, 0, 2 * Math.PI);
-                ctx.setLineDash([5, 5]);
-                ctx.strokeStyle = 'black';
-                ctx.lineWidth = 1;
-                ctx.stroke();
-                ctx.restore();
-            } else {
-                const activeLayer = this.getActiveLayer();
-                if (!activeLayer) return;
+            const activeLayer = this.getActiveLayer();
 
+            // --- SEQUENTIAL DRAWING LOGIC ---
+
+            // 1. DRAW THE GREEN SELECTION BOX
+            // The green box should be visible WHENEVER a layer is active,
+            // UNLESS the eraser is fully armed (meaning the dropdown is closed).
+            const isEraserArmed = this.state.eraserMode !== 'none' && !this.dom.eraseToolDropdown.classList.contains('visible');
+
+            if (activeLayer && !isEraserArmed) {
                 ctx.save();
                 if (isPasteboard) ctx.translate(this.config.PASTEBOARD_MARGIN, this.config.PASTEBOARD_MARGIN);
                 
@@ -1756,6 +1750,28 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
                 ctx.beginPath(); ctx.arc(0, rotHandleY, ho, 0, 2 * Math.PI); ctx.fill();
                 ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; ctx.shadowOffsetX = 0; ctx.shadowOffsetY = 0;
                 ctx.restore(); 
+                ctx.restore();
+            }
+
+            // 2. DRAW THE ERASER CIRCLE
+            // The eraser circle should be visible WHENEVER an eraser mode is selected.
+            // This will draw it on top of the green box if necessary.
+            if (this.state.eraserMode !== 'none') {
+                const canvasPoint = this.getMovieCanvasPoint({clientX: this.state.eraseBrushPos.x + this.dom.movieCanvas.getBoundingClientRect().left, clientY: this.state.eraseBrushPos.y + this.dom.movieCanvas.getBoundingClientRect().top});
+                ctx.save();
+                if (isPasteboard) ctx.translate(this.config.PASTEBOARD_MARGIN, this.config.PASTEBOARD_MARGIN);
+                const brushColor = this.state.eraserMode === 'unerase' ? 'rgba(85, 204, 85, 0.9)' : 'white';
+                ctx.beginPath();
+                ctx.arc(canvasPoint.x, canvasPoint.y, this.dom.eraserSizeDropdown.value / 2, 0, 2 * Math.PI);
+                ctx.strokeStyle = brushColor;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.arc(canvasPoint.x, canvasPoint.y, this.dom.eraserSizeDropdown.value / 2, 0, 2 * Math.PI);
+                ctx.setLineDash([5, 5]);
+                ctx.strokeStyle = 'black';
+                ctx.lineWidth = 1;
+                ctx.stroke();
                 ctx.restore();
             }
         },
@@ -1953,33 +1969,54 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
             return null;
         },
         
-        handleMovieInteractionStart(e) {
-            e.preventDefault();
-            const point = this.getMovieCanvasPoint(e);
-            if (this.state.eraserMode !== 'none' && !this.state.isEraserArmed) { return; }
-            if (this.state.eraserMode !== 'none') {
-                const activeLayer = this.getActiveLayer();
-                if (this.isPointInMovieLayer(point, activeLayer)) {
-                     this.state.movieInteraction = { active: true, type: 'erase', layerId: activeLayer.id, lastProxyX: null, lastProxyY: null };
-                     this.dom.eraseToolDropdown.classList.remove('visible');
-                     this.state.lastEraseCanvasPoint = point;
-                     this.showEraserZoom(true);
-                     this.showEraserHUD(false);
-                     this.drawEraserZoomAt(point);
-                     this.applyBrushToLayer(activeLayer, point);
+               handleMovieInteractionStart(e) {
+            // First, a crucial guard: if the click starts inside any UI dropdown,
+            // ignore it completely on the canvas. This prevents all weird side-effects.
+            const dropdowns = [this.dom.visualsDropdown, this.dom.textDropdown, this.dom.shortcutsDropdown, this.dom.eraseToolDropdown, this.dom.aiToolsDropdown, this.dom.customFontSelect];
+            for (const dropdown of dropdowns) {
+                if (dropdown && dropdown.contains(e.target)) {
+                    return; // Exit function immediately.
                 }
+            }
+
+            const point = this.getMovieCanvasPoint(e);
+            const activeLayer = this.getActiveLayer();
+            const anyDropdownVisible = dropdowns.some(dd => dd && dd.classList.contains('visible')) || (this.dom.customFontSelect && this.dom.customFontSelect.classList.contains('open'));
+
+            // --- PRIMARY LOGIC FOR ERASER ---
+            // If an eraser mode is selected, this is our top priority.
+            if (this.state.eraserMode !== 'none') {
+                e.preventDefault();
+
+                // To start erasing, the dropdown must be closed (i.e., tool is "armed"),
+                // and the click must be on the active layer.
+                if (!anyDropdownVisible && activeLayer && this.isPointInMovieLayer(point, activeLayer)) {
+                    this.state.movieInteraction = { active: true, type: 'erase', layerId: activeLayer.id, lastProxyX: null, lastProxyY: null };
+                    this.state.lastEraseCanvasPoint = point;
+                    this.showEraserZoom(true);
+                    this.showEraserHUD(false); // Hide the HUD while actively erasing
+                    this.drawEraserZoomAt(point);
+                    this.applyBrushToLayer(activeLayer, point);
+                }
+                // If an eraser mode is selected but the click is elsewhere, DO NOTHING.
+                // This allows the global click handler to close the dropdown without deselecting the asset.
                 return;
             }
+
+            // --- NORMAL INTERACTION LOGIC ---
+            // If we've reached this point, no eraser is active.
+            e.preventDefault();
             let interactionFound = false;
-            const activeLayer = this.getActiveLayer();
             const handle = activeLayer ? this.getMovieHandleAtPoint(point, activeLayer) : null;
+
             if (activeLayer && handle) {
                 interactionFound = true;
-                this.state.movieInteraction = { active: true, type: handle === 'rotate' ? 'rotate' : 'resize', layerId: activeLayer.id, handle: handle, startX: point.x, startY: point.y, initialState: JSON.parse(JSON.stringify(activeLayer)), };
+                this.state.movieInteraction = { active: true, type: handle === 'rotate' ? 'rotate' : 'resize', layerId: activeLayer.id, handle: handle, startX: point.x, startY: point.y, initialState: JSON.parse(JSON.stringify(activeLayer)) };
             } else if (this.isPointInMovieLayer(point, activeLayer)) {
                 interactionFound = true;
-                this.state.movieInteraction = { active: true, type: 'drag', layerId: activeLayer.id, offsetX: point.x - activeLayer.x, offsetY: point.y - activeLayer.y, };
+                this.state.movieInteraction = { active: true, type: 'drag', layerId: activeLayer.id, offsetX: point.x - activeLayer.x, offsetY: point.y - activeLayer.y };
             }
+
             if (!interactionFound) {
                 for (let i = 0; i < this.state.canvasState.layers.length; i++) {
                     const l = this.state.canvasState.layers[i];
@@ -1992,16 +2029,18 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
                     }
                 }
             }
-            if (!interactionFound && this.state.activeLayerId) {
+
+            // This is the deselection logic. It will now only run when no eraser is active.
+            if (!interactionFound && this.state.activeLayerId && !anyDropdownVisible) {
                 this.state.activeLayerId = null;
                 this.updateEditPanelsUI();
                 this.renderLayerPalette();
                 this.renderTextLayerPalette();
                 this.drawFrame();
             }
-            if(interactionFound) this.startRenderLoop();
-        },
 
+            if (interactionFound) this.startRenderLoop();
+        },
         getLayerMetrics(layer) {
             if (!layer) return { dWidth: 0, dHeight: 0 };
             let dWidth, dHeight;
@@ -2079,11 +2118,20 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
         handleMovieInteractionEnd(e) {
           if (this.state.movieInteraction.active) {
             const wasErasing = this.state.movieInteraction.type === 'erase';
+            const wasTransforming = ['drag', 'rotate', 'resize'].includes(this.state.movieInteraction.type);
             this.state.movieInteraction.active = false;
             this.showEraserZoom(false);
-            if (wasErasing) { this.renderLayerPalette(); this.showEraserHUD(true); }
+            if (wasErasing) { 
+                this.renderLayerPalette(); 
+                this.showEraserHUD(true);
+            }
             this.stopRenderLoop();
-            this.saveState(); // Save state after an interaction ends
+            
+            if (wasErasing) {
+                this.saveStateDebounced();
+            } else if (wasTransforming) {
+                this.saveState();
+            }
           }
         },
 
@@ -2122,7 +2170,8 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
             if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') { if (key === 'escape') document.activeElement.blur(); return; }
             
             if ((e.metaKey || e.ctrlKey) && key === 'z') { e.preventDefault(); this.undo(); return; }
-            if ((e.metaKey || e.ctrlKey) && key === 'y') { e.preventDefault(); this.redo(); return; }
+            if ((e.metaKey || e.ctrlKey) && (key === 'y' || (e.shiftKey && key === 'z'))) { e.preventDefault(); this.redo(); return; }
+
 
             if ((e.metaKey || e.ctrlKey) && key === 's') { e.preventDefault(); if (!this.dom.saveProjectBtn.disabled) this.saveProjectToLibrary(); return; }
             if (key === 'z' && !(e.metaKey || e.ctrlKey)) { e.preventDefault(); this.toggleCanvasZoom(); return; }
@@ -2154,7 +2203,7 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
 
             if (stateChanged) {
                 this.drawFrame();
-                this.saveState();
+                this.saveStateDebounced();
             }
         },
 
@@ -2177,39 +2226,74 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
             }
         },
 
-        deactivateEraser(shouldCloseDropdown = false) {
+               deactivateEraser(shouldCloseDropdown = false) {
             if (this.state.eraserMode === 'none') return;
-            document.getElementById('eraser-controls-wrapper').classList.add('disabled');
-            this.showEraserHUD(false);
-            this.showEraserZoom(false);
+
+            // Reset the state machine
             this.state.eraserMode = 'none';
             this.state.isEraserArmed = false;
+
+            // Explicitly hide all eraser-related UI, including the HUD
+            this.showEraserHUD(false);
+            this.showEraserZoom(false);
+            document.getElementById('eraser-controls-wrapper').classList.add('disabled');
             this.dom.eraseBtn.classList.remove('active');
             this.dom.uneraseBtn.classList.remove('active');
             this.dom.eraseToolBtn.classList.remove('active');
-            this.dom.movieCanvas.style.cursor = '';
-            this.dom.pasteboardOverlayCanvas.style.cursor = '';
+            this.dom.movieCanvas.classList.remove('erase-cursor');
             this.hideToast();
+            
+            // Redraw the canvas to restore the green selection box
             this.drawFrame();
-            if (shouldCloseDropdown) { this.dom.eraseToolDropdown.classList.remove('visible'); }
-        },
 
-        toggleDropdownEraserMode(mode) {
-            const activeLayer = this.getActiveLayer();
-            if (!activeLayer) { this.toast('Select an image layer to use the eraser.', 3000); return; }
-             if (activeLayer.type !== 'image') { this.toast('Eraser only works on image layers.', 3000); return; }
-            if (this.state.eraserMode === mode) { this.deactivateEraser(false); } 
-            else {
-                this.state.eraserMode = mode;
-                this.state.isEraserArmed = false;
-                document.getElementById('eraser-controls-wrapper').classList.remove('disabled');
-                this.dom.eraseBtn.classList.toggle('active', mode === 'erase');
-                this.dom.uneraseBtn.classList.toggle('active', mode === 'unerase');
-                this.dom.eraseToolBtn.classList.add('active');
-                [this.dom.visualsDropdown, this.dom.textDropdown, this.dom.shortcutsDropdown, this.dom.aiToolsDropdown].forEach(d => d.classList.remove('visible'));
+            if (shouldCloseDropdown) {
+                this.dom.eraseToolDropdown.classList.remove('visible');
             }
         },
+
+              toggleDropdownEraserMode(mode) {
+            const activeLayer = this.getActiveLayer();
+            if (!activeLayer || activeLayer.type !== 'image') {
+                this.toast('Select an image layer to use the eraser.', 3000);
+                return;
+            }
+
+            // If clicking the same button again, fully deactivate.
+            if (this.state.eraserMode === mode) {
+                this.deactivateEraser();
+                return;
+            }
+
+            // --- IMMEDIATE VISUAL ACTIVATION ---
+            this.state.eraserMode = mode;
+            this.state.isEraserArmed = false; // It's visually active, but not "armed" for clicking yet.
+
+            // Immediately hide the system mouse cursor
+            this.dom.movieCanvas.classList.add('erase-cursor');
+
+            // Update button states
+            this.dom.eraseBtn.classList.toggle('active', mode === 'erase');
+            this.dom.uneraseBtn.classList.toggle('active', mode === 'unerase');
+            this.dom.eraseToolBtn.classList.add('active');
+            document.getElementById('eraser-controls-wrapper').classList.remove('disabled');
+
+            // Immediately redraw the canvas to show the eraser circle
+            this.drawFrame();
+        },
         
+        armEraser() {
+            // Do nothing if no mode is selected or if it's already armed.
+            if (this.state.eraserMode === 'none' || this.state.isEraserArmed) return;
+
+            this.state.isEraserArmed = true;
+            this.dom.eraseToolDropdown.classList.remove('visible');
+            this.showEraserHUD(true);
+            this.updateEraserHudState();
+            this.dom.movieCanvas.classList.add('erase-cursor');
+            this.toast(`${this.state.eraserMode === 'erase' ? 'Erase' : 'Unerase'} Mode Armed. Click to use.`, 2500);
+            this.drawFrame(); // Crucial: redraws the overlay immediately
+        },
+
         armEraserFromHUD(mode) {
              if (this.state.eraserMode !== mode) { this.state.eraserMode = mode; this.updateEraserHudState(); }
              this.state.isEraserArmed = true;
@@ -2495,6 +2579,17 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
         },
 
         // --- UNDO/REDO METHODS ---
+
+        debounce(func, delay) {
+            let timeout;
+            return (...args) => {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), delay);
+            };
+        },
+
+        saveStateDebounced: null, 
+
         saveState() {
             if (this.state.historyIndex < this.state.history.length - 1) {
                 this.state.history = this.state.history.slice(0, this.state.historyIndex + 1);
@@ -2552,6 +2647,8 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
                 const stateToRestore = JSON.parse(JSON.stringify(this.state.history[this.state.historyIndex]));
                 this.applyState(stateToRestore);
                 this.toast('Undo', 1500);
+            } else {
+                this.toast("Nothing more to undo", 2000);
             }
         },
 
@@ -2561,6 +2658,8 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
                 const stateToRestore = JSON.parse(JSON.stringify(this.state.history[this.state.historyIndex]));
                 this.applyState(stateToRestore);
                 this.toast('Redo', 1500);
+            } else {
+                this.toast("Nothing more to redo", 2000);
             }
         },
 
@@ -2605,7 +2704,6 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
             this.dom.confirmationOverlay.addEventListener('click', (e) => { if (e.target === this.dom.confirmationOverlay) this.closeConfirmationModal(); });
             this.dom.canvasPanel.addEventListener('mousedown', (e) => this.handleMovieInteractionStart(e));
             window.addEventListener('mousemove', (e) => this.handleMovieInteractionMove(e));
-            window.addEventListener('mouseup', (e) => this.handleMovieInteractionEnd(e));
             this.dom.canvasPanel.addEventListener('mouseleave', () => { if (!this.state.movieInteraction.active) { this.dom.movieCanvas.style.cursor = 'default'; this.dom.pasteboardOverlayCanvas.style.cursor = 'default'; } this.state.eraseBrushPos = {x: -1000, y: -1000}; if(this.state.eraserMode !== 'none') { this.drawControlsOverlay(); } });
             window.addEventListener('keydown', (e) => this.handleKeyDown(e));
             window.addEventListener('beforeunload', () => this.saveCurrentWork());
@@ -2628,20 +2726,39 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
             this.dom.visualsBtn.addEventListener('click', e => { e.stopPropagation(); this.deactivateEraser(true); this.dom.visualsDropdown.classList.toggle('visible'); if (this.dom.visualsDropdown.classList.contains('visible')) { if (this.getActiveLayer() && this.getActiveLayer().type === 'image') { this.switchVisualsTab('asset'); } else { this.switchVisualsTab('background'); } } this.dom.shortcutsDropdown.classList.remove('visible'); this.dom.textDropdown.classList.remove('visible'); this.dom.eraseToolDropdown.classList.remove('visible'); this.dom.aiToolsDropdown.classList.remove('visible'); this.closeFontDropdown(); });
             this.dom.visualsTabAssetBtn.addEventListener('click', () => { this.switchVisualsTab('asset'); if (!this.getActiveLayer() || this.getActiveLayer().type !== 'image') { this.toast('Select an image layer to enable asset editing.', 3000); } });
             this.dom.visualsTabBackgroundBtn.addEventListener('click', () => this.switchVisualsTab('background'));
+                        // (inside setupEventListeners)
+                               // (inside the setupEventListeners function)
+
+            // --- REPLACE THIS ENTIRE BLOCK ---
             this.dom.eraseToolBtn.addEventListener('click', e => {
                 e.stopPropagation();
-                if (this.dom.eraseToolDropdown.classList.contains('visible')) {
-                    if (this.state.eraserMode !== 'none' && !this.state.isEraserArmed) {
-                        this.state.isEraserArmed = true; 
-                        this.showEraserHUD(true); 
-                        this.updateEraserHudState(); 
+                const isDropdownVisible = this.dom.eraseToolDropdown.classList.contains('visible');
+
+                // Case 1: The tool is armed and active (HUD is visible).
+                // The user wants to exit eraser mode completely.
+                if (this.state.isEraserArmed) {
+                    this.deactivateEraser(true); // Call the master reset.
+                }
+                // Case 2: The dropdown is open.
+                // The user is confirming their choice to arm the tool.
+                else if (isDropdownVisible) {
+                    if (this.state.eraserMode !== 'none') {
+                        this.state.isEraserArmed = true;
+                        this.showEraserHUD(true); // Show the HUD
+                        this.updateEraserHudState();
                         this.dom.movieCanvas.classList.add('erase-cursor');
-                        this.toast(`${this.state.eraserMode==='erase'?'Erase':'Unerase'} Mode Activated. Press [ESC] to deactivate.`, null);
+                        this.toast(`${this.state.eraserMode === 'erase' ? 'Erase' : 'Unerase'} Mode Armed`, 2000);
                     }
                     this.dom.eraseToolDropdown.classList.remove('visible');
-                } else {
-                    this.deactivateEraser();
+                    this.drawFrame(); // Redraw immediately
+                }
+                // Case 3: The tool is completely off.
+                // The user wants to start the process.
+                else {
+                    this.deactivateEraser(); // Ensure clean state before opening
                     this.dom.eraseToolDropdown.classList.add('visible');
+                    
+                    // Close all other dropdowns
                     this.dom.shortcutsDropdown.classList.remove('visible');
                     this.dom.visualsDropdown.classList.remove('visible');
                     this.dom.textDropdown.classList.remove('visible');
@@ -2649,17 +2766,21 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
                     this.closeFontDropdown();
                 }
             });
+            // --- END OF REPLACEMENT ---
             this.dom.fontSelectTrigger.addEventListener('click', (e) => { e.stopPropagation(); if (this.dom.customFontSelect.classList.contains('open')) { this.closeFontDropdown(); } else { this.openFontDropdown(); } });
             this.dom.fontSelectDropdown.addEventListener('mouseleave', () => this.handleFontHoverEnd());
             this.dom.eraseBtn.addEventListener('click', () => this.toggleDropdownEraserMode('erase'));
             this.dom.uneraseBtn.addEventListener('click', () => this.toggleDropdownEraserMode('unerase'));
+            this.dom.eraseToolDropdown.addEventListener('mousedown', e => e.stopPropagation());
             this.dom.hudEraseBtn.addEventListener('click', () => this.armEraserFromHUD('erase'));
             this.dom.hudUneraseBtn.addEventListener('click', () => this.armEraserFromHUD('unerase'));
             this.dom.eraserHud.addEventListener('mousedown', e => e.stopPropagation());
+            
             document.querySelectorAll('#visuals-dropdown input, #visuals-dropdown select, #text-dropdown input, #text-dropdown textarea').forEach(input => {
                 const isSlider = input.type === 'range';
                 const inputEvent = isSlider ? 'input' : 'input'; 
-                const changeEvent = isSlider ? 'change' : 'change';
+                const changeEvent = 'change';
+
                 const action = () => {
                     const l = this.getActiveLayer();
                     if (!l && !input.id.startsWith('bg-')) return;
@@ -2690,8 +2811,15 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
                     }
                     if (!this.state.movieInteraction.active) this.drawFrame();
                 };
+
                 input.addEventListener(inputEvent, action);
-                input.addEventListener(changeEvent, () => this.saveState());
+                
+                const canBeChangedRapidly = (input.type === 'range' || input.type === 'color' || input.tagName === 'TEXTAREA' || input.type === 'number');
+                if (canBeChangedRapidly) {
+                     input.addEventListener(changeEvent, () => this.saveStateDebounced());
+                } else {
+                     input.addEventListener(changeEvent, () => this.saveState());
+                }
             });
 
             const textMoveForwardBtn = document.getElementById('text-move-forward'), textMoveBackBtn = document.getElementById('text-move-back');
@@ -2711,10 +2839,83 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
             this.dom.libraryTabBackgroundsBtn.addEventListener('click', () => this.switchAndSaveLibraryTab('backgrounds'));
             this.dom.libraryTabFavoritesBtn.addEventListener('click', () => this.switchAndSaveLibraryTab('favorites'));
             this.dom.eraserSizeDropdown.addEventListener('input', () => { this.dom.eraserSizeSlider.value = this.dom.eraserSizeDropdown.value; });
+            this.dom.eraserSizeDropdown.addEventListener('change', () => this.saveStateDebounced());
             this.dom.eraserStrengthDropdown.addEventListener('input', () => { this.dom.eraserStrengthSlider.value = this.dom.eraserStrengthDropdown.value; });
+            this.dom.eraserStrengthDropdown.addEventListener('change', () => this.saveStateDebounced());
             this.dom.eraserSizeSlider.addEventListener('input', () => { this.dom.eraserSizeDropdown.value = this.dom.eraserSizeSlider.value; if (this.dom.eraserZoomCanvas.classList.contains('visible') && this.state.lastEraseCanvasPoint) this.drawEraserZoomAt(this.state.lastEraseCanvasPoint); });
+            this.dom.eraserSizeSlider.addEventListener('change', () => this.saveStateDebounced());
             this.dom.eraserStrengthSlider.addEventListener('input', () => { this.dom.eraserStrengthDropdown.value = this.dom.eraserStrengthSlider.value; });
+            this.dom.eraserStrengthSlider.addEventListener('change', () => this.saveStateDebounced());
             this.dom.toggleViewBtn.addEventListener('click', () => this.toggleCanvasZoom());
+
+            const dropdownsToScrub = [
+                this.dom.visualsDropdown,
+                this.dom.textDropdown,
+                this.dom.eraseToolDropdown,
+                this.dom.eraserHud
+            ];
+
+                        // (inside the setupEventListeners function)
+
+            dropdownsToScrub.forEach(dropdownEl => {
+                if (!dropdownEl) return;
+                dropdownEl.querySelectorAll('input[type="range"]').forEach(slider => {
+                    
+                    // --- THIS IS THE MODIFIED LINE ---
+                    // Exclude the strength sliders from both the main dropdown AND the HUD.
+                    if (slider.id === 'eraser-strength-dropdown' || slider.id === 'mg-eraser-strength-mini') {
+                        return; // Do not attach the scrubbing listener to strength sliders.
+                    }
+
+                    const sliderContainer = slider.closest('.slider-container, .row');
+                    slider.addEventListener('mousedown', () => {
+                        dropdownEl.classList.add('is-scrubbing');
+                        if (sliderContainer) {
+                            sliderContainer.classList.add('is-active-slider');
+                        }
+                    });
+                });
+            });
+
+            window.addEventListener('mouseup', (e) => {
+                this.handleMovieInteractionEnd(e);
+                dropdownsToScrub.forEach(dropdownEl => {
+                    if (dropdownEl && dropdownEl.classList.contains('is-scrubbing')) {
+                        dropdownEl.classList.remove('is-scrubbing');
+                        dropdownEl.querySelectorAll('.is-active-slider').forEach(container => {
+                            container.classList.remove('is-active-slider');
+                        });
+                    }
+                });
+            });
+
+            // (Inside setupEventListeners)
+window.addEventListener('click', (e) => {
+    const dropdowns = [
+        { el: this.dom.visualsDropdown, btn: this.dom.visualsBtn },
+        { el: this.dom.textDropdown, btn: this.dom.textBtn },
+        { el: this.dom.shortcutsDropdown, btn: this.dom.shortcutsBtn },
+        { el: this.dom.eraseToolDropdown, btn: this.dom.eraseToolBtn },
+        { el: this.dom.aiToolsDropdown, btn: this.dom.aiToolsBtn }
+    ];
+
+    dropdowns.forEach(item => {
+        if (item.el && item.el.classList.contains('visible') && !item.el.contains(e.target) && !item.btn.contains(e.target)) {
+            // *** THIS IS THE MODIFIED PART ***
+            // If we are closing the erase dropdown via a click-off, arm the tool.
+            if (item.el === this.dom.eraseToolDropdown) {
+                this.armEraser();
+            }
+            item.el.classList.remove('visible');
+        }
+    });
+    
+    if (this.dom.customFontSelect && this.dom.customFontSelect.classList.contains('open') && !this.dom.customFontSelect.contains(e.target)) {
+        this.closeFontDropdown();
+    }
+});
+
+
             const canvasResizeObserver = new ResizeObserver(() => { this.resizeCanvas(); this.drawFrame(); });
             canvasResizeObserver.observe(this.dom.canvasPanel);
         },
@@ -2723,13 +2924,10 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
             return this.state.canvasState.layers.find(l => l.id === this.state.activeLayerId);
         },
 
-                async init() {
-            // --- ONNX RUNTIME CONFIG ---
+        async init() {
             ort.env.wasm.simd = true;
             ort.env.wasm.numThreads = 1;
 
-            // --- Populate DOM element properties ---
-            // CORRECTED: Using direct, explicit ID lookups for every element to prevent null references.
             this.dom.loadingOverlay = document.getElementById('loading-overlay');
             this.dom.loadingMessage = this.dom.loadingOverlay.querySelector('h1');
             this.dom.toastEl = document.getElementById('mg-toast');
@@ -2813,23 +3011,24 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
             this.dom.currentThemeNameSpan = document.getElementById('current-theme-name');
             this.dom.pasteboardOverlayCanvas = document.getElementById('mg-pasteboard-overlay-canvas');
 
-            // Get canvas contexts
             this.dom.movieCtx = this.dom.movieCanvas.getContext('2d');
             this.dom.controlsCtx = this.dom.controlsOverlayCanvas.getContext('2d');
             this.dom.pasteboardCtx = this.dom.pasteboardOverlayCanvas.getContext('2d');
             this.dom.eraserZoomCtx = this.dom.eraserZoomCanvas.getContext('2d');
             
-            // Assign the global themes object to our config
+            this.saveStateDebounced = this.debounce(this.saveState, this.config.DEBOUNCE_DELAY);
             this.config.themes = window.themes;
 
-            // Set the theme name on initial load
             const savedThemeName = localStorage.getItem('selectedTheme') || 'classic light';
+            
+            // FIX: Apply the theme immediately on load to prevent color flashing.
+            this.applyTheme(savedThemeName);
+            
             this.state.originalTheme = savedThemeName;
             if (this.dom.currentThemeNameSpan) {
                 this.dom.currentThemeNameSpan.textContent = savedThemeName;
             }
 
-            // Initialize font map
             this.config.availableFonts.forEach(font => this.config.fontValueToNameMap.set(font.value, font.name));
 
             const minDisplayTime = new Promise(resolve => setTimeout(resolve, 2400)); 
