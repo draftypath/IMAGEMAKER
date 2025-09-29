@@ -327,19 +327,23 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
 </head>
 <body>
 <script>
+    // === SINGLE SOURCE OF TRUTH FOR THEMES ===
+    // This object is now defined once in the global scope so both scripts can access it.
+    const themes = {
+        'classic light': { name: 'classic light', isDark: false, colors: ['#f2efe8', '#2b2b2b', '#d98c5f'], css: { '--bg': '#f2efe8', '--ink': '#2b2b2b', '--mid': '#c2c2c2', '--light': '#faf9f5', '--shadow': '#7a7a7a', '--action-color': '#2b2b2b', '--danger-color': '#cc4444', '--success-color': '#55cc55' } },
+        'dark': { name: 'dark', isDark: true, colors: ['#1a1d2d', '#e0e5f0', '#e8a85a'], css: { '--bg': '#1a1d2d', '--ink': '#e0e5f0', '--mid': '#3d4a6e', '--light': '#252a40', '--shadow': '#0d0f16', '--action-color': '#e0e5f0', '--danger-color': '#a83e3e', '--success-color': '#4a9d4a' } },
+        'イーピーイッピ': { name: 'イーピーイッピ', isDark: true, colors: ['#5c3d46', '#dcd0c0', '#a26769'], css: { '--bg': '#2a1d21', '--ink': '#dcd0c0', '--mid': '#5c3d46', '--light': '#402d32', '--shadow': '#1a1114', '--action-color': '#a26769', '--danger-color': '#a26769', '--success-color': '#69a267' } },
+        'zarah': { name: 'zarah', isDark: false, colors: ['#7b9c98', '#eaf1f3', '#495555'], css: { '--bg': '#7b9c98', '--ink': '#eaf1f3', '--mid': '#495755', '--light': '#6c8985', '--shadow': '#3e4a48', '--action-color': '#eaf1f3' } },
+        'lavender': { name: 'lavender', isDark: false, colors: ['#b3b3d9', '#282846', '#656599'], css: { '--bg': '#b3b3d9', '--ink': '#282846', '--mid': '#656599', '--light': '#c4c4e2', '--shadow': '#47476b', '--action-color': '#8c58a6' } },
+        'café': { name: 'café', isDark: false, colors: ['#ceb18d', '#4e433f', '#d4d2d1'], css: { '--bg': '#ceb18d', '--ink': '#4e433f', '--mid': '#d4d2d1', '--light': '#f7f2ea', '--shadow': '#8a7a6a', '--action-color': '#8a6ea2' } },
+        'mizu': { name: 'mizu', isDark: false, colors: ['#b8dceb', '#091f2c', '#89a5bb'], css: { '--bg': '#b8dceb', '--ink': '#091f2c', '--mid': '#89a5bb', '--light': '#cfe5ee', '--shadow': '#627382', '--action-color': '#005a8e' } },
+        'キティ': { name: 'キティ', isDark: false, colors: ['#fdf6e3', '#657b83', '#93a1a1'], css: { '--bg': '#fdf6e3', '--ink': '#657b83', '--mid': '#93a1a1', '--light': '#eee8d5', '--shadow': '#586e75', '--action-color': '#268bd2' } },
+        'aura': { name: 'aura', isDark: true, colors: ['#29423D', '#EAE8E1', '#C9A59C'], css: { '--bg': '#1A2A27', '--ink': '#EAE8E1', '--mid': '#3E5D56', '--light': '#29423D', '--shadow': '#111C19', '--action-color': '#C9A59C', '--danger-color': '#b05454', '--success-color': '#5a9e7a' } }
+    };
+
   (function() {
+    // This pre-loader now uses the global 'themes' object.
     try {
-        const themes = {
-            'classic light': { name: 'classic light', isDark: false, colors: ['#f2efe8', '#2b2b2b', '#c2c2c2'], css: { '--bg': '#f2efe8', '--ink': '#2b2b2b', '--mid': '#c2c2c2', '--light': '#faf9f5', '--shadow': '#7a7a7a', '--action-color': '#2b2b2b', '--danger-color': '#cc4444', '--success-color': '#55cc55' } },
-            'dark': { name: 'dark', isDark: true, colors: ['#1a1d2d', '#e0e5f0', '#3d4a6e'], css: { '--bg': '#1a1d2d', '--ink': '#e0e5f0', '--mid': '#3d4a6e', '--light': '#252a40', '--shadow': '#0d0f16', '--action-color': '#e0e5f0', '--danger-color': '#a83e3e', '--success-color': '#4a9d4a' } },
-            'イーピーイッピ': { name: 'イーピーイッピ', isDark: true, colors: ['#5c3d46', '#dcd0c0', '#a26769'], css: { '--bg': '#2a1d21', '--ink': '#dcd0c0', '--mid': '#5c3d46', '--light': '#402d32', '--shadow': '#1a1114', '--action-color': '#a26769', '--danger-color': '#a26769', '--success-color': '#69a267' } },
-            'zarah': { name: 'zarah', isDark: false, colors: ['#7b9c98', '#eaf1f3', '#495555'], css: { '--bg': '#7b9c98', '--ink': '#eaf1f3', '--mid': '#495755', '--light': '#6c8985', '--shadow': '#3e4a48', '--action-color': '#eaf1f3' } },
-            'lavender': { name: 'lavender', isDark: false, colors: ['#b3b3d9', '#282846', '#656599'], css: { '--bg': '#b3b3d9', '--ink': '#282846', '--mid': '#656599', '--light': '#c4c4e2', '--shadow': '#47476b', '--action-color': '#8c58a6' } },
-            'café': { name: 'café', isDark: false, colors: ['#ceb18d', '#4e433f', '#d4d2d1'], css: { '--bg': '#ceb18d', '--ink': '#4e433f', '--mid': '#d4d2d1', '--light': '#f7f2ea', '--shadow': '#8a7a6a', '--action-color': '#8a6ea2' } },
-            'mizu': { name: 'mizu', isDark: false, colors: ['#b8dceb', '#091f2c', '#89a5bb'], css: { '--bg': '#b8dceb', '--ink': '#091f2c', '--mid': '#89a5bb', '--light': '#cfe5ee', '--shadow': '#627382', '--action-color': '#005a8e' } },
-            'キティ': { name: 'キティ', isDark: false, colors: ['#fdf6e3', '#657b83', '#93a1a1'], css: { '--bg': '#fdf6e3', '--ink': '#657b83', '--mid': '#93a1a1', '--light': '#eee8d5', '--shadow': '#586e75', '--action-color': '#268bd2' } },
-            'aura': { name: 'aura', isDark: true, colors: ['#29423D', '#EAE8E1', '#C9A59C'], css: { '--bg': '#1A2A27', '--ink': '#EAE8E1', '--mid': '#3E5D56', '--light': '#29423D', '--shadow': '#111C19', '--action-color': '#C9A59C', '--danger-color': '#b05454', '--success-color': '#5a9e7a' } }
-        };
         const savedThemeName = localStorage.getItem('selectedTheme') || 'classic light';
         const theme = themes[savedThemeName];
         if (theme) {
@@ -440,7 +444,23 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
             <div class="slider-container"><label for="text-shadow-offset-y">Offset Y</label><input type="range" id="text-shadow-offset-y" min="-50" max="50" value="10"></div>
         </div>
         <div id="text-zorder-controls" style="display:flex;gap:.5rem;align-items:center;margin-top:.5rem;"><button id="text-move-back" class="mg-btn" type="button" style="width:auto;padding:2px 8px;">Move back</button><button id="text-move-forward" class="mg-btn" type="button" style="width:auto;padding:2px 8px;">Move forward</button></div></div></div>
-<button id=shortcuts-btn>Shortcuts</button><div class=controls-fake><div class=btn-square></div><div class=btn-square></div></div><div id=shortcuts-dropdown><h5>Keyboard Shortcuts</h5><ul><li><span>Toggle Canvas View</span><kbd>Z</kbd></li><li><span>Enlarge Asset</span><kbd>D</kbd></li><li><span>Shrink Asset</span><kbd>F</kbd></li><li><span>Flip Asset Horizontally</span><kbd>S</kbd></li><li><span>Move Layer Forward</span><kbd>Q</kbd></li><li><span>Move Layer Backward</span><kbd>W</kbd></li><li><span>Delete Asset</span><kbd>Delete</kbd></li><li><span>Save Project</span><kbd>Cmd/Ctrl + S</kbd></li></ul></div></div></div><main id=studio-container><div id=controls-panel>
+<button id=shortcuts-btn>Shortcuts</button><div class=controls-fake><div class=btn-square></div><div class=btn-square></div></div>
+<div id=shortcuts-dropdown>
+    <h5>Keyboard Shortcuts</h5>
+    <ul>
+        <li><span>Undo Last Action</span><kbd>Cmd/Ctrl + Z</kbd></li>
+        <li><span>Redo Last Action</span><kbd>Cmd/Ctrl + Y</kbd></li>
+        <li><span>Toggle Canvas View</span><kbd>Z</kbd></li>
+        <li><span>Enlarge Asset</span><kbd>D</kbd></li>
+        <li><span>Shrink Asset</span><kbd>F</kbd></li>
+        <li><span>Flip Asset Horizontally</span><kbd>S</kbd></li>
+        <li><span>Move Layer Forward</span><kbd>Q</kbd></li>
+        <li><span>Move Layer Backward</span><kbd>W</kbd></li>
+        <li><span>Delete Asset</span><kbd>Delete</kbd></li>
+        <li><span>Save Project</span><kbd>Cmd/Ctrl + S</kbd></li>
+    </ul>
+</div>
+</div></div><main id=studio-container><div id=controls-panel>
     <fieldset id="assets-folder-fieldset">
         <legend>Project Library</legend>
         <button id="mg-view-all-local-assets-btn" class="mg-btn">View All</button>
@@ -570,17 +590,7 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
         config: {
             secondaryFontsLoaded: false,
             loadedFonts: new Set(['VT323']),
-            themes: {
-                'classic light': { name: 'classic light', isDark: false, colors: ['#f2efe8', '#2b2b2b', '#d98c5f'], css: { '--bg': '#f2efe8', '--ink': '#2b2b2b', '--mid': '#c2c2c2', '--light': '#faf9f5', '--shadow': '#7a7a7a', '--action-color': '#2b2b2b', '--danger-color': '#cc4444', '--success-color': '#55cc55' } },
-                'dark': { name: 'dark', isDark: true, colors: ['#1a1d2d', '#e0e5f0', '#e8a85a'], css: { '--bg': '#1a1d2d', '--ink': '#e0e5f0', '--mid': '#3d4a6e', '--light': '#252a40', '--shadow': '#0d0f16', '--action-color': '#e0e5f0', '--danger-color': '#a83e3e', '--success-color': '#4a9d4a' } },
-                'イーピーイッピ': { name: 'イーピーイッピ', isDark: true, colors: ['#5c3d46', '#dcd0c0', '#a26769'], css: { '--bg': '#2a1d21', '--ink': '#dcd0c0', '--mid': '#5c3d46', '--light': '#402d32', '--shadow': '#1a1114', '--action-color': '#a26769', '--danger-color': '#a26769', '--success-color': '#69a267' } },
-                'zarah': { name: 'zarah', isDark: false, colors: ['#7b9c98', '#eaf1f3', '#495555'], css: { '--bg': '#7b9c98', '--ink': '#eaf1f3', '--mid': '#495755', '--light': '#6c8985', '--shadow': '#3e4a48', '--action-color': '#eaf1f3' } },
-                'lavender': { name: 'lavender', isDark: false, colors: ['#b3b3d9', '#282846', '#656599'], css: { '--bg': '#b3b3d9', '--ink': '#282846', '--mid': '#656599', '--light': '#c4c4e2', '--shadow': '#47476b', '--action-color': '#8c58a6' } },
-                'café': { name: 'café', isDark: false, colors: ['#ceb18d', '#4e433f', '#d4d2d1'], css: { '--bg': '#ceb18d', '--ink': '#4e433f', '--mid': '#d4d2d1', '--light': '#f7f2ea', '--shadow': '#8a7a6a', '--action-color': '#8a6ea2' } },
-                'mizu': { name: 'mizu', isDark: false, colors: ['#b8dceb', '#091f2c', '#89a5bb'], css: { '--bg': '#b8dceb', '--ink': '#091f2c', '--mid': '#89a5bb', '--light': '#cfe5ee', '--shadow': '#627382', '--action-color': '#005a8e' } },
-                'キティ': { name: 'キティ', isDark: false, colors: ['#fdf6e3', '#657b83', '#93a1a1'], css: { '--bg': '#fdf6e3', '--ink': '#657b83', '--mid': '#93a1a1', '--light': '#eee8d5', '--shadow': '#586e75', '--action-color': '#268bd2' } },
-                'aura': { name: 'aura', isDark: true, colors: ['#29423D', '#EAE8E1', '#C9A59C'], css: { '--bg': '#1A2A27', '--ink': '#EAE8E1', '--mid': '#3E5D56', '--light': '#29423D', '--shadow': '#111C19', '--action-color': '#C9A59C', '--danger-color': '#b05454', '--success-color': '#5a9e7a' } },
-            },
+            themes: {}, // This will be populated from the global 'themes' object in init()
             PASTEBOARD_MARGIN: 1500,
             FADE_IN_DURATION: 300,
             UI_MIN_PX: 120,
@@ -590,6 +600,7 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
             MIN_ZOOM_FEEL: 1.08,
             BRUSH_MIN: 5,
             BRUSH_MAX: 250,
+            HISTORY_LIMIT: 15,
             availableFonts: [
                 { name: 'VT323', value: "'VT323', monospace" }, { name: 'Yomogi', value: "'Yomogi', cursive" },
                 { name: 'Young Serif', value: "'Young Serif', serif" }, { name: 'Times New Roman', value: "Times New Roman, serif" },
@@ -634,28 +645,11 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
             confirmCallback: null,
             lastEraseCanvasPoint: null,
             bgSessionCache: new Map(),
+            history: [],
+            historyIndex: -1,
         },
 
-        dom: {
-            loadingOverlay: null, loadingMessage: null, addLayerOverlay: null, assetPalette: null, addLayerFileInput: null, canvasPanel: null, 
-            canvasPlaceholder: null, controlsOverlayCanvas: null, controlsCtx: null, pasteboardOverlayCanvas: null, pasteboardCtx: null, 
-            initialBackgroundInput: null, layerInstructions: null, movieCanvas: null, movieCtx: null, downloadImageBtn: null, 
-            saveProjectBtn: null, clearCanvasBtn: null, confirmationOverlay: null, confirmationText: null, confirmYesBtn: null, 
-            confirmNoBtn: null, shortcutsBtn: null, shortcutsDropdown: null, visualsBtn: null, visualsDropdown: null, 
-            assetVisualsControls: null, assetOpacitySlider: null, assetBrightnessSlider: null, assetSaturationSlider: null, 
-            bgBrightnessSlider: null, bgSaturationSlider: null, textBtn: null, textDropdown: null, textVisualsControls: null, 
-            textContentInput: null, textSizeSlider: null, textColorInput: null, textEdgeColorInput: null, textEdgeWidthSlider: null, 
-            addNewTextLayerBtn: null, textLayerPalette: null, toggleViewBtn: null, eraseToolBtn: null, eraseToolDropdown: null, 
-            eraseBtn: null, uneraseBtn: null, aiToolsBtn: null, aiToolsDropdown: null, assetsFolderFieldset: null, localAssetPalette: null, 
-            localBackgroundPalette: null, viewAllLocalAssetsBtn: null, projectLibraryPopupOverlay: null, projectLibraryGridProjects: null, 
-            projectLibraryGridAssets: null, projectLibraryGridBackgrounds: null, projectLibraryGridFavorites: null, libraryTabProjectsBtn: null, 
-            libraryTabAssetsBtn: null, libraryTabBackgroundsBtn: null, libraryTabFavoritesBtn: null, projectLibraryPopupCloseBtn: null, 
-            visualsTabAssetBtn: null, visualsTabBackgroundBtn: null, assetTabPanel: null, backgroundTabPanel: null, customFontSelect: null, 
-            fontSelectTrigger: null, fontSelectDropdown: null, fontSelectList: null, eraserZoomCanvas: null, eraserZoomCtx: null, 
-            eraserHud: null, hudEraseBtn: null, hudUneraseBtn: null, eraserSizeSlider: null, eraserStrengthSlider: null, 
-            eraserSizeDropdown: null, eraserStrengthDropdown: null, toastEl: null, themePopupOverlay: null, themePopupContent: null,
-            themeList: null, themeSelectLink: null, currentThemeNameSpan: null,
-        },
+        dom: {},
 
         loadSpecificFonts(fontNames) {
             if (!Array.isArray(fontNames) || fontNames.length === 0) return Promise.resolve();
@@ -687,8 +681,8 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
             document.head.appendChild(style);
         },
 
-        applyTheme(themeName, isPreview = false) {
-            const theme = this.config.themes[themeName];
+              applyTheme(themeName, isPreview = false) {
+            const theme = themes[themeName]; // FIX: Use the global 'themes' object directly
             if (!theme) return;
             const root = document.documentElement;
             if (isPreview) { root.style.transition = 'none'; }
@@ -723,11 +717,11 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
             this.dom.themePopupOverlay.style.display = 'none';
         },
 
-        populateThemeList() {
+               populateThemeList() {
             this.dom.themeList.innerHTML = '';
             const currentTheme = localStorage.getItem('selectedTheme') || 'classic light';
-            for (const themeName in this.config.themes) {
-                const theme = this.config.themes[themeName];
+            for (const themeName in themes) { // FIX: Use the global 'themes' object directly
+                const theme = themes[themeName];
                 const li = document.createElement('li');
                 li.dataset.themeName = themeName;
                 if(themeName === currentTheme) li.classList.add('active');
@@ -1246,6 +1240,7 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
                 this.renderTextLayerPalette();
                 this.updateEditPanelsUI();
                 this.triggerAnimatedRender();
+                this.saveState();
             };
             if (this.state.assetCache[src]) { createFromImage(this.state.assetCache[src]); return; }
             const image = new Image();
@@ -1313,7 +1308,7 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
                 this.drawLayers(this.dom.movieCtx, this.state.canvasState.layers);
                 this.drawControlsOverlay();
                 if (progress < 1) { requestAnimationFrame(animateBackground); } 
-                else { this.drawFrame(); }
+                else { this.drawFrame(); if (!isRestoring) { this.saveState(); } }
             }
             requestAnimationFrame(animateBackground);
             if (isFirstBackground) { this.toast('Background set! Add layers to create your image.', 3000); }
@@ -1403,6 +1398,7 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
                     this.renderLayerPalette();
                     if(this.updateTextOrderButtonsState) this.updateTextOrderButtonsState();
                     this.drawFrame();
+                    this.saveState();
                 }
             });
         },
@@ -1517,6 +1513,7 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
             e.target.classList.add('selected');
             this.closeFontDropdown();
             if (!this.state.movieInteraction.active) this.drawFrame();
+            this.saveState();
         },
 
         openFontDropdown() {
@@ -1589,6 +1586,7 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
             this.toast('Text layer added!', 2000);
             this.dom.textContentInput.focus();
             this.dom.textContentInput.select();
+            this.saveState();
         },
 
         deleteMovieLayer(layerId) {
@@ -1599,6 +1597,7 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
             this.updateControlsState();
             this.updateEditPanelsUI();
             this.drawFrame();
+            this.saveState();
         },
         
         getTextBlockMetrics(ctx, text, font, fontSize) {
@@ -2084,6 +2083,7 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
             this.showEraserZoom(false);
             if (wasErasing) { this.renderLayerPalette(); this.showEraserHUD(true); }
             this.stopRenderLoop();
+            this.saveState(); // Save state after an interaction ends
           }
         },
 
@@ -2120,17 +2120,22 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
         handleKeyDown(e) {
             const key = e.key.toLowerCase();
             if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') { if (key === 'escape') document.activeElement.blur(); return; }
+            
+            if ((e.metaKey || e.ctrlKey) && key === 'z') { e.preventDefault(); this.undo(); return; }
+            if ((e.metaKey || e.ctrlKey) && key === 'y') { e.preventDefault(); this.redo(); return; }
+
             if ((e.metaKey || e.ctrlKey) && key === 's') { e.preventDefault(); if (!this.dom.saveProjectBtn.disabled) this.saveProjectToLibrary(); return; }
-            if (key === 'z') { e.preventDefault(); this.toggleCanvasZoom(); return; }
+            if (key === 'z' && !(e.metaKey || e.ctrlKey)) { e.preventDefault(); this.toggleCanvasZoom(); return; }
             if (key === 'escape' && this.state.eraserMode !== 'none') { e.preventDefault(); this.deactivateEraser(); return; }
             const activeLayer = this.getActiveLayer();
             if (!activeLayer) return;
             if (key === 'q' || key === 'w') {
                 e.preventDefault();
                 const moved = this.nudgeLayerZ(activeLayer.id, key === 'q' ? -1 : +1);
-                if (moved) { this.renderLayerPalette(); this.renderTextLayerPalette(); if(this.updateTextOrderButtonsState) this.updateTextOrderButtonsState(); this.drawFrame(); }
+                if (moved) { this.renderLayerPalette(); this.renderTextLayerPalette(); if(this.updateTextOrderButtonsState) this.updateTextOrderButtonsState(); this.drawFrame(); this.saveState(); }
                 return;
             }
+            let stateChanged = false;
             if (key === 'd' || key === 'f') {
                 e.preventDefault();
                 const scaleFactor = key === 'd' ? 1.05 : 0.95;
@@ -2142,10 +2147,15 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
                     activeLayer.propSize = activeLayer.fontSize / this.dom.movieCanvas.height;
                     this.dom.textSizeSlider.value = activeLayer.fontSize;
                 }
+                 stateChanged = true;
             }
-            else if (key === 's') { e.preventDefault(); activeLayer.flipX = !activeLayer.flipX; } 
-            else if (key === 'delete' || key === 'backspace') { e.preventDefault(); this.deleteMovieLayer(activeLayer.id); this.toast('Layer deleted', 2000); }
-            this.drawFrame();
+            else if (key === 's' && !(e.metaKey || e.ctrlKey)) { e.preventDefault(); activeLayer.flipX = !activeLayer.flipX; stateChanged = true; } 
+            else if (key === 'delete' || key === 'backspace') { e.preventDefault(); this.deleteMovieLayer(activeLayer.id); this.toast('Layer deleted', 2000); return; } // deleteMovieLayer already saves state
+
+            if (stateChanged) {
+                this.drawFrame();
+                this.saveState();
+            }
         },
 
         clearCanvas(isSoft = false) {
@@ -2159,7 +2169,12 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
             this.updateControlsState();
             this.updateEditPanelsUI();
             this.drawFrame();
-            if (!isSoft) this.toast("Canvas cleared. Saved projects are safe.", 2000);
+            if (!isSoft) {
+                this.toast("Canvas cleared. Saved projects are safe.", 2000);
+                this.state.history = [];
+                this.state.historyIndex = -1;
+                this.saveState();
+            }
         },
 
         deactivateEraser(shouldCloseDropdown = false) {
@@ -2314,6 +2329,7 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
                 this.toast(`Background removed.`, 2500);
                 if(this.renderLayerPalette) this.renderLayerPalette();
                 if(this.drawFrame) this.drawFrame();
+                this.saveState();
             } catch (err) {
                 console.error(err);
                 this.hideToast();
@@ -2457,11 +2473,14 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
             this.renderTextLayerPalette();
             this.drawFrame();
             await this.saveCurrentWork();
+            this.state.history = [];
+            this.state.historyIndex = -1;
+            this.saveState();
         },
         
         async restoreCurrentWork() {
             const savedData = localStorage.getItem('ims-autosave-project');
-            if (!savedData) return;
+            if (!savedData) { this.saveState(); return; } 
             try {
                 const projectState = JSON.parse(savedData);
                 this.toast("Restoring previous work...", null);
@@ -2471,6 +2490,77 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
                 console.error("Failed to restore project:", error);
                 this.toast(`Could not restore work: ${error.message}`, 4000);
                 localStorage.removeItem('ims-autosave-project');
+                this.saveState();
+            }
+        },
+
+        // --- UNDO/REDO METHODS ---
+        saveState() {
+            if (this.state.historyIndex < this.state.history.length - 1) {
+                this.state.history = this.state.history.slice(0, this.state.historyIndex + 1);
+            }
+
+            const snapshot = {
+                ...this.state.canvasState,
+                layers: this.state.canvasState.layers.map(layer => {
+                    const { asset, proxyCanvas, proxyCtx, ...leanLayer } = layer;
+                    if (layer.type === 'image' && proxyCanvas) {
+                        leanLayer.proxyCanvasDataURL = proxyCanvas.toDataURL();
+                    }
+                    return leanLayer;
+                }),
+                backgroundElement: null
+            };
+            
+            this.state.history.push(snapshot);
+
+            if (this.state.history.length > this.config.HISTORY_LIMIT) {
+                this.state.history.shift();
+            }
+            
+            this.state.historyIndex = this.state.history.length - 1;
+        },
+
+        async applyState(stateToApply) {
+            for (const layer of stateToApply.layers) {
+                if (layer.type === 'image' && layer.proxyCanvasDataURL) {
+                    const img = new Image();
+                    img.src = layer.proxyCanvasDataURL;
+                    await img.decode();
+                    const proxyCanvas = document.createElement('canvas');
+                    proxyCanvas.width = img.width;
+                    proxyCanvas.height = img.height;
+                    const proxyCtx = proxyCanvas.getContext('2d');
+                    proxyCtx.drawImage(img, 0, 0);
+                    layer.proxyCanvas = proxyCanvas;
+                    layer.proxyCtx = proxyCtx;
+                }
+            }
+
+            stateToApply.backgroundElement = this.state.canvasState.backgroundElement;
+            this.state.canvasState = stateToApply;
+
+            this.updateEditPanelsUI();
+            this.renderLayerPalette();
+            this.renderTextLayerPalette();
+            this.drawFrame();
+        },
+
+        undo() {
+            if (this.state.historyIndex > 0) {
+                this.state.historyIndex--;
+                const stateToRestore = JSON.parse(JSON.stringify(this.state.history[this.state.historyIndex]));
+                this.applyState(stateToRestore);
+                this.toast('Undo', 1500);
+            }
+        },
+
+        redo() {
+            if (this.state.historyIndex < this.state.history.length - 1) {
+                this.state.historyIndex++;
+                const stateToRestore = JSON.parse(JSON.stringify(this.state.history[this.state.historyIndex]));
+                this.applyState(stateToRestore);
+                this.toast('Redo', 1500);
             }
         },
 
@@ -2567,19 +2657,18 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
             this.dom.hudUneraseBtn.addEventListener('click', () => this.armEraserFromHUD('unerase'));
             this.dom.eraserHud.addEventListener('mousedown', e => e.stopPropagation());
             document.querySelectorAll('#visuals-dropdown input, #visuals-dropdown select, #text-dropdown input, #text-dropdown textarea').forEach(input => {
-                const eventType = ['range', 'color'].includes(input.type) || input.tagName === 'TEXTAREA' ? 'input' : 'change';
-                input.addEventListener(eventType, () => {
+                const isSlider = input.type === 'range';
+                const inputEvent = isSlider ? 'input' : 'input'; 
+                const changeEvent = isSlider ? 'change' : 'change';
+                const action = () => {
                     const l = this.getActiveLayer();
                     if (!l && !input.id.startsWith('bg-')) return;
-                    switch(input.id) {
+                     switch(input.id) {
                         case 'asset-opacity': l.opacity = parseFloat(input.value); break;
                         case 'asset-brightness': l.brightness = parseFloat(input.value); break;
                         case 'asset-saturation': l.saturation = parseFloat(input.value); break;
                         case 'bg-brightness': this.state.canvasState.bgBrightness = parseFloat(input.value); break;
-                        case 'bg-saturation': this.state.canvasState.bgSaturation = parseFloat(input.value);
-                        break;
-                        case 'text-content': if(l.type==='text') l.text = input
-                        break;
+                        case 'bg-saturation': this.state.canvasState.bgSaturation = parseFloat(input.value); break;
                         case 'text-content': if(l.type==='text') l.text = input.value; this.renderTextLayerPalette(); break;
                         case 'text-size': if(l.type==='text') { l.fontSize = parseFloat(input.value); l.propSize = l.fontSize / this.dom.movieCanvas.height; } break;
                         case 'text-color': if(l.type==='text') l.color = input.value; break;
@@ -2600,47 +2689,15 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
                         case 'asset-edge-width': if(l) l.border.width = input.value; break;
                     }
                     if (!this.state.movieInteraction.active) this.drawFrame();
-                });
+                };
+                input.addEventListener(inputEvent, action);
+                input.addEventListener(changeEvent, () => this.saveState());
             });
+
             const textMoveForwardBtn = document.getElementById('text-move-forward'), textMoveBackBtn = document.getElementById('text-move-back');
-            if (textMoveForwardBtn) textMoveForwardBtn.addEventListener('click', () => { const l = this.getActiveLayer(); if (l?.type === 'text' && this.nudgeLayerZ(l.id, -1)) { this.renderLayerPalette(); this.renderTextLayerPalette(); this.updateTextOrderButtonsState(); this.drawFrame(); } });
-            if (textMoveBackBtn) textMoveBackBtn.addEventListener('click', () => { const l = this.getActiveLayer(); if (l?.type === 'text' && this.nudgeLayerZ(l.id, +1)) { this.renderLayerPalette(); this.renderTextLayerPalette(); this.updateTextOrderButtonsState(); this.drawFrame(); } });
-            const allSliders = document.querySelectorAll('#visuals-dropdown input[type=range], #text-dropdown input[type=range], #erase-tool-dropdown input[type=range], #mg-eraser-hud input[type=range]');
-            const startScrubbing = (e) => {
-                const slider = e.currentTarget, container = slider.closest('.slider-container') || slider.closest('.row');
-                const parentScrubTarget = slider.closest('[id$="-dropdown"]') || slider.closest('#mg-eraser-hud');
-                if (parentScrubTarget && container) { parentScrubTarget.classList.add('is-scrubbing'); container.classList.add('is-active-slider'); }
-            };
-            const endScrubbing = () => { 
-                const scrubbedEl = document.querySelector('.is-scrubbing'); 
-                if (scrubbedEl) { 
-                    const activeContainer = scrubbedEl.querySelector('.is-active-slider'); 
-                    if (activeContainer) activeContainer.classList.remove('is-active-slider'); 
-                    scrubbedEl.classList.remove('is-scrubbing'); 
-                } 
-            };
-            allSliders.forEach(slider => {
-                slider.addEventListener('mousedown', startScrubbing);
-                slider.addEventListener('touchstart', startScrubbing, { passive: true });
-            });
-            window.addEventListener('mouseup', endScrubbing);
-            window.addEventListener('touchend', endScrubbing);
-            window.addEventListener('click', (e) => {
-                const popups = [ { dropdown: this.dom.shortcutsDropdown, button: this.dom.shortcutsBtn }, { dropdown: this.dom.visualsDropdown, button: this.dom.visualsBtn }, { dropdown: this.dom.textDropdown, button: this.dom.textBtn }, { dropdown: this.dom.eraseToolDropdown, button: this.dom.eraseToolBtn }, { dropdown: this.dom.aiToolsDropdown, button: this.dom.aiToolsBtn } ];
-                const clickedInsidePopup = popups.some(p => p.dropdown.contains(e.target));
-                if (e.target.type !== 'color' && !clickedInsidePopup) {
-                    popups.forEach(p => {
-                        if (!p.button.contains(e.target)) {
-                             if (p.dropdown.id === 'erase-tool-dropdown' && p.dropdown.classList.contains('visible') && this.state.eraserMode !== 'none' && !this.state.isEraserArmed) {
-                                this.state.isEraserArmed = true; this.showEraserHUD(true); this.updateEraserHudState(); this.dom.movieCanvas.classList.add('erase-cursor');
-                                this.toast(`${this.state.eraserMode==='erase'?'Erase':'Unerase'} Mode Activated. Press [ESC] to deactivate.`, null);
-                            }
-                            p.dropdown.classList.remove('visible');
-                        }
-                    });
-                }
-                if (!this.dom.customFontSelect.contains(e.target)) { this.closeFontDropdown(); }
-            });
+            if (textMoveForwardBtn) textMoveForwardBtn.addEventListener('click', () => { const l = this.getActiveLayer(); if (l?.type === 'text' && this.nudgeLayerZ(l.id, -1)) { this.renderLayerPalette(); this.renderTextLayerPalette(); this.updateTextOrderButtonsState(); this.drawFrame(); this.saveState(); } });
+            if (textMoveBackBtn) textMoveBackBtn.addEventListener('click', () => { const l = this.getActiveLayer(); if (l?.type === 'text' && this.nudgeLayerZ(l.id, +1)) { this.renderLayerPalette(); this.renderTextLayerPalette(); this.updateTextOrderButtonsState(); this.drawFrame(); this.saveState(); } });
+            
             this.dom.viewAllLocalAssetsBtn.addEventListener('click', () => {
                 this.populateProjectLibraryPopup();
                 const lastTab = localStorage.getItem('ims-last-library-tab') || 'assets';
@@ -2672,8 +2729,10 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
             ort.env.wasm.numThreads = 1;
 
             // --- Populate DOM element properties ---
-            // This section is now corrected to use direct, explicit lookups for each ID.
+            // CORRECTED: Using direct, explicit ID lookups for every element to prevent null references.
             this.dom.loadingOverlay = document.getElementById('loading-overlay');
+            this.dom.loadingMessage = this.dom.loadingOverlay.querySelector('h1');
+            this.dom.toastEl = document.getElementById('mg-toast');
             this.dom.addLayerOverlay = document.getElementById('mg-asset-library-overlay');
             this.dom.assetPalette = document.getElementById('mg-asset-palette');
             this.dom.addLayerFileInput = document.getElementById('mg-asset-picker-file');
@@ -2753,8 +2812,6 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
             this.dom.themeSelectLink = document.getElementById('theme-select-link');
             this.dom.currentThemeNameSpan = document.getElementById('current-theme-name');
             this.dom.pasteboardOverlayCanvas = document.getElementById('mg-pasteboard-overlay-canvas');
-            this.dom.loadingMessage = this.dom.loadingOverlay.querySelector('h1');
-            this.dom.toastEl = document.getElementById('mg-toast');
 
             // Get canvas contexts
             this.dom.movieCtx = this.dom.movieCanvas.getContext('2d');
@@ -2762,6 +2819,16 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
             this.dom.pasteboardCtx = this.dom.pasteboardOverlayCanvas.getContext('2d');
             this.dom.eraserZoomCtx = this.dom.eraserZoomCanvas.getContext('2d');
             
+            // Assign the global themes object to our config
+            this.config.themes = window.themes;
+
+            // Set the theme name on initial load
+            const savedThemeName = localStorage.getItem('selectedTheme') || 'classic light';
+            this.state.originalTheme = savedThemeName;
+            if (this.dom.currentThemeNameSpan) {
+                this.dom.currentThemeNameSpan.textContent = savedThemeName;
+            }
+
             // Initialize font map
             this.config.availableFonts.forEach(font => this.config.fontValueToNameMap.set(font.value, font.name));
 
