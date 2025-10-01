@@ -652,21 +652,44 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
 
         dom: {},
 
-        loadSpecificFonts(fontNames) {
+loadSpecificFonts(fontNames) {
             if (!Array.isArray(fontNames) || fontNames.length === 0) return Promise.resolve();
+            
             const fontsToLoad = fontNames.filter(f => !this.config.loadedFonts.has(f));
             if (fontsToLoad.length === 0) return Promise.resolve();
-            const baseUrl = 'https://fonts.googleapis.com/css2?';
-            const familyParams = fontsToLoad.map(font => `family=${font.replace(/ /g, '+')}`).join('&');
-            const url = `${baseUrl}${familyParams}&display=swap`;
-            return new Promise((resolve, reject) => {
-                const link = document.createElement('link');
-                link.href = url;
-                link.rel = 'stylesheet';
-                link.onload = () => { fontsToLoad.forEach(f => this.config.loadedFonts.add(f)); resolve(); };
-                link.onerror = () => { console.error('Failed to load specific fonts:', fontsToLoad); reject(new Error(`Could not load fonts: ${fontsToLoad.join(', ')}`)); };
-                document.head.appendChild(link);
-            });
+
+            // --- BATCHING LOGIC START ---
+            const batchSize = 10; // Request 10 fonts at a time.
+            const promises = [];
+
+            for (let i = 0; i < fontsToLoad.length; i += batchSize) {
+                const batch = fontsToLoad.slice(i, i + batchSize);
+                
+                const baseUrl = 'https://fonts.googleapis.com/css2?';
+                const familyParams = batch.map(font => `family=${font.replace(/ /g, '+')}`).join('&');
+                const url = `${baseUrl}${familyParams}&display=swap`;
+
+                const promise = new Promise((resolve, reject) => {
+                    const link = document.createElement('link');
+                    link.href = url;
+                    link.rel = 'stylesheet';
+                    link.onload = () => {
+                        batch.forEach(f => this.config.loadedFonts.add(f));
+                        resolve();
+                    };
+                    link.onerror = () => {
+                        console.error('Failed to load a batch of fonts:', batch);
+                        // We can still try to resolve, so the app doesn't crash.
+                        // The user just won't have these specific fonts.
+                        reject(new Error(`Could not load font batch: ${batch.join(', ')}`));
+                    };
+                    document.head.appendChild(link);
+                });
+                promises.push(promise);
+            }
+            // --- BATCHING LOGIC END ---
+
+            return Promise.all(promises);
         },
 
         loadSecondaryFonts() {
