@@ -1650,67 +1650,140 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper,body[data-theme-is-dark=t
             }
             return null;
         },
+
+        // Add this ENTIRE new function to your script
+
+isPixelOpaqueAtPoint(layer, point) {
+    // This function only applies to image layers. Text is always considered "opaque".
+    if (layer.type !== 'image' || !layer.proxyCanvas) {
+        return true;
+    }
+
+    // 1. Translate the world-space click point to the layer's local, unrotated space
+    const dx = point.x - layer.x;
+    const dy = point.y - layer.y;
+    const angle = -layer.rot * Math.PI / 180;
+    const localX = dx * Math.cos(angle) - dy * Math.sin(angle);
+    const localY = dx * Math.sin(angle) + dy * Math.cos(angle);
+
+    // 2. Convert the local point (centered) to proxyCanvas coordinates (top-left)
+    const assetWidth = layer.proxyCanvas.width;
+    const assetHeight = layer.proxyCanvas.height;
+    const layerRenderWidth = layer.size;
+    const layerRenderHeight = layer.size * (assetHeight / assetWidth);
+
+    // The scale factor to convert from rendered size back to the proxyCanvas's original size
+    const scale = assetWidth / layerRenderWidth;
+
+    // Shift from center-based coordinates to top-left-based, then apply scale
+    const proxyX = Math.floor((localX + layerRenderWidth / 2) * scale);
+    const proxyY = Math.floor((localY + layerRenderHeight / 2) * scale);
+
+    // 3. Check if the calculated point is even within the canvas bounds
+    if (proxyX < 0 || proxyX >= assetWidth || proxyY < 0 || proxyY >= assetHeight) {
+        return false;
+    }
+
+    // 4. Read the single pixel's data from the proxyCanvas
+    try {
+        const pixelData = layer.proxyCtx.getImageData(proxyX, proxyY, 1, 1).data;
+        // The alpha value is the 4th element (index 3). We use a small threshold.
+        return pixelData[3] > 10;
+    } catch (e) {
+        // getImageData can throw security errors on tainted canvases, though unlikely here.
+        console.error("Could not read pixel data:", e);
+        return false;
+    }
+},
         
-        handleMovieInteractionStart(e) {
-            const dropdowns = [this.dom.visualsDropdown, this.dom.textDropdown, this.dom.shortcutsDropdown, this.dom.eraseToolDropdown, this.dom.aiToolsDropdown, this.dom.customFontSelect];
-            for (const dropdown of dropdowns) {
-                if (dropdown && dropdown.contains(e.target)) {
-                    return;
+       // REPLACE your entire existing handleMovieInteractionStart function with this new one
+
+handleMovieInteractionStart(e) {
+    const dropdowns = [this.dom.visualsDropdown, this.dom.textDropdown, this.dom.shortcutsDropdown, this.dom.eraseToolDropdown, this.dom.aiToolsDropdown, this.dom.customFontSelect];
+    if (dropdowns.some(dd => dd && dd.contains(e.target))) {
+        return; // Ignore clicks that start inside any UI dropdown
+    }
+
+    const point = this.getMovieCanvasPoint(e);
+    const activeLayer = this.getActiveLayer();
+    const anyDropdownVisible = dropdowns.some(dd => dd && dd.classList.contains('visible')) || (this.dom.customFontSelect && this.dom.customFontSelect.classList.contains('open'));
+
+    // Eraser logic remains the highest priority
+    if (this.state.eraserMode !== 'none') {
+        e.preventDefault();
+        if (!anyDropdownVisible && activeLayer && this.isPointInMovieLayer(point, activeLayer)) {
+            this.state.movieInteraction = { active: true, type: 'erase', layerId: activeLayer.id, lastProxyX: null, lastProxyY: null };
+            this.state.lastEraseCanvasPoint = point;
+            this.showEraserZoom(true);
+            this.showEraserHUD(false);
+            this.drawEraserZoomAt(point);
+            this.applyBrushToLayer(activeLayer, point);
+        }
+        return;
+    }
+
+    e.preventDefault();
+    let interactionFound = false;
+
+    // First, check for interaction with the currently active layer's handles
+    const handle = activeLayer ? this.getMovieHandleAtPoint(point, activeLayer) : null;
+    if (activeLayer && handle) {
+        interactionFound = true;
+        this.state.movieInteraction = { active: true, type: handle === 'rotate' ? 'rotate' : 'resize', layerId: activeLayer.id, handle: handle, startX: point.x, startY: point.y, initialState: JSON.parse(JSON.stringify(activeLayer)) };
+    } else {
+        // --- NEW PIXEL-PERFECT SELECTION LOGIC ---
+        let firstBoundingBoxHit = null;
+        let finalLayerToSelect = null;
+
+        // Loop from top layer to bottom
+        for (const layer of this.state.canvasState.layers) {
+            if (this.isPointInMovieLayer(point, layer)) {
+                // This is a "potential candidate" based on bounding box
+                if (!firstBoundingBoxHit) {
+                    firstBoundingBoxHit = layer;
+                }
+                // Now, do the precise pixel check
+                if (this.isPixelOpaqueAtPoint(layer, point)) {
+                    finalLayerToSelect = layer; // We found our target!
+                    break; // Stop searching immediately
                 }
             }
+        }
 
-            const point = this.getMovieCanvasPoint(e);
-            const activeLayer = this.getActiveLayer();
-            const anyDropdownVisible = dropdowns.some(dd => dd && dd.classList.contains('visible')) || (this.dom.customFontSelect && this.dom.customFontSelect.classList.contains('open'));
-
-            if (this.state.eraserMode !== 'none') {
-                e.preventDefault();
-                if (!anyDropdownVisible && activeLayer && this.isPointInMovieLayer(point, activeLayer)) {
-                    this.state.movieInteraction = { active: true, type: 'erase', layerId: activeLayer.id, lastProxyX: null, lastProxyY: null };
-                    this.state.lastEraseCanvasPoint = point;
-                    this.showEraserZoom(true);
-                    this.showEraserHUD(false);
-                    this.drawEraserZoomAt(point);
-                    this.applyBrushToLayer(activeLayer, point);
-                }
-                return;
-            }
-
-            e.preventDefault();
-            let interactionFound = false;
-            const handle = activeLayer ? this.getMovieHandleAtPoint(point, activeLayer) : null;
-
-            if (activeLayer && handle) {
-                interactionFound = true;
-                this.state.movieInteraction = { active: true, type: handle === 'rotate' ? 'rotate' : 'resize', layerId: activeLayer.id, handle: handle, startX: point.x, startY: point.y, initialState: JSON.parse(JSON.stringify(activeLayer)) };
-            } else if (this.isPointInMovieLayer(point, activeLayer)) {
-                interactionFound = true;
-                this.state.movieInteraction = { active: true, type: 'drag', layerId: activeLayer.id, offsetX: point.x - activeLayer.x, offsetY: point.y - activeLayer.y };
-            }
-
-            if (!interactionFound) {
-                for (let i = 0; i < this.state.canvasState.layers.length; i++) {
-                    const l = this.state.canvasState.layers[i];
-                    if (this.isPointInMovieLayer(point, l)) {
-                        this.state.activeLayerId = l.id;
-                        this.renderLayerPalette(); this.renderTextLayerPalette(); this.updateEditPanelsUI();
-                        this.state.movieInteraction = { active: true, type: 'drag', layerId: l.id, offsetX: point.x - l.x, offsetY: point.y - l.y };
-                        interactionFound = true;
-                        break;
-                    }
-                }
-            }
-
-            if (!interactionFound && this.state.activeLayerId && !anyDropdownVisible) {
+        // After the loop, decide what to do
+        if (finalLayerToSelect) {
+            // A layer with opaque pixels was clicked directly
+            this.state.activeLayerId = finalLayerToSelect.id;
+            interactionFound = true;
+        } else if (firstBoundingBoxHit) {
+            // Fallback: No opaque pixels found, select the top-most bounding box that was hit
+            this.state.activeLayerId = firstBoundingBoxHit.id;
+            interactionFound = true;
+        } else {
+            // Nothing was clicked at all
+            if (this.state.activeLayerId && !anyDropdownVisible) {
                 this.state.activeLayerId = null;
-                this.updateEditPanelsUI();
-                this.renderLayerPalette();
-                this.renderTextLayerPalette();
-                this.drawFrame();
             }
+            interactionFound = false;
+        }
+        
+        // If a layer was selected (either by pixel or fallback), start a drag operation
+        if (interactionFound) {
+            const newlySelectedLayer = this.getActiveLayer();
+            this.state.movieInteraction = { active: true, type: 'drag', layerId: newlySelectedLayer.id, offsetX: point.x - newlySelectedLayer.x, offsetY: point.y - newlySelectedLayer.y };
+        }
+    }
+    
+    // Update UI and start rendering if any interaction occurred
+    this.renderLayerPalette();
+    this.renderTextLayerPalette();
+    this.updateEditPanelsUI();
+    this.drawFrame();
 
-            if (interactionFound) this.startRenderLoop();
-        },
+    if (interactionFound) {
+        this.startRenderLoop();
+    }
+},
         
         getLayerMetrics(layer) {
             if (!layer) return { dWidth: 0, dHeight: 0 };
