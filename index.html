@@ -877,7 +877,8 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper,body[data-theme-is-dark=t
                 if (!w || !h) { img.addEventListener('load', () => createFromImage(img), { once: true }); return; }
                 const proxyCanvas = document.createElement('canvas');
                 proxyCanvas.width = w; proxyCanvas.height = h;
-                proxyCanvas.getContext('2d').drawImage(img, 0, 0);
+                const proxyCtx = proxyCanvas.getContext('2d', { willReadFrequently: true }); 
+                proxyCtx.drawImage(img, 0, 0);
 
                 const contentFrame = this.calculateContentBounds(proxyCanvas);
 
@@ -890,7 +891,7 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper,body[data-theme-is-dark=t
                     brightness: 1, saturation: 1, 
                     shadow: { enabled: false, color: '#000000', blur: 10, offsetX: 10, offsetY: 10 }, 
                     border: { enabled: false, color: '#FFFFFF', width: 4 }, 
-                    proxyCanvas, proxyCtx: proxyCanvas.getContext('2d'), 
+                    proxyCanvas, proxyCtx: proxyCtx,
                     createdAt: Date.now(),
                     contentFrame: contentFrame 
                 };
@@ -1604,7 +1605,39 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper,body[data-theme-is-dark=t
             this.state.lastEraseCanvasPoint = canvasPoint;
             if (this.state.movieInteraction.active) { this.drawEraserZoomAt(canvasPoint); }
         },
+        // Add this new helper function to your script
 
+getHandleWorldPosition(layer, handleName) {
+    const { dWidth, dHeight } = this.getLayerMetrics(layer);
+    if (!dWidth || !dHeight) return { x: layer.x, y: layer.y };
+
+    let offsetX = 0, offsetY = 0;
+    if ((layer.type === 'image' || layer.type === 'rasterized-image') && layer.contentFrame) {
+        const fullWidth = layer.size;
+        const fullHeight = layer.size * (layer.proxyCanvas.height / layer.proxyCanvas.width);
+        const frameScale = fullWidth / layer.proxyCanvas.width;
+        const frameCenterX = (layer.contentFrame.x + layer.contentFrame.width / 2) * frameScale;
+        const frameCenterY = (layer.contentFrame.y + layer.contentFrame.height / 2) * frameScale;
+        offsetX = frameCenterX - (fullWidth / 2);
+        offsetY = frameCenterY - (fullHeight / 2);
+    }
+
+    const handles = {
+        tl: { x: -dWidth / 2, y: -dHeight / 2 }, tr: { x: dWidth / 2, y: -dHeight / 2 },
+        bl: { x: -dWidth / 2, y: dHeight / 2 }, br: { x: dWidth / 2, y: dHeight / 2 }
+    };
+
+    const h = handles[handleName];
+    if (!h) return { x: layer.x, y: layer.y };
+
+    const angle = layer.rot * Math.PI / 180, cos = Math.cos(angle), sin = Math.sin(angle);
+    
+    // Apply offset to the handle's local position before rotating
+    const handleWorldX = layer.x + ((offsetX + h.x) * cos - (offsetY + h.y) * sin);
+    const handleWorldY = layer.y + ((offsetX + h.x) * sin + (offsetY + h.y) * cos);
+
+    return { x: handleWorldX, y: handleWorldY };
+},
         // =================================================================
         // ==  DEFINITIVE FIX: getMovieHandleAtPoint =======================
         // =================================================================
@@ -1698,83 +1731,90 @@ isPixelOpaqueAtPoint(layer, point) {
         
        // REPLACE your entire existing handleMovieInteractionStart function with this new one
 
+// Replace the existing handleMovieInteractionStart function
+
 handleMovieInteractionStart(e) {
     const dropdowns = [this.dom.visualsDropdown, this.dom.textDropdown, this.dom.shortcutsDropdown, this.dom.eraseToolDropdown, this.dom.aiToolsDropdown, this.dom.customFontSelect];
     if (dropdowns.some(dd => dd && dd.contains(e.target))) {
-        return; // Ignore clicks that start inside any UI dropdown
+        return;
     }
 
     const point = this.getMovieCanvasPoint(e);
     const activeLayer = this.getActiveLayer();
     const anyDropdownVisible = dropdowns.some(dd => dd && dd.classList.contains('visible')) || (this.dom.customFontSelect && this.dom.customFontSelect.classList.contains('open'));
 
-    // Eraser logic remains the highest priority
     if (this.state.eraserMode !== 'none') {
         e.preventDefault();
         if (!anyDropdownVisible && activeLayer && this.isPointInMovieLayer(point, activeLayer)) {
             this.state.movieInteraction = { active: true, type: 'erase', layerId: activeLayer.id, lastProxyX: null, lastProxyY: null };
             this.state.lastEraseCanvasPoint = point;
-            this.showEraserZoom(true);
-            this.showEraserHUD(false);
-            this.drawEraserZoomAt(point);
-            this.applyBrushToLayer(activeLayer, point);
+            this.showEraserZoom(true); this.showEraserHUD(false);
+            this.drawEraserZoomAt(point); this.applyBrushToLayer(activeLayer, point);
         }
         return;
     }
 
     e.preventDefault();
     let interactionFound = false;
-
-    // First, check for interaction with the currently active layer's handles
     const handle = activeLayer ? this.getMovieHandleAtPoint(point, activeLayer) : null;
+
     if (activeLayer && handle) {
         interactionFound = true;
-        this.state.movieInteraction = { active: true, type: handle === 'rotate' ? 'rotate' : 'resize', layerId: activeLayer.id, handle: handle, startX: point.x, startY: point.y, initialState: JSON.parse(JSON.stringify(activeLayer)) };
+        
+        // --- NEW LOGIC FOR ANCHOR POINT RESIZING ---
+        const interactionData = {
+            active: true,
+            type: handle === 'rotate' ? 'rotate' : 'resize',
+            layerId: activeLayer.id,
+            handle: handle,
+            startX: point.x,
+            startY: point.y,
+            initialState: JSON.parse(JSON.stringify(activeLayer))
+        };
+
+        if (interactionData.type === 'resize') {
+            const oppositeHandles = { tl: 'br', tr: 'bl', bl: 'tr', br: 'tl' };
+            const oppositeHandleName = oppositeHandles[handle];
+            interactionData.anchorPoint = this.getHandleWorldPosition(activeLayer, oppositeHandleName);
+            interactionData.startHandlePoint = this.getHandleWorldPosition(activeLayer, handle);
+        }
+        this.state.movieInteraction = interactionData;
+        // --- END NEW LOGIC ---
+
     } else {
-        // --- NEW PIXEL-PERFECT SELECTION LOGIC ---
         let firstBoundingBoxHit = null;
         let finalLayerToSelect = null;
-
-        // Loop from top layer to bottom
         for (const layer of this.state.canvasState.layers) {
             if (this.isPointInMovieLayer(point, layer)) {
-                // This is a "potential candidate" based on bounding box
                 if (!firstBoundingBoxHit) {
                     firstBoundingBoxHit = layer;
                 }
-                // Now, do the precise pixel check
                 if (this.isPixelOpaqueAtPoint(layer, point)) {
-                    finalLayerToSelect = layer; // We found our target!
-                    break; // Stop searching immediately
+                    finalLayerToSelect = layer;
+                    break;
                 }
             }
         }
 
-        // After the loop, decide what to do
         if (finalLayerToSelect) {
-            // A layer with opaque pixels was clicked directly
             this.state.activeLayerId = finalLayerToSelect.id;
             interactionFound = true;
         } else if (firstBoundingBoxHit) {
-            // Fallback: No opaque pixels found, select the top-most bounding box that was hit
             this.state.activeLayerId = firstBoundingBoxHit.id;
             interactionFound = true;
         } else {
-            // Nothing was clicked at all
             if (this.state.activeLayerId && !anyDropdownVisible) {
                 this.state.activeLayerId = null;
             }
             interactionFound = false;
         }
         
-        // If a layer was selected (either by pixel or fallback), start a drag operation
         if (interactionFound) {
             const newlySelectedLayer = this.getActiveLayer();
             this.state.movieInteraction = { active: true, type: 'drag', layerId: newlySelectedLayer.id, offsetX: point.x - newlySelectedLayer.x, offsetY: point.y - newlySelectedLayer.y };
         }
     }
     
-    // Update UI and start rendering if any interaction occurred
     this.renderLayerPalette();
     this.renderTextLayerPalette();
     this.updateEditPanelsUI();
@@ -1845,53 +1885,73 @@ handleMovieInteractionStart(e) {
             );
         },
 
-        handleMovieInteractionMove(e) {
-            const point = this.getMovieCanvasPoint(e);
-            this.state.eraseBrushPos = { x: e.clientX - this.dom.movieCanvas.getBoundingClientRect().left, y: e.clientY - this.dom.movieCanvas.getBoundingClientRect().top };
-            if (!this.state.movieInteraction.active) {
-                this.updateCursor(e);
-                if (this.state.eraserMode !== 'none') {
-                    this.drawControlsOverlay();
-                    if (this.dom.eraseToolDropdown.classList.contains('is-scrubbing')) {
-                        this.drawEraserZoomAt(point);
-                    }
-                }
-                return;
-            }
-            e.preventDefault();
-            const l = this.getActiveLayer();
-            if (!l) return;
-            if (this.state.movieInteraction.type === 'erase') { this.applyBrushToLayer(l, point); this.drawEraserZoomAt(point); return; }
-            if (this.state.movieInteraction.type === 'drag') {
-                l.x = point.x - this.state.movieInteraction.offsetX;
-                l.y = point.y - this.state.movieInteraction.offsetY;
-                l.propX = l.x / this.dom.movieCanvas.width;
-                l.propY = l.y / this.dom.movieCanvas.height;
-            } 
-            else if (this.state.movieInteraction.type === 'rotate') {
-                const iState = this.state.movieInteraction.initialState;
-                const initialAngle = Math.atan2(this.state.movieInteraction.startY - iState.y, this.state.movieInteraction.startX - iState.x) * 180 / Math.PI;
-                const currentAngle = Math.atan2(point.y - iState.y, point.x - iState.x) * 180 / Math.PI;
-                l.rot = iState.rot + (currentAngle - initialAngle);
-            } else if (this.state.movieInteraction.type === 'resize') {
-                const iState = this.state.movieInteraction.initialState;
-                const initialDist = Math.hypot(this.state.movieInteraction.startX - iState.x, this.state.movieInteraction.startY - iState.y);
-                const currentDist = Math.hypot(point.x - iState.x, point.y - iState.y);
-                if (initialDist > 1) {
-                    const scaleFactor = currentDist / initialDist;
-                    if (l.type === 'text') {
-                        l.fontSize = Math.max(10, iState.fontSize * scaleFactor);
-                        l.propSize = l.fontSize / this.dom.movieCanvas.height;
-                        this.dom.textSizeSlider.value = l.fontSize;
-                    } 
-                    else {
-                        l.size = Math.max(20, iState.size * scaleFactor);
-                        l.propSize = l.size / this.dom.movieCanvas.width;
-                    }
-                }
-            }
-        },
+       // Replace your existing handleMovieInteractionMove function with this final version
 
+handleMovieInteractionMove(e) {
+    const point = this.getMovieCanvasPoint(e);
+    this.state.eraseBrushPos = { x: e.clientX - this.dom.movieCanvas.getBoundingClientRect().left, y: e.clientY - this.dom.movieCanvas.getBoundingClientRect().top };
+    if (!this.state.movieInteraction.active) {
+        this.updateCursor(e);
+        if (this.state.eraserMode !== 'none') { this.drawControlsOverlay(); if (this.dom.eraseToolDropdown.classList.contains('is-scrubbing')) { this.drawEraserZoomAt(point); } }
+        return;
+    }
+
+    e.preventDefault();
+    const l = this.getActiveLayer();
+    if (!l) return;
+    const iState = this.state.movieInteraction.initialState;
+
+    if (this.state.movieInteraction.type === 'erase') {
+        this.applyBrushToLayer(l, point);
+        this.drawEraserZoomAt(point);
+        return;
+    }
+
+    if (this.state.movieInteraction.type === 'drag') {
+        l.x = point.x - this.state.movieInteraction.offsetX;
+        l.y = point.y - this.state.movieInteraction.offsetY;
+        l.propX = l.x / this.dom.movieCanvas.width;
+        l.propY = l.y / this.dom.movieCanvas.height;
+    } else if (this.state.movieInteraction.type === 'rotate') {
+        const initialAngle = Math.atan2(this.state.movieInteraction.startY - iState.y, this.state.movieInteraction.startX - iState.x) * 180 / Math.PI;
+        const currentAngle = Math.atan2(point.y - iState.y, point.x - iState.x) * 180 / Math.PI;
+        l.rot = iState.rot + (currentAngle - initialAngle);
+    } else if (this.state.movieInteraction.type === 'resize') {
+        
+        // The "if (e.altKey)" block has been removed.
+        
+        // --- ANCHOR-BASED RESIZE LOGIC (NOW THE ONLY OPTION) ---
+        const { anchorPoint, startHandlePoint } = this.state.movieInteraction;
+
+        const initialVector = { x: startHandlePoint.x - anchorPoint.x, y: startHandlePoint.y - anchorPoint.y };
+        const currentMouseVector = { x: point.x - anchorPoint.x, y: point.y - anchorPoint.y };
+
+        const initialDist = Math.hypot(initialVector.x, initialVector.y);
+        if (initialDist < 1) return;
+
+        // Project the current mouse vector onto the initial diagonal vector to maintain aspect ratio
+        const dotProduct = currentMouseVector.x * initialVector.x + currentMouseVector.y * initialVector.y;
+        const projectedDist = dotProduct / initialDist;
+        const scaleFactor = Math.max(0.01, projectedDist / initialDist);
+
+        // Apply the new size
+        if (l.type === 'text') {
+            l.fontSize = Math.max(10, iState.fontSize * scaleFactor);
+            l.propSize = l.fontSize / this.dom.movieCanvas.height;
+            this.dom.textSizeSlider.value = l.fontSize;
+        } else {
+            l.size = Math.max(20, iState.size * scaleFactor);
+            l.propSize = l.size / this.dom.movieCanvas.width;
+        }
+
+        // Reposition the layer's center based on the anchor
+        const vectorFromAnchorToCenter = { x: iState.x - anchorPoint.x, y: iState.y - anchorPoint.y };
+        l.x = anchorPoint.x + vectorFromAnchorToCenter.x * scaleFactor;
+        l.y = anchorPoint.y + vectorFromAnchorToCenter.y * scaleFactor;
+        l.propX = l.x / this.dom.movieCanvas.width;
+        l.propY = l.y / this.dom.movieCanvas.height;
+    }
+},
         handleMovieInteractionEnd(e) {
           if (this.state.movieInteraction.active) {
             const wasErasing = this.state.movieInteraction.type === 'erase';
@@ -2114,7 +2174,7 @@ handleMovieInteractionStart(e) {
 
         letterboxToSquareBitmap(imgBitmap, size = 320) {
             const canvas = new OffscreenCanvas(size, size);
-            const ctx = canvas.getContext('2d');
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
             ctx.imageSmoothingEnabled = true;
             ctx.imageSmoothingQuality = 'high';
             const scale = Math.min(size / imgBitmap.width, size / imgBitmap.height);
