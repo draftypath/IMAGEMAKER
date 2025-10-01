@@ -27,561 +27,170 @@ body{font-family:'VT323',monospace;background:var(--bg);color:var(--ink);display
 .controls-fake .btn-square:last-child{background-color:var(--danger-color)}
 
 /* Dropdown Button Styling */
-#erase-tool-btn, #shortcuts-btn, #text-btn, #toggle-view-btn, #visuals-btn, #ai-tools-btn {
-    font-family: inherit;
-    font-size: 1.1rem;
-    background: var(--light);
-    border: 2px solid var(--ink);
-    padding: 0 8px;
-    cursor: pointer;
-    color: var(--ink);
-    border-radius: 3px;
-    box-shadow: 2px 2px 0 var(--shadow);
-    transition: transform .15s ease-out, box-shadow .15s ease-out;
-}
-#erase-tool-btn:hover, #shortcuts-btn:hover, #text-btn:hover, #toggle-view-btn:hover, #visuals-btn:hover, #ai-tools-btn:hover {
-    transform: translate(1px, 1px);
-    box-shadow: 1px 1px 0 var(--shadow);
-}
-#erase-tool-btn:active, #shortcuts-btn:active, #text-btn:active, #toggle-view-btn:active, #visuals-btn:active, #ai-tools-btn:active {
-    transform: translate(2px, 2px);
-    box-shadow: none;
-}
-#toggle-view-btn { /* Specific style for the toggle button */
-    padding: 0 4px;
-    font-size: 18px;
-}
-
-/* === MODIFIED: Dropdown Panel Styling with Scroll === */
-#erase-tool-dropdown, #shortcuts-dropdown, #text-dropdown, #visuals-dropdown, #ai-tools-dropdown {
-    position: absolute;
-    top: 28px;
-    background: rgba(var(--light-rgb), .65);
-    -webkit-backdrop-filter: blur(4px);
-    backdrop-filter: blur(4px);
-    border: 2px solid var(--ink);
-    box-shadow: 2px 2px 0 var(--shadow);
-    padding: .5rem 1rem;
-    z-index: 100;
-    width: 250px;
-    border-radius: 4px;
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: opacity .2s ease-out, transform .2s ease-out;
-    pointer-events: none;
-    display: none;
-    max-height: calc(100vh - 88px); /* New */
-    overflow-y: auto; /* New */
-}
-
-
-/* Positioning for each dropdown */
-#visuals-dropdown   { right: 382px; width: 280px; }
-#erase-tool-dropdown  { right: 288px; width: auto; }
-#ai-tools-dropdown    { right: 198px; }
-#text-dropdown        { right: 102px; width: 280px; }
-#shortcuts-dropdown   { right: 8px; }
-
-
-/* Visibility Toggle */
-#erase-tool-dropdown.visible, #shortcuts-dropdown.visible, #text-dropdown.visible, #visuals-dropdown.visible, #ai-tools-dropdown.visible {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-    display: block; /* Use display to show/hide */
-}
-
-/* Headers and content within dropdowns */
-#erase-tool-dropdown h5, #shortcuts-dropdown h5, #text-dropdown h5, #visuals-dropdown h5, #ai-tools-dropdown h5 {
-    margin: 0 0 .5rem;
-    font-size: 1.25rem;
-    text-align: center;
-}
-#erase-tool-dropdown h6, #text-dropdown h6, #visuals-dropdown h6 {
-    font-size: 1.15rem;
-    font-weight: 700;
-    text-align: left;
-    margin-top: .5rem;
-    margin-bottom: .5rem;
-    border-bottom: 2px solid var(--mid);
-    padding-bottom: 2px;
-}
-.compact-slider-row { display: flex; align-items: center; gap: .75rem; margin-bottom: .5rem; }
-.compact-slider-row label { flex-shrink: 0; margin: 0; }
-.compact-slider-row input[type=range] { width: 100%; }
-.compact-color-row { display: flex; align-items: flex-start; gap: .75rem; }
-.compact-color-row .slider-container { flex: 1; }
-.compact-color-row input[type="color"] { width: 100%; height: 25px; padding: 0; border: 1px solid var(--ink); }
-.compact-color-row label { margin-bottom: 2px; }
-
+#erase-tool-btn,#shortcuts-btn,#text-btn,#toggle-view-btn,#visuals-btn,#ai-tools-btn{font-family:inherit;font-size:1.1rem;background:var(--light);border:2px solid var(--ink);padding:0 8px;cursor:pointer;color:var(--ink);border-radius:3px;box-shadow:2px 2px 0 var(--shadow);transition:transform .15s ease-out,box-shadow .15s ease-out}
+#erase-tool-btn:hover,#shortcuts-btn:hover,#text-btn:hover,#toggle-view-btn:hover,#visuals-btn:hover,#ai-tools-btn:hover{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--shadow)}
+#erase-tool-btn:active,#shortcuts-btn:active,#text-btn:active,#toggle-view-btn:active,#visuals-btn:active,#ai-tools-btn:active{transform:translate(2px,2px);box-shadow:none}
+#toggle-view-btn{padding:0 4px;font-size:18px}
+#erase-tool-dropdown,#shortcuts-dropdown,#text-dropdown,#visuals-dropdown,#ai-tools-dropdown{position:absolute;top:28px;background:rgba(var(--light-rgb),.65);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);border:2px solid var(--ink);box-shadow:2px 2px 0 var(--shadow);padding:.5rem 1rem;z-index:100;width:250px;border-radius:4px;opacity:0;transform:translateY(-10px);transition:opacity .2s ease-out,transform .2s ease-out;pointer-events:none;display:none;max-height:calc(100vh - 88px);overflow-y:auto}
+#visuals-dropdown{right:382px;width:280px}
+#erase-tool-dropdown{right:288px;width:auto}
+#ai-tools-dropdown{right:198px}
+#text-dropdown{right:102px;width:280px}
+#shortcuts-dropdown{right:8px}
+#erase-tool-dropdown.visible,#shortcuts-dropdown.visible,#text-dropdown.visible,#visuals-dropdown.visible,#ai-tools-dropdown.visible{opacity:1;transform:translateY(0);pointer-events:auto;display:block}
+#erase-tool-dropdown h5,#shortcuts-dropdown h5,#text-dropdown h5,#visuals-dropdown h5,#ai-tools-dropdown h5{margin:0 0 .5rem;font-size:1.25rem;text-align:center}
+#erase-tool-dropdown h6,#text-dropdown h6,#visuals-dropdown h6{font-size:1.15rem;font-weight:700;text-align:left;margin-top:.5rem;margin-bottom:.5rem;border-bottom:2px solid var(--mid);padding-bottom:2px}
+.compact-slider-row{display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem}
+.compact-slider-row label{flex-shrink:0;margin:0}
+.compact-slider-row input[type=range]{width:100%}
+.compact-color-row{display:flex;align-items:flex-start;gap:.75rem}
+.compact-color-row .slider-container{flex:1}
+.compact-color-row input[type=color]{width:100%;height:25px;padding:0;border:1px solid var(--ink)}
+.compact-color-row label{margin-bottom:2px}
 #shortcuts-dropdown ul{margin:0;padding:0;list-style:none;font-size:1rem}
 #shortcuts-dropdown li{display:flex;justify-content:space-between;padding:2px 0}
 #shortcuts-dropdown li kbd{font-family:inherit;border:2px solid var(--ink);padding:0 4px;background:var(--bg);transition:background-color .3s,border-color .3s,color .3s}
-
-/* Additional styles to integrate with your existing code */
-main#studio-container { display:grid; grid-template-columns:320px 1fr; grid-template-rows:minmax(0,1fr); gap:1.5rem; padding:1.5rem; flex-grow:1; min-height:0 }
-#controls-panel { display:flex; flex-direction:column; gap:1rem; overflow-y:auto; min-height:0 }
-#canvas-panel { display:flex; align-items:center; justify-content:center; border:2px solid var(--ink); background-color:var(--mid); position:relative; min-height:0; transition:background-color .5s ease-in-out; overflow:hidden }
-#controls-panel fieldset { border: 2px solid var(--ink); padding: .8rem; margin: 0; }
-.hidden { display: none !important; }
-.disabled { opacity: 0.5; pointer-events: none; }
-.slider-container { margin-bottom: 0.5rem; }
-.mg-btn{font-family:inherit;font-size:18px;background:color-mix(in srgb, var(--light) 95%, var(--ink) 5%);border:2px solid var(--ink);padding:8px 16px;margin:4px;cursor:pointer;text-decoration:none;color:var(--ink);transition:.2s all;box-shadow:2px 2px 0 var(--shadow);width:100%;white-space:nowrap;border-radius:3px}
+main#studio-container{display:grid;grid-template-columns:320px 1fr;grid-template-rows:minmax(0,1fr);gap:1.5rem;padding:1.5rem;flex-grow:1;min-height:0}
+#controls-panel{display:flex;flex-direction:column;gap:1rem;overflow-y:auto;min-height:0}
+#canvas-panel{display:flex;align-items:center;justify-content:center;border:2px solid var(--ink);background-color:var(--mid);position:relative;min-height:0;transition:background-color .5s ease-in-out;overflow:hidden}
+#controls-panel fieldset{border:2px solid var(--ink);padding:.8rem;margin:0}
+.hidden{display:none!important}
+.disabled{opacity:.5;pointer-events:none}
+.slider-container{margin-bottom:.5rem}
+.mg-btn{font-family:inherit;font-size:18px;background:color-mix(in srgb,var(--light) 95%,var(--ink) 5%);border:2px solid var(--ink);padding:8px 16px;margin:4px;cursor:pointer;text-decoration:none;color:var(--ink);transition:.2s all;box-shadow:2px 2px 0 var(--shadow);width:100%;white-space:nowrap;border-radius:3px}
 .mg-btn:hover{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--shadow)}
-.mg-btn:active{transform:translate(2px,2px);box-shadow:none}.mg-btn.disabled,.mg-btn:disabled{opacity:.5;pointer-events:none;box-shadow:none;transform:none}
+.mg-btn:active{transform:translate(2px,2px);box-shadow:none}
+.mg-btn.disabled,.mg-btn:disabled{opacity:.5;pointer-events:none;box-shadow:none;transform:none}
 .mg-btn.active{background-color:var(--action-color);color:var(--light);box-shadow:none;transform:translate(2px,2px)}
-.eraser-mode-selector { display: flex; gap: 0.5rem; }
-#text-layer-manager { display: flex; gap: .5rem; align-items:center; padding-bottom:.5rem; margin-bottom:.5rem; border-bottom:2px solid var(--mid); }
+.eraser-mode-selector{display:flex;gap:.5rem}
+#text-layer-manager{display:flex;gap:.5rem;align-items:center;padding-bottom:.5rem;margin-bottom:.5rem;border-bottom:2px solid var(--mid)}
 .effects-checkbox{display:flex;align-items:center;margin-top:.5rem}
 .effects-controls{padding-left:1.5rem;border-left:2px solid var(--mid);margin-left:.5rem}
 footer{height:28px;padding:0 8px;display:flex;justify-content:space-between;align-items:center;font-size:.9rem;flex-shrink:0;gap:1rem;background-color:var(--light);color:var(--ink);transition:background-color .3s,color .3s;border-top:2px solid var(--ink)}
 .footer-links,.footer-right{display:flex;flex-wrap:wrap;gap:1.5rem;align-items:center}
 footer a{color:var(--ink);text-decoration:none;transition:opacity .2s,color .3s;opacity:.7}
-footer a:hover{opacity:1}footer a i{margin-right:.5em}
+footer a:hover{opacity:1}
+footer a i{margin-right:.5em}
 .mg-overlay-base{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .3s,visibility 0s .3s;background:rgba(10,10,10,.25)}
 .mg-overlay-base.visible{opacity:1;visibility:visible;pointer-events:auto;transition:opacity .3s,visibility 0s 0s}
-#canvas-placeholder { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-.placeholder-text { color: var(--shadow); }
-
-#eraser-hardness-presets {
-    justify-content: space-around;
-    margin-top: 0.5rem;
-}
-#eraser-hardness-presets .mg-btn {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    padding: 0;
-    flex-shrink: 0;
-    border-width: 2px;
-    box-shadow: 1px 1px 0 var(--shadow);
-    transform: translateY(0);
-}
-#eraser-hardness-presets .mg-btn:hover {
-    transform: translate(1px, 1px);
-    box-shadow: none;
-}
-#eraser-hardness-presets .mg-btn.active {
-    background-color: var(--action-color);
-    transform: translateY(1px);
-    box-shadow: none;
-}
-
-/* === RESTORED: PROJECT LIBRARY STYLES (MAIN PANEL) === */
-#assets-folder-fieldset { position: relative; }
-#assets-folder-actions { display:flex; justify-content:space-between; align-items:center; margin-bottom:.5rem; }
-#assets-folder-actions p { font-size:1.1rem; margin:0; }
-#mg-view-all-local-assets-btn { 
-    position: absolute; 
-    top: -14px; 
-    right: 12px;
-    width:auto; 
-    padding: 2px 8px; 
-    font-size: 16px; 
-    margin: 0;
-}
-
-
-/* === POPUP: PROJECT LIBRARY STYLES === */
-.visuals-main-tab-btn {
-    font-family:inherit; font-size:16px; background:color-mix(in srgb, var(--light) 95%, var(--ink) 5%); border:2px solid var(--ink);
-    padding:4px 8px; cursor:pointer; color:var(--ink); transition:.2s all;
-    box-shadow:2px 2px 0 var(--shadow); flex-grow:1; text-align:center; border-radius:3px
-}
-.visuals-main-tab-btn:hover { transform:translate(1px,1px); box-shadow:1px 1px 0 var(--shadow) }
-.visuals-main-tab-btn.active { background-color:var(--action-color); color:var(--light); transform:translate(2px,2px); box-shadow:none }
-
-body[data-theme-name="classic light"] .mg-btn.active {
-    color: var(--bg);
-}
-
-#project-library-popup {
-    width:90%; max-width:800px; height:80vh; padding:0; display:flex; flex-direction:column;
-}
-#project-library-popup .titlebar { flex-shrink:0; }
-#project-library-grids-container { flex-grow: 1; overflow-y: auto; }
-.project-library-grid {
-    padding:1rem; display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
-    gap:1rem; align-content:flex-start;
-}
-.project-library-grid h5 {
-    grid-column: 1 / -1;
-    text-align: left;
-    font-size: 1.25rem;
-    margin: 0.5rem 0 0;
-    border-bottom: 2px solid var(--mid);
-    padding-bottom: 4px;
-}
-.library-grid-item {
-    width:100%; aspect-ratio:1/1; border:2px solid var(--ink); background: color-mix(in srgb, var(--light) 90%, var(--ink) 10%);
-    position:relative; box-shadow:3px 3px 0 var(--ink); transition:transform .15s ease-out,box-shadow .15s ease-out;
-    border-radius:3px;
-}
-
-/* === MODIFIED: Favorite & Delete Button Styles === */
-.library-grid-item .delete-btn {
-    position:absolute; top:-8px; right:-8px; background:var(--danger-color); color:var(--light);
-    border:2px solid var(--ink); width:24px; height:24px; font-size:16px;
-    cursor:pointer; display:flex; align-items:center; justify-content:center;
-    line-height:1; z-index:2; opacity:0; transition: all .15s ease-out;
-    border-radius: 2px; font-family: monospace;
-}
-
-.library-grid-item .favorite-btn {
-    position:absolute; top:-8px; left:-8px; background:var(--mid); color:var(--ink);
-    border:2px solid var(--ink); width:24px; height:24px; font-size:16px;
-    cursor:pointer; display:flex; align-items:center; justify-content:center;
-    line-height:1; z-index:2; opacity:0; transition: all .15s ease-out;
-    border-radius: 2px; box-shadow: 1px 1px 0 var(--ink);
-}
-
-/* Lift buttons on hover for interactivity */
-.library-grid-item .delete-btn:hover,
-.library-grid-item .favorite-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 2px 2px 0 var(--ink);
-}
-/* Press buttons down on click */
-.library-grid-item .delete-btn:active,
-.library-grid-item .favorite-btn:active {
-    transform: scale(0.95) translateY(1px);
-    box-shadow: none;
-}
-
-/* Keep favorite button pressed down when active */
-.library-grid-item .favorite-btn.is-favorite {
-    background-color: var(--action-color);
-    transform: translateY(1px);
-    box-shadow: none;
-}
-
-.library-grid-item .favorite-btn::before {
-    font-family: "Font Awesome 6 Free";
-    font-weight: 400; /* Hollow star by default */
-    content: "\f005";
-    transition: font-weight .2s, color .2s;
-}
-
-/* When favorited, icon color should contrast with new background */
-.library-grid-item .favorite-btn.is-favorite::before {
-    color: var(--light);
-}
-
-/* On hover OR if favorited, make the star solid */
-.library-grid-item .favorite-btn:hover::before,
-.library-grid-item .favorite-btn.is-favorite::before {
-    font-weight: 900;
-}
-
-.library-grid-item:hover .delete-btn, .library-grid-item:hover .favorite-btn { opacity:1; }
-
-.library-grid-item > div { cursor:pointer; width:100%; height:100%; }
-.library-grid-item:hover {
-    transform:translate(-2px,-2px) scale(1.03); box-shadow:5px 5px 0 var(--ink); border-color:var(--action-color);
-}
-.library-grid-item img, .library-grid-item video {
-    width:100%; height:100%; object-fit:cover; pointer-events:none;
-}
-
-/* === MODIFIED: Popup Close Button Styles === */
-.overlay-close-btn {
-    width: 16px;
-    height: 16px;
-    background: var(--danger-color);
-    border: 2px solid var(--ink);
-    color: var(--ink);
-    font-family: 'VT323', monospace;
-    font-size: 14px;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    cursor: pointer;
-    z-index: 10;
-    transition: filter .2s;
-}
-.overlay-close-btn:hover {
-    filter: brightness(1.2);
-}
-#project-library-popup .overlay-close-btn {
-    margin-left: auto; /* Push to the right */
-}
-#mg-asset-picker-wrapper .overlay-close-btn {
-    position: absolute;
-    top: 10px;
-    right: 12px;
-}
-
+#canvas-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.placeholder-text{color:var(--shadow)}
+#eraser-hardness-presets{justify-content:space-around;margin-top:.5rem}
+#eraser-hardness-presets .mg-btn{width:32px;height:32px;border-radius:50%;padding:0;flex-shrink:0;border-width:2px;box-shadow:1px 1px 0 var(--shadow);transform:translateY(0)}
+#eraser-hardness-presets .mg-btn:hover{transform:translate(1px,1px);box-shadow:none}
+#eraser-hardness-presets .mg-btn.active{background-color:var(--action-color);transform:translateY(1px);box-shadow:none}
+#assets-folder-fieldset{position:relative}
+#assets-folder-actions{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
+#assets-folder-actions p{font-size:1.1rem;margin:0}
+#mg-view-all-local-assets-btn{position:absolute;top:-14px;right:12px;width:auto;padding:2px 8px;font-size:16px;margin:0}
+.visuals-main-tab-btn{font-family:inherit;font-size:16px;background:color-mix(in srgb,var(--light) 95%,var(--ink) 5%);border:2px solid var(--ink);padding:4px 8px;cursor:pointer;color:var(--ink);transition:.2s all;box-shadow:2px 2px 0 var(--shadow);flex-grow:1;text-align:center;border-radius:3px}
+.visuals-main-tab-btn:hover{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--shadow)}
+.visuals-main-tab-btn.active{background-color:var(--action-color);color:var(--light);transform:translate(2px,2px);box-shadow:none}
+body[data-theme-name="classic light"] .mg-btn.active{color:var(--bg)}
+#project-library-popup{width:90%;max-width:800px;height:80vh;padding:0;display:flex;flex-direction:column}
+#project-library-popup .titlebar{flex-shrink:0}
+#project-library-grids-container{flex-grow:1;overflow-y:auto}
+.project-library-grid{padding:1rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:1rem;align-content:flex-start}
+.project-library-grid h5{grid-column:1/-1;text-align:left;font-size:1.25rem;margin:.5rem 0 0;border-bottom:2px solid var(--mid);padding-bottom:4px}
+.library-grid-item{width:100%;aspect-ratio:1/1;border:2px solid var(--ink);background:color-mix(in srgb,var(--light) 90%,var(--ink) 10%);position:relative;box-shadow:3px 3px 0 var(--ink);transition:transform .15s ease-out,box-shadow .15s ease-out;border-radius:3px}
+.library-grid-item .delete-btn{position:absolute;top:-8px;right:-8px;background:var(--danger-color);color:var(--light);border:2px solid var(--ink);width:24px;height:24px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;z-index:2;opacity:0;transition:all .15s ease-out;border-radius:2px;font-family:monospace}
+.library-grid-item .favorite-btn{position:absolute;top:-8px;left:-8px;background:var(--mid);color:var(--ink);border:2px solid var(--ink);width:24px;height:24px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;z-index:2;opacity:0;transition:all .15s ease-out;border-radius:2px;box-shadow:1px 1px 0 var(--ink)}
+.library-grid-item .delete-btn:hover,.library-grid-item .favorite-btn:hover{transform:translateY(-1px);box-shadow:2px 2px 0 var(--ink)}
+.library-grid-item .delete-btn:active,.library-grid-item .favorite-btn:active{transform:scale(.95) translateY(1px);box-shadow:none}
+.library-grid-item .favorite-btn.is-favorite{background-color:var(--action-color);transform:translateY(1px);box-shadow:none}
+.library-grid-item .favorite-btn::before{font-family:"Font Awesome 6 Free";font-weight:400;content:"\f005";transition:font-weight .2s,color .2s}
+.library-grid-item .favorite-btn.is-favorite::before{color:var(--light)}
+.library-grid-item .favorite-btn:hover::before,.library-grid-item .favorite-btn.is-favorite::before{font-weight:900}
+.library-grid-item:hover .delete-btn,.library-grid-item:hover .favorite-btn{opacity:1}
+.library-grid-item>div{cursor:pointer;width:100%;height:100%}
+.library-grid-item:hover{transform:translate(-2px,-2px) scale(1.03);box-shadow:5px 5px 0 var(--ink);border-color:var(--action-color)}
+.library-grid-item img,.library-grid-item video{width:100%;height:100%;object-fit:cover;pointer-events:none}
+.overlay-close-btn{width:16px;height:16px;background:var(--danger-color);border:2px solid var(--ink);color:var(--ink);font-family:'VT323',monospace;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer;z-index:10;transition:filter .2s}
+.overlay-close-btn:hover{filter:brightness(1.2)}
+#project-library-popup .overlay-close-btn{margin-left:auto}
+#mg-asset-picker-wrapper .overlay-close-btn{position:absolute;top:10px;right:12px}
 #mg-asset-picker-wrapper.window{background:rgba(var(--light-rgb),.85);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:2px solid var(--ink);box-shadow:4px 4px 0 var(--ink);padding:2rem;max-width:450px;width:90vw;text-align:center;color:var(--ink);height:auto;max-height:90vh}
-body[data-theme-is-dark=true] #mg-asset-picker-wrapper,
-body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:var(--ink)}
+body[data-theme-is-dark=true] #mg-asset-picker-wrapper,body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:var(--ink)}
 #mg-asset-picker-wrapper h4{font-size:1.8rem;font-weight:400;margin:0 0 .5rem}
 #mg-asset-picker-wrapper>p{font-size:1rem;margin:0 0 1.5rem}
 #mg-asset-drop-zone{border:4px dashed var(--mid);border-radius:10px;padding:2rem;color:var(--mid);cursor:pointer;transition:all .2s ease-in-out;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;aspect-ratio:1/1}
 #mg-asset-drop-zone h3{font-size:1.5rem;margin:0 0 .5rem;pointer-events:none}
 #mg-asset-drop-zone p{font-size:1rem;margin:0;pointer-events:none}
 #mg-asset-drop-zone.drag-over,#mg-asset-drop-zone:hover{border-color:var(--ink);color:var(--ink);background-color:rgba(var(--action-color-rgb),.1);border-style:solid}
-
 </style>
 </head>
 <body>
-<script>
-    // === SINGLE SOURCE OF TRUTH FOR THEMES ===
-    // This object is now defined once in the global scope so both scripts can access it.
-    const themes = {
-        'classic light': { name: 'classic light', isDark: false, colors: ['#f2efe8', '#2b2b2b', '#d98c5f'], css: { '--bg': '#f2efe8', '--ink': '#2b2b2b', '--mid': '#c2c2c2', '--light': '#faf9f5', '--shadow': '#7a7a7a', '--action-color': '#2b2b2b', '--danger-color': '#cc4444', '--success-color': '#55cc55' } },
-        'dark': { name: 'dark', isDark: true, colors: ['#1a1d2d', '#e0e5f0', '#e8a85a'], css: { '--bg': '#1a1d2d', '--ink': '#e0e5f0', '--mid': '#3d4a6e', '--light': '#252a40', '--shadow': '#0d0f16', '--action-color': '#e0e5f0', '--danger-color': '#a83e3e', '--success-color': '#4a9d4a' } },
-        'イーピーイッピ': { name: 'イーピーイッピ', isDark: true, colors: ['#5c3d46', '#dcd0c0', '#a26769'], css: { '--bg': '#2a1d21', '--ink': '#dcd0c0', '--mid': '#5c3d46', '--light': '#402d32', '--shadow': '#1a1114', '--action-color': '#a26769', '--danger-color': '#a26769', '--success-color': '#69a267' } },
-        'zarah': { name: 'zarah', isDark: false, colors: ['#7b9c98', '#eaf1f3', '#495555'], css: { '--bg': '#7b9c98', '--ink': '#eaf1f3', '--mid': '#495755', '--light': '#6c8985', '--shadow': '#3e4a48', '--action-color': '#eaf1f3' } },
-        'lavender': { name: 'lavender', isDark: false, colors: ['#b3b3d9', '#282846', '#656599'], css: { '--bg': '#b3b3d9', '--ink': '#282846', '--mid': '#656599', '--light': '#c4c4e2', '--shadow': '#47476b', '--action-color': '#8c58a6' } },
-        'café': { name: 'café', isDark: false, colors: ['#ceb18d', '#4e433f', '#d4d2d1'], css: { '--bg': '#ceb18d', '--ink': '#4e433f', '--mid': '#d4d2d1', '--light': '#f7f2ea', '--shadow': '#8a7a6a', '--action-color': '#8a6ea2' } },
-        'mizu': { name: 'mizu', isDark: false, colors: ['#b8dceb', '#091f2c', '#89a5bb'], css: { '--bg': '#b8dceb', '--ink': '#091f2c', '--mid': '#89a5bb', '--light': '#cfe5ee', '--shadow': '#627382', '--action-color': '#005a8e' } },
-        'キティ': { name: 'キティ', isDark: false, colors: ['#fdf6e3', '#657b83', '#93a1a1'], css: { '--bg': '#fdf6e3', '--ink': '#657b83', '--mid': '#93a1a1', '--light': '#eee8d5', '--shadow': '#586e75', '--action-color': '#268bd2' } },
-        'aura': { name: 'aura', isDark: true, colors: ['#29423D', '#EAE8E1', '#C9A59C'], css: { '--bg': '#1A2A27', '--ink': '#EAE8E1', '--mid': '#3E5D56', '--light': '#29423D', '--shadow': '#111C19', '--action-color': '#C9A59C', '--danger-color': '#b05454', '--success-color': '#5a9e7a' } }
-    };
-
-  (function() {
-    // This pre-loader now uses the global 'themes' object.
-    try {
-        const savedThemeName = localStorage.getItem('selectedTheme') || 'classic light';
-        const theme = themes[savedThemeName];
-        if (theme) {
-            const style = document.createElement('style');
-            const cssVars = Object.entries(theme.css).map(([key, value]) => `${key}: ${value};`).join('');
-            style.textContent = `:root { ${cssVars} }`;
-            document.head.appendChild(style);
-            document.body.dataset.themeName = savedThemeName;
-        }
-    } catch (e) { console.warn("Theme pre-loader failed.", e); }
-  })();
-</script>
-
+<script>const themes={'classic light':{name:'classic light',isDark:!1,colors:['#f2efe8','#2b2b2b','#d98c5f'],css:{'--bg':'#f2efe8','--ink':'#2b2b2b','--mid':'#c2c2c2','--light':'#faf9f5','--shadow':'#7a7a7a','--action-color':'#2b2b2b','--danger-color':'#cc4444','--success-color':'#55cc55'}},dark:{name:'dark',isDark:!0,colors:['#1a1d2d','#e0e5f0','#e8a85a'],css:{'--bg':'#1a1d2d','--ink':'#e0e5f0','--mid':'#3d4a6e','--light':'#252a40','--shadow':'#0d0f16','--action-color':'#e0e5f0','--danger-color':'#a83e3e','--success-color':'#4a9d4a'}},'イーピーイッピ':{name:'イーピーイッピ',isDark:!0,colors:['#5c3d46','#dcd0c0','#a26769'],css:{'--bg':'#2a1d21','--ink':'#dcd0c0','--mid':'#5c3d46','--light':'#402d32','--shadow':'#1a1114','--action-color':'#a26769','--danger-color':'#a26769','--success-color':'#69a267'}},zarah:{name:'zarah',isDark:!1,colors:['#7b9c98','#eaf1f3','#495555'],css:{'--bg':'#7b9c98','--ink':'#eaf1f3','--mid':'#495755','--light':'#6c8985','--shadow':'#3e4a48','--action-color':'#eaf1f3'}},lavender:{name:'lavender',isDark:!1,colors:['#b3b3d9','#282846','#656599'],css:{'--bg':'#b3b3d9','--ink':'#282846','--mid':'#656599','--light':'#c4c4e2','--shadow':'#47476b','--action-color':'#8c58a6'}},café:{name:'café',isDark:!1,colors:['#ceb18d','#4e433f','#d4d2d1'],css:{'--bg':'#ceb18d','--ink':'#4e433f','--mid':'#d4d2d1','--light':'#f7f2ea','--shadow':'#8a7a6a','--action-color':'#8a6ea2'}},mizu:{name:'mizu',isDark:!1,colors:['#b8dceb','#091f2c','#89a5bb'],css:{'--bg':'#b8dceb','--ink':'#091f2c','--mid':'#89a5bb','--light':'#cfe5ee','--shadow':'#627382','--action-color':'#005a8e'}},'キティ':{name:'キティ',isDark:!1,colors:['#fdf6e3','#657b83','#93a1a1'],css:{'--bg':'#fdf6e3','--ink':'#657b83','--mid':'#93a1a1','--light':'#eee8d5','--shadow':'#586e75','--action-color':'#268bd2'}},aura:{name:'aura',isDark:!0,colors:['#29423D','#EAE8E1','#C9A59C'],css:{'--bg':'#1A2A27','--ink':'#EAE8E1','--mid':'#3E5D56','--light':'#29423D','--shadow':'#111C19','--action-color':'#C9A59C','--danger-color':'#b05454','--success-color':'#5a9e7a'}}};!function(){try{const e=localStorage.getItem('selectedTheme')||'classic light',t=themes[e];if(t){const o=document.createElement('style'),s=Object.entries(t.css).map(([e,t])=>`${e}: ${t};`).join('');o.textContent=`:root { ${s} }`,document.head.appendChild(o),document.body.dataset.themeName=e}}catch(e){console.warn("Theme pre-loader failed.",e)}}();</script>
 <div class=window>
-<div id="loading-overlay"><h1>Initializing Image-Maker-Studio.exe</h1></div>
+<div id=loading-overlay><h1>Initializing Image-Maker-Studio.exe</h1></div>
 <div class=titlebar><span>Image-Maker-Studio.exe</span><div class=titlebar-controls>
-    <button id="toggle-view-btn" title="Toggle Canvas View (Z)">⬚</button>
-    <button id=visuals-btn>Edit Visuals</button>
-    <div id="visuals-dropdown">
-        <h5>Visuals Editor</h5>
-        <div id="visuals-tabs" class="eraser-mode-selector" style="margin-bottom: 0.8rem;"><button id="visuals-tab-asset" class="mg-btn" type="button">Asset</button><button id="visuals-tab-background" class="mg-btn active" type="button">Background</button></div>
-        <div id="asset-tab-panel" class="hidden">
-            <div id="asset-visuals-controls" class="disabled">
-                <h6>Filters</h6>
-                <div class=slider-container><label for=asset-opacity>Opacity</label><input type=range id=asset-opacity min=0 max=1 step=.01 value=1></div>
-                <div class=slider-container><label for=asset-brightness>Brightness</label><input type=range id=asset-brightness min=0 max=2 step=.01 value=1></div>
-                <div class=slider-container><label for=asset-saturation>Saturation</label><input type=range id=asset-saturation min=0 max=2 step=.01 value=1></div>
-                
-                <h6>Drop Shadow</h6>
-                <div class="effects-checkbox" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: .5rem;">
-                    <div><input type="checkbox" id="shadow-enable"><label for="shadow-enable">Enable</label></div>
-                    <input type="color" id="shadow-color" value="#000000" style="width: 100px; height: 25px; border: 1px solid var(--ink); padding: 0;">
-                </div>
-                <div id="shadow-controls" class="effects-controls disabled">
-                    <div class="slider-container"><label for="shadow-blur">Blur</label><input type="range" id="shadow-blur" min="0" max="50" value="10"></div>
-                    <div class="slider-container"><label for="shadow-offset-x">Offset X</label><input type="range" id="shadow-offset-x" min="-50" max="50" value="10"></div>
-                    <div class="slider-container"><label for="shadow-offset-y">Offset Y</label><input type="range" id="shadow-offset-y" min="-50" max="50" value="10"></div>
-                </div>
-                
-                <h6>Edge</h6>
-                 <div class="effects-checkbox" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: .5rem;">
-                     <div><input type="checkbox" id="asset-edge-enable"><label for="asset-edge-enable">Enable</label></div>
-                     <input type="color" id="asset-edge-color" value="#FFFFFF" style="width: 100px; height: 25px; border: 1px solid var(--ink); padding: 0;">
-                </div>
-                <div id="asset-edge-controls" class="effects-controls disabled">
-                    <div class="slider-container"><label for="asset-edge-width">Width</label><input type="range" id="asset-edge-width" min="0" max="20" value="4"></div>
-                </div>
-            </div>
-        </div>
-        <div id="background-tab-panel">
-             <div id="background-visuals-controls">
-                <h6>Background Filters</h6>
-                <div class=slider-container><label for=bg-brightness>Brightness</label><input type=range id=bg-brightness min=0 max=2 step=.01 value=1></div>
-                <div class=slider-container><label for=bg-saturation>Saturation</label><input type=range id=bg-saturation min=0 max=2 step=.01 value=1></div>
-            </div>
-        </div>
-    </div>
-    <button id="erase-tool-btn">Erase</button>
-    <div id="erase-tool-dropdown">
-        <h5>Eraser Tool</h5>
-        <div class="eraser-mode-selector">
-            <button class="mg-btn" id="erase-btn">Erase</button>
-            <button class="mg-btn" id="unerase-btn">Unerase</button>
-        </div>
-        <div id="eraser-controls-wrapper" class="disabled">
-            <div class="slider-container">
-                <label for="eraser-size-dropdown">Size</label>
-                <input type="range" id="eraser-size-dropdown" min="5" max="250" value="128">
-            </div>
-            <div class="slider-container">
-                <label for="eraser-strength-dropdown">Strength</label>
-                <input type="range" id="eraser-strength-dropdown" min="0" max="1" step="0.01" value="1">
-            </div>
-        </div>
-    </div>
-    <button id="ai-tools-btn">BG Remover.exe</button><div id="ai-tools-dropdown"><h5>Background Remover</h5></div><button id=text-btn>Text</button><div id=text-dropdown><h5>Text Editor</h5><div id=text-layer-manager><div id=text-layer-palette></div><button id=add-new-text-layer-btn class="palette-slot empty" title="Add new text layer">+</button></div><div id=text-visuals-controls class=disabled><div class=slider-container><label for=text-content>Text Content</label><textarea id=text-content rows=3 style="width:100%;font-family:inherit;font-size:1rem;padding:4px;border:1px solid var(--ink);background:var(--bg);line-height:1.1;">New Text</textarea></div>
-        <div class="slider-container">
-            <label>Font</label>
-            <div id="custom-font-select">
-                <div id="font-select-trigger" tabindex="0"><span>VT323</span> <i class="fas fa-chevron-down"></i></div>
-                <div id="font-select-dropdown" class="hidden"><ul id="font-select-list"></ul></div>
-            </div>
-        </div>
-        <div class=slider-container><label for=text-size>Size</label><input type=range id=text-size min=20 max=800 step=1 value=410></div>
-        <div class="compact-color-row">
-            <div class=slider-container><label for=text-color>Color</label><input type=color id=text-color value=#FFFFFF></div>
-            <div class=slider-container><label for="text-edge-color">Edge Color</label><input type="color" id="text-edge-color" value="#000000"></div>
-        </div>
-        <div class="slider-container"><label for="text-edge-width">Edge Density</label><input type="range" id="text-edge-width" min="0" max="20" step="0.1" value="0"></div>
-        <h6>Drop Shadow</h6>
-        <div class="effects-checkbox" style="display: flex; justify-content: space-between; align-items: center;">
-            <div><input type="checkbox" id="text-shadow-enable"><label for="text-shadow-enable">Enable</label></div>
-            <div class="slider-container" style="margin-bottom: 0; width: 60%;"><label for="text-shadow-color" style="margin-top:0;">Color</label><input type="color" id="text-shadow-color" value="#000000" style="width:100%;border:none;padding:0"></div>
-        </div>
-        <div id="text-shadow-controls" class="effects-controls disabled">
-            <div class="slider-container"><label for="text-shadow-blur">Blur</label><input type="range" id="text-shadow-blur" min="0" max="50" value="10"></div>
-            <div class="slider-container"><label for="text-shadow-offset-x">Offset X</label><input type="range" id="text-shadow-offset-x" min="-50" max="50" value="10"></div>
-            <div class="slider-container"><label for="text-shadow-offset-y">Offset Y</label><input type="range" id="text-shadow-offset-y" min="-50" max="50" value="10"></div>
-        </div>
-        <div id="text-zorder-controls" style="display:flex;gap:.5rem;align-items:center;margin-top:.5rem;"><button id="text-move-back" class="mg-btn" type="button" style="width:auto;padding:2px 8px;">Move back</button><button id="text-move-forward" class="mg-btn" type="button" style="width:auto;padding:2px 8px;">Move forward</button></div></div></div>
+<button id=toggle-view-btn title="Toggle Canvas View (Z)">⬚</button>
+<button id=visuals-btn>Edit Visuals</button>
+<div id=visuals-dropdown>
+<h5>Visuals Editor</h5>
+<div id=visuals-tabs class=eraser-mode-selector style=margin-bottom:.8rem><button id=visuals-tab-asset class=mg-btn type=button>Asset</button><button id=visuals-tab-background class="mg-btn active" type=button>Background</button></div>
+<div id=asset-tab-panel class=hidden><div id=asset-visuals-controls class=disabled>
+<h6>Filters</h6>
+<div class=slider-container><label for=asset-opacity>Opacity</label><input type=range id=asset-opacity min=0 max=1 step=.01 value=1></div>
+<div class=slider-container><label for=asset-brightness>Brightness</label><input type=range id=asset-brightness min=0 max=2 step=.01 value=1></div>
+<div class=slider-container><label for=asset-saturation>Saturation</label><input type=range id=asset-saturation min=0 max=2 step=.01 value=1></div>
+<h6>Drop Shadow</h6>
+<div class=effects-checkbox style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem"><div><input type=checkbox id=shadow-enable><label for=shadow-enable>Enable</label></div><input type=color id=shadow-color value=#000000 style="width:100px;height:25px;border:1px solid var(--ink);padding:0"></div>
+<div id=shadow-controls class="effects-controls disabled">
+<div class=slider-container><label for=shadow-blur>Blur</label><input type=range id=shadow-blur min=0 max=50 value=10></div>
+<div class=slider-container><label for=shadow-offset-x>Offset X</label><input type=range id=shadow-offset-x min=-50 max=50 value=10></div>
+<div class=slider-container><label for=shadow-offset-y>Offset Y</label><input type=range id=shadow-offset-y min=-50 max=50 value=10></div>
+</div>
+<h6>Edge</h6>
+<div class=effects-checkbox style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem"><div><input type=checkbox id=asset-edge-enable><label for=asset-edge-enable>Enable</label></div><input type=color id=asset-edge-color value=#FFFFFF style="width:100px;height:25px;border:1px solid var(--ink);padding:0"></div>
+<div id=asset-edge-controls class="effects-controls disabled"><div class=slider-container><label for=asset-edge-width>Width</label><input type=range id=asset-edge-width min=0 max=20 value=4></div></div>
+</div></div>
+<div id=background-tab-panel><div id=background-visuals-controls>
+<h6>Background Filters</h6>
+<div class=slider-container><label for=bg-brightness>Brightness</label><input type=range id=bg-brightness min=0 max=2 step=.01 value=1></div>
+<div class=slider-container><label for=bg-saturation>Saturation</label><input type=range id=bg-saturation min=0 max=2 step=.01 value=1></div>
+</div></div></div>
+<button id=erase-tool-btn>Erase</button>
+<div id=erase-tool-dropdown>
+<h5>Eraser Tool</h5>
+<div class=eraser-mode-selector><button class=mg-btn id=erase-btn>Erase</button><button class=mg-btn id=unerase-btn>Unerase</button></div>
+<div id=eraser-controls-wrapper class=disabled>
+<div class=slider-container><label for=eraser-size-dropdown>Size</label><input type=range id=eraser-size-dropdown min=5 max=250 value=128></div>
+<div class=slider-container><label for=eraser-strength-dropdown>Strength</label><input type=range id=eraser-strength-dropdown min=0 max=1 step=.01 value=1></div>
+</div></div>
+<button id=ai-tools-btn>BG Remover.exe</button><div id=ai-tools-dropdown><h5>Background Remover</h5></div><button id=text-btn>Text</button><div id=text-dropdown><h5>Text Editor</h5><div id=text-layer-manager><div id=text-layer-palette></div><button id=add-new-text-layer-btn class="palette-slot empty" title="Add new text layer">+</button></div><div id=text-visuals-controls class=disabled><div class=slider-container><label for=text-content>Text Content</label><textarea id=text-content rows=3 style="width:100%;font-family:inherit;font-size:1rem;padding:4px;border:1px solid var(--ink);background:var(--bg);line-height:1.1">New Text</textarea></div>
+<div class=slider-container><label>Font</label><div id=custom-font-select><div id=font-select-trigger tabindex=0><span>VT323</span> <i class="fas fa-chevron-down"></i></div><div id=font-select-dropdown class=hidden><ul id=font-select-list></ul></div></div></div>
+<div class=slider-container><label for=text-size>Size</label><input type=range id=text-size min=20 max=800 step=1 value=410></div>
+<div class=compact-color-row>
+<div class=slider-container><label for=text-color>Color</label><input type=color id=text-color value=#FFFFFF></div>
+<div class=slider-container><label for=text-edge-color>Edge Color</label><input type=color id=text-edge-color value=#000000></div>
+</div>
+<div class=slider-container><label for=text-edge-width>Edge Density</label><input type=range id=text-edge-width min=0 max=20 step=.1 value=0></div>
+<h6>Drop Shadow</h6>
+<div class=effects-checkbox style="display:flex;justify-content:space-between;align-items:center"><div><input type=checkbox id=text-shadow-enable><label for=text-shadow-enable>Enable</label></div><div class=slider-container style="margin-bottom:0;width:60%"><label for=text-shadow-color style=margin-top:0>Color</label><input type=color id=text-shadow-color value=#000000 style="width:100%;border:none;padding:0"></div></div>
+<div id=text-shadow-controls class="effects-controls disabled">
+<div class=slider-container><label for=text-shadow-blur>Blur</label><input type=range id=text-shadow-blur min=0 max=50 value=10></div>
+<div class=slider-container><label for=text-shadow-offset-x>Offset X</label><input type=range id=text-shadow-offset-x min=-50 max=50 value=10></div>
+<div class=slider-container><label for=text-shadow-offset-y>Offset Y</label><input type=range id=text-shadow-offset-y min=-50 max=50 value=10></div>
+</div>
+<div id=text-zorder-controls style="display:flex;gap:.5rem;align-items:center;margin-top:.5rem"><button id=text-move-back class=mg-btn type=button style="width:auto;padding:2px 8px">Move back</button><button id=text-move-forward class=mg-btn type=button style="width:auto;padding:2px 8px">Move forward</button></div></div></div>
 <button id=shortcuts-btn>Shortcuts</button><div class=controls-fake><div class=btn-square></div><div class=btn-square></div></div>
-<div id=shortcuts-dropdown>
-    <h5>Keyboard Shortcuts</h5>
-    <ul>
-        <li><span>Undo Last Action</span><kbd>Cmd/Ctrl + Z</kbd></li>
-        <li><span>Redo Last Action</span><kbd>Cmd/Ctrl + Y</kbd></li>
-        <li><span>Toggle Canvas View</span><kbd>Z</kbd></li>
-        <li><span>Enlarge Asset</span><kbd>D</kbd></li>
-        <li><span>Shrink Asset</span><kbd>F</kbd></li>
-        <li><span>Flip Asset Horizontally</span><kbd>S</kbd></li>
-        <li><span>Move Layer Forward</span><kbd>Q</kbd></li>
-        <li><span>Move Layer Backward</span><kbd>W</kbd></li>
-        <li><span>Delete Asset</span><kbd>Delete</kbd></li>
-        <li><span>Save Project</span><kbd>Cmd/Ctrl + S</kbd></li>
-    </ul>
-</div>
+<div id=shortcuts-dropdown><h5>Keyboard Shortcuts</h5><ul><li><span>Undo Last Action</span><kbd>Cmd/Ctrl + Z</kbd></li><li><span>Redo Last Action</span><kbd>Cmd/Ctrl + Y</kbd></li><li><span>Toggle Canvas View</span><kbd>Z</kbd></li><li><span>Enlarge Asset</span><kbd>D</kbd></li><li><span>Shrink Asset</span><kbd>F</kbd></li><li><span>Flip Asset Horizontally</span><kbd>S</kbd></li><li><span>Move Layer Forward</span><kbd>Q</kbd></li><li><span>Move Layer Backward</span><kbd>W</kbd></li><li><span>Delete Asset</span><kbd>Delete</kbd></li><li><span>Save Project</span><kbd>Cmd/Ctrl + S</kbd></li></ul></div>
 </div></div><main id=studio-container><div id=controls-panel>
-    <fieldset id="assets-folder-fieldset">
-        <legend>Project Library</legend>
-        <button id="mg-view-all-local-assets-btn" class="mg-btn">View All</button>
-        <div id="assets-folder-actions"><p>Your recent assets</p></div>
-        <div id="mg-local-asset-palette"></div>
-        <p style="font-size: 1.1rem; margin-top: 0.6rem; margin-bottom: 0.5rem;">Your recent backgrounds</p>
-        <div id="mg-local-background-palette"></div>
-    </fieldset>
-    <fieldset id="layers-fieldset"><legend>Layers</legend><p id=layer-instructions class=placeholder-text>Add a background to begin.</p><div id="mg-asset-palette"></div></fieldset>
-<fieldset><legend>Canvas Actions</legend><div class="action-buttons" style="margin-bottom: 0.5rem; display: flex; gap: 0.5rem;"><button class="mg-btn" id="mg-save-project-btn" disabled>Save Project</button><button class="mg-btn" id="mg-clear-canvas-btn" disabled>Clear Canvas</button></div><button class="mg-btn generate" id=mg-download-image-btn disabled>Download Image</button></fieldset></div><div id=canvas-panel>
-<canvas id=mg-movie-canvas></canvas><canvas id=mg-controls-overlay-canvas></canvas><canvas id="mg-pasteboard-overlay-canvas"></canvas><canvas id="mg-eraser-zoom"></canvas>
-<div id="mg-eraser-hud">
-    <div class="row eraser-mode-selector" style="margin-bottom:6px; width: 100%;"><button class="mg-btn" id="mg-hud-erase-btn" type="button" title="Erase">Erase</button><button class="mg-btn" id="mg-hud-unerase-btn" type="button" title="Unerase">Unerase</button></div>
-    <div class="row"><label for="mg-eraser-size-mini" style="font-size:14px;">Size</label><input id="mg-eraser-size-mini" type="range" min="5" max="250" value="128"></div>
-    <div class="row" style="margin-top: 4px;"><label for="mg-eraser-strength-mini" style="font-size:14px;">Strength</label><input id="mg-eraser-strength-mini" type="range" min="0" max="1" step="0.01" value="1"></div>
-</div>
-<div id=canvas-placeholder><img src="welcome.png" alt="Click or drag and drop to start creating"><h3>Click, Paste, or Drag & Drop File</h3><p>to add a background image & begin creating</p></div></div></main>
-<footer>
-    <div class="footer-links"><a href="#"><i class="fas fa-envelope"></i>feedback</a><a href="#"><i class="fab fa-twitter"></i>updates</a><a href="#"><i class="fas fa-file-alt"></i>license</a><a href="#"><i class="fas fa-shield-alt"></i>report</a><a href="#"><i class="fas fa-lock"></i>privacy</a></div>
-    <div class="footer-right"><a href="#" id="theme-select-link"><i class="fas fa-palette"></i><span id="current-theme-name"></span></a><a href="#" id="version-link"><i class="fas fa-code-branch"></i>v4.18.1</a></div>
-</footer>
+<fieldset id=assets-folder-fieldset><legend>Project Library</legend><button id=mg-view-all-local-assets-btn class=mg-btn>View All</button><div id=assets-folder-actions><p>Your recent assets</p></div><div id=mg-local-asset-palette></div><p style="font-size:1.1rem;margin-top:.6rem;margin-bottom:.5rem">Your recent backgrounds</p><div id=mg-local-background-palette></div></fieldset>
+<fieldset id=layers-fieldset><legend>Layers</legend><p id=layer-instructions class=placeholder-text>Add a background to begin.</p><div id=mg-asset-palette></div></fieldset>
+<fieldset><legend>Canvas Actions</legend><div class=action-buttons style="margin-bottom:.5rem;display:flex;gap:.5rem"><button class="mg-btn" id=mg-save-project-btn disabled>Save Project</button><button class="mg-btn" id=mg-clear-canvas-btn disabled>Clear Canvas</button></div><button class="mg-btn generate" id=mg-download-image-btn disabled>Download Image</button></fieldset></div><div id=canvas-panel>
+<canvas id=mg-movie-canvas></canvas><canvas id=mg-controls-overlay-canvas></canvas><canvas id=mg-pasteboard-overlay-canvas></canvas><canvas id=mg-eraser-zoom></canvas>
+<div id=mg-eraser-hud><div class="row eraser-mode-selector" style="margin-bottom:6px;width:100%"><button class="mg-btn" id=mg-hud-erase-btn type=button title=Erase>Erase</button><button class="mg-btn" id=mg-hud-unerase-btn type=button title=Unerase>Unerase</button></div><div class=row><label for=mg-eraser-size-mini style=font-size:14px>Size</label><input id=mg-eraser-size-mini type=range min=5 max=250 value=128></div><div class=row style="margin-top:4px"><label for=mg-eraser-strength-mini style=font-size:14px>Strength</label><input id=mg-eraser-strength-mini type=range min=0 max=1 step=.01 value=1></div></div>
+<div id=canvas-placeholder><img src=welcome.png alt="Click or drag and drop to start creating"><h3>Click, Paste, or Drag & Drop File</h3><p>to add a background image & begin creating</p></div></div></main>
+<footer><div class=footer-links><a href=#><i class="fas fa-envelope"></i>feedback</a><a href=#><i class="fab fa-twitter"></i>updates</a><a href=#><i class="fas fa-file-alt"></i>license</a><a href=#><i class="fas fa-shield-alt"></i>report</a><a href=#><i class="fas fa-lock"></i>privacy</a></div><div class=footer-right><a href=# id=theme-select-link><i class="fas fa-palette"></i><span id=current-theme-name></span></a><a href=# id=version-link><i class="fas fa-code-branch"></i>v4.18.1</a></div></footer>
 <input type=file id=initial-background-input accept=image/* style=display:none></div>
-
-<!-- === MODIFIED: This is the new Add Layer popup based on the reference === -->
-<div id="mg-asset-library-overlay" class="mg-overlay-base">
-    <div id="mg-asset-picker-wrapper" class="window">
-        <button id="mg-asset-library-close" class="overlay-close-btn">X</button>
-        <h4>Add a New Layer</h4>
-        <p>Add your own image to the current scene.</p>
-        <div id="mg-asset-drop-zone">
-            <h3>Click, Paste, or Drag & Drop File</h3>
-            <p>Supported formats: PNG, JPG, JPEG</p>
-        </div>
-        <div id="mg-asset-picker-actions">
-             <input type="file" id="mg-asset-picker-file" accept="image/png, image/jpeg" style="display:none">
-        </div>
-    </div>
-</div>
-
-
-<div id="project-library-popup-overlay" class="mg-overlay-base">
-    <div id="project-library-popup" class="window">
-        <div class="titlebar">
-            <span>Project Library</span>
-            <button id="project-library-popup-close" class="overlay-close-btn">X</button>
-        </div>
-        <div class="library-tabs" style="padding: 0.5rem 1rem; display: flex; gap: 0.5rem; border-bottom: 2px solid var(--ink);">
-            <button id="library-tab-projects" class="visuals-main-tab-btn">Projects</button>
-            <button id="library-tab-assets" class="visuals-main-tab-btn active">Assets</button>
-            <button id="library-tab-backgrounds" class="visuals-main-tab-btn">Backgrounds</button>
-            <button id="library-tab-favorites" class="visuals-main-tab-btn">Favorites</button>
-        </div>
-        <div id="project-library-grids-container" style="flex-grow: 1; overflow-y: auto;">
-            <div id="project-library-grid-projects" class="project-library-grid hidden"></div>
-            <div id="project-library-grid-assets" class="project-library-grid"></div>
-            <div id="project-library-grid-backgrounds" class="project-library-grid hidden"></div>
-            <div id="project-library-grid-favorites" class="project-library-grid hidden"></div>
-        </div>
-    </div>
-</div>
-
-<div id=mg-confirmation-overlay class=mg-overlay-base><div id=mg-confirmation-dialog class=window><p id=mg-confirmation-text>Are you sure?</p><div class=action-buttons><button id="mg-confirm-yes-btn" class="mg-btn active" type="button">Yes</button><button id="mg-confirm-no-btn" class="mg-btn" type="button">No</button></div></div></div>
-<div id="mg-asset-action-overlay" class=mg-overlay-base style="display: none;"><div id="mg-asset-action-dialog" class=window><p>How would you like to use this asset?</p><div class="action-buttons"><button id="mg-asset-action-background-btn" class="mg-btn">Set as Background</button><button id="mg-asset-action-layer-btn" class="mg-btn">Add as Layer</button></div></div></div>
-<div id="version-popup-overlay" style="display: none;">
-    <div id="version-popup-content">
-        <span id="close-popup">X</span>
-        <h4>v4.18.1</h4>
-        <h6>12 Sep 2025</h6>
-        <p>A performance and user experience patch focused on improving initial load times and refining UI elements based on user feedback.</p>
-        <h5>Features</h5>
-        <ul>
-            <li><strong>performance:</strong> Implemented "critical CSS" to ensure the loading screen appears almost instantly. Non-essential styles are now loaded asynchronously.</li>
-            <li><strong>performance:</strong> Decorative fonts are now loaded on-demand when the user opens the Text Editor for the first time, saving multiple network requests on initial load.</li>
-        </ul>
-        <h5>Improvements</h5>
-        <ul>
-            <li><strong>performance:</strong> Removed the background removal tool to significantly reduce the initial JavaScript bundle size.</li>
-            <li><strong>performance:</strong> Replaced the welcome video with a static, compressed PNG to speed up the placeholder view.</li>
-            <li><strong>ux:</strong> The border style selector popup is now a perfectly sized, non-scrollable grid with centered previews and improved spacing.</li>
-            <li><strong>ux:</strong> Previews in the border style selector now use the theme's main ink color (e.g., black) instead of green for better visual consistency.</li>
-            <li><strong>ui:</strong> Added small 'x' markers to the corners of the "Classic Barb" border preview to better reflect its on-canvas appearance.</li>
-        </ul>
-        <h5>Fixes</h5>
-        <ul>
-            <li><strong>style:</strong> Corrected the "Classic Wiggle" rotator handle on the canvas, which was incorrectly showing a black fill; it now correctly shows only the green stroke.</li>
-        </ul>
-
-        <hr style="margin: 2rem 0;">
-
-        <h4>v4.18.0</h4>
-        <h6>11 Sep 2025</h6>
-        <p>A major update focused on UI/UX enhancements and bug fixes, particularly for the editing tools.</p>
-        <h5>Features</h5>
-        <ul>
-            <li><strong>ui:</strong> re-architected the 'Edit Visuals' dropdown into a tabbed interface ("Asset" and "Background") to improve organization and ensure it fits on smaller screens</li>
-            <li><strong>eraser:</strong> added a floating side HUD that appears when the eraser tool is active, providing quick access to primary controls without reopening the main dropdown</li>
-            <li><strong>ux:</strong> implemented a smooth "scrubbing" effect for sliders, which fades out non-essential UI elements during adjustment for better focus</li>
-        </ul>
-        <h5>Improvements</h5>
-        <ul>
-            <li><strong>style:</strong> reduced border and box-shadow thickness sitewide for a lighter, more refined aesthetic</li>
-            <li><strong>eraser:</strong> redesigned the side HUD with clear "Erase" and "Unerase" buttons that dynamically match the application's selected theme</li>
-            <li><strong>eraser:</strong> added a "Strength" slider to the side HUD for quick access to both primary brush settings</li>
-            <li><strong>eraser:</strong> refined the activation flow to keep the main dropdown open for initial adjustments; the side HUD now appears only after the user moves to the canvas</li>
-            <li><strong>ui:</strong> added smooth fade-in and fade-out transitions to the eraser's side HUD and magnifying zoom window for a more polished feel</li>
-            <li><strong>ux:</strong> the "Asset" tab in the Visuals Editor is now always clickable and provides a helpful toast message if no asset is currently selected</li>
-            <li><strong>ux:</strong> improved instructional text for the eraser, changing "Armed" to "Activated" and clarifying how to deactivate the tool</li>
-            <li><strong>text:</strong> renamed "Stroke Width" to "Density" in the Text Editor</li>
-            <li><strong>performance:</strong> capped the eraser's undo history to a maximum of 10 steps per layer to prevent excessive memory usage</li>
-        </ul>
-        <h5>Fixes</h5>
-        <ul>
-            <li><strong>download:</strong> implemented a missing `toast` function that was causing a critical error and preventing the "Download Image" button from working</li>
-            <li><strong>eraser:</strong> the floating side HUD no longer incorrectly disappears when a user interacts with its sliders</li>
-            <li><strong>eraser:</strong> the Size and Strength sliders are now perfectly synced in real-time between the main dropdown and the side HUD</li>
-            <li><strong>eraser:</strong> the side HUD now correctly disappears the moment an erase action begins (mouse-down) and reappears immediately upon release (mouse-up)</li>
-            <li><strong>ui:</strong> disabled the "scrubbing" fade-out effect for all "Strength" sliders, as hiding the UI was not necessary for that specific adjustment</li>
-        </ul>
-    </div>
-</div>
-<div id="theme-popup-overlay" style="display: none;"><div id="theme-popup-content"><ul id="theme-list"></ul></div></div>
+<div id=mg-asset-library-overlay class=mg-overlay-base><div id=mg-asset-picker-wrapper class=window><button id=mg-asset-library-close class=overlay-close-btn>X</button><h4>Add a New Layer</h4><p>Add your own image to the current scene.</p><div id=mg-asset-drop-zone><h3>Click, Paste, or Drag & Drop File</h3><p>Supported formats: PNG, JPG, JPEG</p></div><div id=mg-asset-picker-actions><input type=file id=mg-asset-picker-file accept="image/png, image/jpeg" style=display:none></div></div></div>
+<div id=project-library-popup-overlay class=mg-overlay-base><div id=project-library-popup class=window><div class=titlebar><span>Project Library</span><button id=project-library-popup-close class=overlay-close-btn>X</button></div><div class=library-tabs style="padding:.5rem 1rem;display:flex;gap:.5rem;border-bottom:2px solid var(--ink)"><button id=library-tab-projects class=visuals-main-tab-btn>Projects</button><button id=library-tab-assets class="visuals-main-tab-btn active">Assets</button><button id=library-tab-backgrounds class=visuals-main-tab-btn>Backgrounds</button><button id=library-tab-favorites class=visuals-main-tab-btn>Favorites</button></div><div id=project-library-grids-container style="flex-grow:1;overflow-y:auto"><div id=project-library-grid-projects class="project-library-grid hidden"></div><div id=project-library-grid-assets class=project-library-grid></div><div id=project-library-grid-backgrounds class="project-library-grid hidden"></div><div id=project-library-grid-favorites class="project-library-grid hidden"></div></div></div></div>
+<div id=mg-confirmation-overlay class=mg-overlay-base><div id=mg-confirmation-dialog class=window><p id=mg-confirmation-text>Are you sure?</p><div class=action-buttons><button id="mg-confirm-yes-btn" class="mg-btn active" type=button>Yes</button><button id="mg-confirm-no-btn" class=mg-btn type=button>No</button></div></div></div>
+<div id=mg-asset-action-overlay class=mg-overlay-base style="display:none"><div id=mg-asset-action-dialog class=window><p>How would you like to use this asset?</p><div class=action-buttons><button id=mg-asset-action-background-btn class=mg-btn>Set as Background</button><button id=mg-asset-action-layer-btn class=mg-btn>Add as Layer</button></div></div></div>
+<div id=version-popup-overlay style="display:none"><div id=version-popup-content><span id=close-popup>X</span><h4>v4.18.1</h4><h6>12 Sep 2025</h6><p>A performance and user experience patch focused on improving initial load times and refining UI elements based on user feedback.</p><h5>Features</h5><ul><li><strong>performance:</strong> Implemented "critical CSS" to ensure the loading screen appears almost instantly. Non-essential styles are now loaded asynchronously.</li><li><strong>performance:</strong> Decorative fonts are now loaded on-demand when the user opens the Text Editor for the first time, saving multiple network requests on initial load.</li></ul><h5>Improvements</h5><ul><li><strong>performance:</strong> Removed the background removal tool to significantly reduce the initial JavaScript bundle size.</li><li><strong>performance:</strong> Replaced the welcome video with a static, compressed PNG to speed up the placeholder view.</li><li><strong>ux:</strong> The border style selector popup is now a perfectly sized, non-scrollable grid with centered previews and improved spacing.</li><li><strong>ux:</strong> Previews in the border style selector now use the theme's main ink color (e.g., black) instead of green for better visual consistency.</li><li><strong>ui:</strong> Added small 'x' markers to the corners of the "Classic Barb" border preview to better reflect its on-canvas appearance.</li></ul><h5>Fixes</h5><ul><li><strong>style:</strong> Corrected the "Classic Wiggle" rotator handle on the canvas, which was incorrectly showing a black fill; it now correctly shows only the green stroke.</li></ul><hr style=margin:2rem 0><h4>v4.18.0</h4><h6>11 Sep 2025</h6><p>A major update focused on UI/UX enhancements and bug fixes, particularly for the editing tools.</p><h5>Features</h5><ul><li><strong>ui:</strong> re-architected the 'Edit Visuals' dropdown into a tabbed interface ("Asset" and "Background") to improve organization and ensure it fits on smaller screens</li><li><strong>eraser:</strong> added a floating side HUD that appears when the eraser tool is active, providing quick access to primary controls without reopening the main dropdown</li><li><strong>ux:</strong> implemented a smooth "scrubbing" effect for sliders, which fades out non-essential UI elements during adjustment for better focus</li></ul><h5>Improvements</h5><ul><li><strong>style:</strong> reduced border and box-shadow thickness sitewide for a lighter, more refined aesthetic</li><li><strong>eraser:</strong> redesigned the side HUD with clear "Erase" and "Unerase" buttons that dynamically match the application's selected theme</li><li><strong>eraser:</strong> added a "Strength" slider to the side HUD for quick access to both primary brush settings</li><li><strong>eraser:</strong> refined the activation flow to keep the main dropdown open for initial adjustments; the side HUD now appears only after the user moves to the canvas</li><li><strong>ui:</strong> added smooth fade-in and fade-out transitions to the eraser's side HUD and magnifying zoom window for a more polished feel</li><li><strong>ux:</strong> the "Asset" tab in the Visuals Editor is now always clickable and provides a helpful toast message if no asset is currently selected</li><li><strong>ux:</strong> improved instructional text for the eraser, changing "Armed" to "Activated" and clarifying how to deactivate the tool</li><li><strong>text:</strong> renamed "Stroke Width" to "Density" in the Text Editor</li><li><strong>performance:</strong> capped the eraser's undo history to a maximum of 10 steps per layer to prevent excessive memory usage</li></ul><h5>Fixes</h5><ul><li><strong>download:</strong> implemented a missing `toast` function that was causing a critical error and preventing the "Download Image" button from working</li><li><strong>eraser:</strong> the floating side HUD no longer incorrectly disappears when a user interacts with its sliders</li><li><strong>eraser:</strong> the Size and Strength sliders are now perfectly synced in real-time between the main dropdown and the side HUD</li><li><strong>eraser:</strong> the side HUD now correctly disappears the moment an erase action begins (mouse-down) and reappears immediately upon release (mouse-up)</li><li><strong>ui:</strong> disabled the "scrubbing" fade-out effect for all "Strength" sliders, as hiding the UI was not necessary for that specific adjustment</li></ul></div></div>
+<div id=theme-popup-overlay style="display:none"><div id=theme-popup-content><ul id=theme-list></ul></div></div>
 <div id=mg-toast></div>
 
 <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.18.0/dist/ort.min.js"></script>
@@ -590,7 +199,7 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
         config: {
             secondaryFontsLoaded: false,
             loadedFonts: new Set(['VT323']),
-            themes: {}, // This will be populated from the global 'themes' object in init()
+            themes: {},
             PASTEBOARD_MARGIN: 1500,
             FADE_IN_DURATION: 300,
             UI_MIN_PX: 120,
@@ -601,22 +210,22 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
             BRUSH_MIN: 5,
             BRUSH_MAX: 250,
             HISTORY_LIMIT: 15,
-            DEBOUNCE_DELAY: 500, // Delay for debounced save in milliseconds
+            DEBOUNCE_DELAY: 500,
             availableFonts: [
                 { name: 'VT323', value: "'VT323', monospace" }, { name: 'Yomogi', value: "'Yomogi', cursive" },
-                { name: 'Young Serif', value: "'Young Serif', serif" }, { name: 'Special Elite', value: "'Special Elite', cursive" }, 
-                { name: 'Rubik Mono One', value: "'Rubik Mono One', sans-serif" }, { name: 'Rubik Beastly', value: "'Rubik Beastly', cursive" }, 
-                { name: 'Press Start 2P', value: "'Press Start 2P', cursive", style: "font-size: 0.6rem;" }, { name: 'Patua One', value: "'Patua One', cursive" }, 
-                { name: 'Nosifer', value: "'Nosifer', cursive" }, { name: 'Monoton', value: "'Monoton', cursive" }, 
-                { name: 'Modak', value: "'Modak', cursive" }, { name: 'Metal Mania', value: "'Metal Mania', cursive" }, 
-                { name: 'Major Mono Display', value: "'Major Mono Display', monospace", style: "font-size: 0.8rem;" }, { name: 'Luckiest Guy', value: "'Luckiest Guy', cursive" }, 
-                { name: 'Londrina Outline', value: "'Londrina Outline', cursive" }, { name: 'Joti One', value: "'Joti One', cursive" }, 
-                { name: 'Gorditas', value: "'Gorditas', cursive" }, { name: 'Graduate', value: "'Graduate', cursive" }, 
-                { name: 'Gloria Hallelujah', value: "'Gloria Hallelujah', cursive" }, { name: 'Frijole', value: "'Frijole', cursive" }, 
-                { name: 'Erica One', value: "'Erica One', cursive" }, { name: 'Eater', value: "'Eater', cursive" }, 
-                { name: 'Dokdo', value: "'Dokdo', cursive" }, { name: 'Cute Font', value: "'Cute Font', cursive" }, 
-                { name: 'Creepster', value: "'Creepster', cursive" }, { name: 'Codystar', value: "'Codystar', cursive" }, 
-                { name: 'Barrio', value: "'Barrio', cursive" }, { name: 'Bahiana', value: "'Bahiana', cursive" }, 
+                { name: 'Young Serif', value: "'Young Serif', serif" }, { name: 'Special Elite', value: "'Special Elite', cursive" },
+                { name: 'Rubik Mono One', value: "'Rubik Mono One', sans-serif" }, { name: 'Rubik Beastly', value: "'Rubik Beastly', cursive" },
+                { name: 'Press Start 2P', value: "'Press Start 2P', cursive", style: "font-size: 0.6rem;" }, { name: 'Patua One', value: "'Patua One', cursive" },
+                { name: 'Nosifer', value: "'Nosifer', cursive" }, { name: 'Monoton', value: "'Monoton', cursive" },
+                { name: 'Modak', value: "'Modak', cursive" }, { name: 'Metal Mania', value: "'Metal Mania', cursive" },
+                { name: 'Major Mono Display', value: "'Major Mono Display', monospace", style: "font-size: 0.8rem;" }, { name: 'Luckiest Guy', value: "'Luckiest Guy', cursive" },
+                { name: 'Londrina Outline', value: "'Londrina Outline', cursive" }, { name: 'Joti One', value: "'Joti One', cursive" },
+                { name: 'Gorditas', value: "'Gorditas', cursive" }, { name: 'Graduate', value: "'Graduate', cursive" },
+                { name: 'Gloria Hallelujah', value: "'Gloria Hallelujah', cursive" }, { name: 'Frijole', value: "'Frijole', cursive" },
+                { name: 'Erica One', value: "'Erica One', cursive" }, { name: 'Eater', value: "'Eater', cursive" },
+                { name: 'Dokdo', value: "'Dokdo', cursive" }, { name: 'Cute Font', value: "'Cute Font', cursive" },
+                { name: 'Creepster', value: "'Creepster', cursive" }, { name: 'Codystar', value: "'Codystar', cursive" },
+                { name: 'Barrio', value: "'Barrio', cursive" }, { name: 'Bahiana', value: "'Bahiana', cursive" },
                 { name: 'Astloch', value: "'Astloch', cursive" }, { name: 'Are You Serious', value: "'Are You Serious', cursive" }
             ],
             fontValueToNameMap: new Map(),
@@ -650,43 +259,27 @@ body[data-theme-is-dark=true] #mg-asset-picker-wrapper .overlay-close-btn{color:
 
         dom: {},
 
-loadSpecificFonts(fontNames) {
+        loadSpecificFonts(fontNames) {
             if (!Array.isArray(fontNames) || fontNames.length === 0) return Promise.resolve();
-            
             const fontsToLoad = fontNames.filter(f => !this.config.loadedFonts.has(f));
             if (fontsToLoad.length === 0) return Promise.resolve();
-
-            // --- BATCHING LOGIC START ---
-            const batchSize = 10; // Request 10 fonts at a time.
+            const batchSize = 10;
             const promises = [];
-
             for (let i = 0; i < fontsToLoad.length; i += batchSize) {
                 const batch = fontsToLoad.slice(i, i + batchSize);
-                
                 const baseUrl = 'https://fonts.googleapis.com/css2?';
                 const familyParams = batch.map(font => `family=${font.replace(/ /g, '+')}`).join('&');
                 const url = `${baseUrl}${familyParams}&display=swap`;
-
                 const promise = new Promise((resolve, reject) => {
                     const link = document.createElement('link');
                     link.href = url;
                     link.rel = 'stylesheet';
-                    link.onload = () => {
-                        batch.forEach(f => this.config.loadedFonts.add(f));
-                        resolve();
-                    };
-                    link.onerror = () => {
-                        console.error('Failed to load a batch of fonts:', batch);
-                        // We can still try to resolve, so the app doesn't crash.
-                        // The user just won't have these specific fonts.
-                        reject(new Error(`Could not load font batch: ${batch.join(', ')}`));
-                    };
+                    link.onload = () => { batch.forEach(f => this.config.loadedFonts.add(f)); resolve(); };
+                    link.onerror = () => { console.error('Failed to load a batch of fonts:', batch); reject(new Error(`Could not load font batch: ${batch.join(', ')}`)); };
                     document.head.appendChild(link);
                 });
                 promises.push(promise);
             }
-            // --- BATCHING LOGIC END ---
-
             return Promise.all(promises);
         },
 
@@ -708,7 +301,7 @@ loadSpecificFonts(fontNames) {
         },
 
               applyTheme(themeName, isPreview = false) {
-            const theme = themes[themeName]; // FIX: Use the global 'themes' object directly
+            const theme = themes[themeName];
             if (!theme) return;
             const root = document.documentElement;
             if (isPreview) { root.style.transition = 'none'; }
@@ -746,7 +339,7 @@ loadSpecificFonts(fontNames) {
                populateThemeList() {
             this.dom.themeList.innerHTML = '';
             const currentTheme = localStorage.getItem('selectedTheme') || 'classic light';
-            for (const themeName in themes) { // FIX: Use the global 'themes' object directly
+            for (const themeName in themes) {
                 const theme = themes[themeName];
                 const li = document.createElement('li');
                 li.dataset.themeName = themeName;
@@ -1247,6 +840,36 @@ loadSpecificFonts(fontNames) {
             this.addImageLayer(src, hash);
         },
         
+        calculateContentBounds(canvas) {
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+            let minX = canvas.width, minY = canvas.height, maxX = -1, maxY = -1;
+
+            for (let y = 0; y < canvas.height; y++) {
+                for (let x = 0; x < canvas.width; x++) {
+                    if (data[(y * canvas.width + x) * 4 + 3] > 0) {
+                        if (x < minX) minX = x;
+                        if (x > maxX) maxX = x;
+                        if (y < minY) minY = y;
+                        if (y > maxY) maxY = y;
+                    }
+                }
+            }
+
+            if (maxX === -1) {
+                return { x: 0, y: 0, width: canvas.width, height: canvas.height, isEmpty: true };
+            }
+
+            return {
+                x: minX,
+                y: minY,
+                width: maxX - minX + 1,
+                height: maxY - minY + 1,
+                isEmpty: false
+            };
+        },
+
         addImageLayer(src, hash) {
             if (!this.state.canvasState.backgroundElement) { this.toast('Please add a background image first.', 2000); return; }
             const createFromImage = (img) => {
@@ -1255,8 +878,22 @@ loadSpecificFonts(fontNames) {
                 const proxyCanvas = document.createElement('canvas');
                 proxyCanvas.width = w; proxyCanvas.height = h;
                 proxyCanvas.getContext('2d').drawImage(img, 0, 0);
+
+                const contentFrame = this.calculateContentBounds(proxyCanvas);
+
                 const newSize = Math.max(20, Math.min(this.dom.movieCanvas.width, this.dom.movieCanvas.height) * 0.4);
-                const newLayer = { id: (Date.now() + Math.random()).toString(), src, hash, asset: img, type: 'image', x: this.dom.movieCanvas.width / 2, y: this.dom.movieCanvas.height / 2, size: newSize, rot: 0, flipX: false, opacity: 1, brightness: 1, saturation: 1, shadow: { enabled: false, color: '#000000', blur: 10, offsetX: 10, offsetY: 10 }, border: { enabled: false, color: '#FFFFFF', width: 4 }, proxyCanvas, proxyCtx: proxyCanvas.getContext('2d'), createdAt: Date.now() };
+                const newLayer = { 
+                    id: (Date.now() + Math.random()).toString(), 
+                    src, hash, asset: img, type: 'image', 
+                    x: this.dom.movieCanvas.width / 2, y: this.dom.movieCanvas.height / 2, 
+                    size: newSize, rot: 0, flipX: false, opacity: 1, 
+                    brightness: 1, saturation: 1, 
+                    shadow: { enabled: false, color: '#000000', blur: 10, offsetX: 10, offsetY: 10 }, 
+                    border: { enabled: false, color: '#FFFFFF', width: 4 }, 
+                    proxyCanvas, proxyCtx: proxyCanvas.getContext('2d'), 
+                    createdAt: Date.now(),
+                    contentFrame: contentFrame 
+                };
                 newLayer.propX = newLayer.x / this.dom.movieCanvas.width;
                 newLayer.propY = newLayer.y / this.dom.movieCanvas.height;
                 newLayer.propSize = newLayer.size / this.dom.movieCanvas.width;
@@ -1275,7 +912,7 @@ loadSpecificFonts(fontNames) {
             image.onerror = () => this.toast(`Could not load asset: ${src}`);
             image.src = src;
         },
-        
+
         updateControlsState() {
             const hasBackground = !!this.state.canvasState.backgroundElement;
             this.dom.downloadImageBtn.disabled = !hasBackground;
@@ -1721,19 +1358,13 @@ loadSpecificFonts(fontNames) {
         },
         stopRenderLoop() { cancelAnimationFrame(this.state.animationFrameId); this.state.animationFrameId = null; this.drawFrame(); },
 
-               drawControlsOverlay() {
+        drawControlsOverlay() {
             const isPasteboard = this.state.isCanvasViewZoomedOut;
             const ctx = isPasteboard ? this.dom.pasteboardCtx : this.dom.controlsCtx;
             const canvas = isPasteboard ? this.dom.pasteboardOverlayCanvas : this.dom.controlsOverlayCanvas;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
         
             const activeLayer = this.getActiveLayer();
-
-            // --- SEQUENTIAL DRAWING LOGIC ---
-
-            // 1. DRAW THE GREEN SELECTION BOX
-            // The green box should be visible WHENEVER a layer is active,
-            // UNLESS the eraser is fully armed (meaning the dropdown is closed).
             const isEraserArmed = this.state.eraserMode !== 'none' && !this.dom.eraseToolDropdown.classList.contains('visible');
 
             if (activeLayer && !isEraserArmed) {
@@ -1750,9 +1381,23 @@ loadSpecificFonts(fontNames) {
                 const handleSize = HANDLE_SCREEN_SIZE / scale, lineWidth = BORDER_SCREEN_WIDTH / scale, rotationHandleOffset = ROTATION_HANDLE_SCREEN_OFFSET / scale;
                 const ho = handleSize / 2;
 
-                ctx.save();
                 ctx.translate(activeLayer.x, activeLayer.y);
                 ctx.rotate(activeLayer.rot * Math.PI / 180);
+
+                let offsetX = 0, offsetY = 0;
+                if ((activeLayer.type === 'image' || activeLayer.type === 'rasterized-image') && activeLayer.contentFrame) {
+                    const fullWidth = activeLayer.size;
+                    const fullHeight = activeLayer.size * (activeLayer.proxyCanvas.height / activeLayer.proxyCanvas.width);
+                    const frameScale = fullWidth / activeLayer.proxyCanvas.width;
+                    
+                    const frameCenterX = (activeLayer.contentFrame.x + activeLayer.contentFrame.width / 2) * frameScale;
+                    const frameCenterY = (activeLayer.contentFrame.y + activeLayer.contentFrame.height / 2) * frameScale;
+                    
+                    offsetX = frameCenterX - (fullWidth / 2);
+                    offsetY = frameCenterY - (fullHeight / 2);
+                    ctx.translate(offsetX, offsetY);
+                }
+                
                 ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
                 ctx.shadowBlur = 4;
                 ctx.shadowOffsetX = 2;
@@ -1766,17 +1411,14 @@ loadSpecificFonts(fontNames) {
                 ctx.beginPath(); ctx.arc(halfW, -halfH, ho, 0, 2 * Math.PI); ctx.fill();
                 ctx.beginPath(); ctx.arc(-halfW, halfH, ho, 0, 2 * Math.PI); ctx.fill();
                 ctx.beginPath(); ctx.arc(halfW, halfH, ho, 0, 2 * Math.PI); ctx.fill();
+                
                 const rotHandleY = -halfH - rotationHandleOffset;
                 ctx.beginPath(); ctx.moveTo(0, -halfH); ctx.lineTo(0, rotHandleY); ctx.stroke();
                 ctx.beginPath(); ctx.arc(0, rotHandleY, ho, 0, 2 * Math.PI); ctx.fill();
-                ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; ctx.shadowOffsetX = 0; ctx.shadowOffsetY = 0;
-                ctx.restore(); 
+                
                 ctx.restore();
             }
 
-            // 2. DRAW THE ERASER CIRCLE
-            // The eraser circle should be visible WHENEVER an eraser mode is selected.
-            // This will draw it on top of the green box if necessary.
             if (this.state.eraserMode !== 'none') {
                 const canvasPoint = this.getMovieCanvasPoint({clientX: this.state.eraseBrushPos.x + this.dom.movieCanvas.getBoundingClientRect().left, clientY: this.state.eraseBrushPos.y + this.dom.movieCanvas.getBoundingClientRect().top});
                 ctx.save();
@@ -1963,6 +1605,9 @@ loadSpecificFonts(fontNames) {
             if (this.state.movieInteraction.active) { this.drawEraserZoomAt(canvasPoint); }
         },
 
+        // =================================================================
+        // ==  DEFINITIVE FIX: getMovieHandleAtPoint =======================
+        // =================================================================
         getMovieHandleAtPoint(point, layer) {
             const scale = this.dom.movieCanvas.getBoundingClientRect().width / this.dom.movieCanvas.width;
             if (scale === 0 || !isFinite(scale)) return null;
@@ -1970,33 +1615,47 @@ loadSpecificFonts(fontNames) {
             const radius = DESIRED_HIT_RADIUS_ON_SCREEN / scale;
             const { dWidth, dHeight } = this.getLayerMetrics(layer);
             if (!dWidth || !dHeight) return null;
+
+            let offsetX = 0, offsetY = 0;
+            if ((layer.type === 'image' || layer.type === 'rasterized-image') && layer.contentFrame) {
+                const fullWidth = layer.size;
+                const fullHeight = layer.size * (layer.proxyCanvas.height / layer.proxyCanvas.width);
+                const frameScale = fullWidth / layer.proxyCanvas.width;
+                const frameCenterX = (layer.contentFrame.x + layer.contentFrame.width / 2) * frameScale;
+                const frameCenterY = (layer.contentFrame.y + layer.contentFrame.height / 2) * frameScale;
+                offsetX = frameCenterX - (fullWidth / 2);
+                offsetY = frameCenterY - (fullHeight / 2);
+            }
+            
             const angle = layer.rot * Math.PI / 180, cos = Math.cos(angle), sin = Math.sin(angle);
             const ROTATION_HANDLE_SCREEN_OFFSET = 26;
             const rotationHandleOffset = ROTATION_HANDLE_SCREEN_OFFSET / scale;
-            const rotHandleY = -dHeight / 2 - rotationHandleOffset;
-            const rotatedRotHandleX = layer.x + (0 * cos - rotHandleY * sin);
-            const rotatedRotHandleY = layer.y + (0 * sin + rotHandleY * cos);
-            if (Math.hypot(point.x - rotatedRotHandleX, point.y - rotatedRotHandleY) < radius) return 'rotate';
+            
+            const rotHandleLocalX = 0;
+            const rotHandleLocalY = -dHeight / 2 - rotationHandleOffset;
+            const rotHandleWorldX = layer.x + ((offsetX + rotHandleLocalX) * cos - (offsetY + rotHandleLocalY) * sin);
+            const rotHandleWorldY = layer.y + ((offsetX + rotHandleLocalX) * sin + (offsetY + rotHandleLocalY) * cos);
+            if (Math.hypot(point.x - rotHandleWorldX, point.y - rotHandleWorldY) < radius) return 'rotate';
+            
             const handles = {
                 tl: { x: -dWidth / 2, y: -dHeight / 2 }, tr: { x: dWidth / 2, y: -dHeight / 2 },
                 bl: { x: -dWidth / 2, y: dHeight / 2 }, br: { x: dWidth / 2, y: dHeight / 2 }
             };
+
             for (const name in handles) {
                 const h = handles[name];
-                const handleWorldX = layer.x + h.x * cos - h.y * sin;
-                const handleWorldY = layer.y + h.x * sin + h.y * cos;
+                const handleWorldX = layer.x + ((offsetX + h.x) * cos - (offsetY + h.y) * sin);
+                const handleWorldY = layer.y + ((offsetX + h.x) * sin + (offsetY + h.y) * cos);
                 if (Math.hypot(point.x - handleWorldX, point.y - handleWorldY) < radius) return name;
             }
             return null;
         },
         
-               handleMovieInteractionStart(e) {
-            // First, a crucial guard: if the click starts inside any UI dropdown,
-            // ignore it completely on the canvas. This prevents all weird side-effects.
+        handleMovieInteractionStart(e) {
             const dropdowns = [this.dom.visualsDropdown, this.dom.textDropdown, this.dom.shortcutsDropdown, this.dom.eraseToolDropdown, this.dom.aiToolsDropdown, this.dom.customFontSelect];
             for (const dropdown of dropdowns) {
                 if (dropdown && dropdown.contains(e.target)) {
-                    return; // Exit function immediately.
+                    return;
                 }
             }
 
@@ -2004,28 +1663,19 @@ loadSpecificFonts(fontNames) {
             const activeLayer = this.getActiveLayer();
             const anyDropdownVisible = dropdowns.some(dd => dd && dd.classList.contains('visible')) || (this.dom.customFontSelect && this.dom.customFontSelect.classList.contains('open'));
 
-            // --- PRIMARY LOGIC FOR ERASER ---
-            // If an eraser mode is selected, this is our top priority.
             if (this.state.eraserMode !== 'none') {
                 e.preventDefault();
-
-                // To start erasing, the dropdown must be closed (i.e., tool is "armed"),
-                // and the click must be on the active layer.
                 if (!anyDropdownVisible && activeLayer && this.isPointInMovieLayer(point, activeLayer)) {
                     this.state.movieInteraction = { active: true, type: 'erase', layerId: activeLayer.id, lastProxyX: null, lastProxyY: null };
                     this.state.lastEraseCanvasPoint = point;
                     this.showEraserZoom(true);
-                    this.showEraserHUD(false); // Hide the HUD while actively erasing
+                    this.showEraserHUD(false);
                     this.drawEraserZoomAt(point);
                     this.applyBrushToLayer(activeLayer, point);
                 }
-                // If an eraser mode is selected but the click is elsewhere, DO NOTHING.
-                // This allows the global click handler to close the dropdown without deselecting the asset.
                 return;
             }
 
-            // --- NORMAL INTERACTION LOGIC ---
-            // If we've reached this point, no eraser is active.
             e.preventDefault();
             let interactionFound = false;
             const handle = activeLayer ? this.getMovieHandleAtPoint(point, activeLayer) : null;
@@ -2051,7 +1701,6 @@ loadSpecificFonts(fontNames) {
                 }
             }
 
-            // This is the deselection logic. It will now only run when no eraser is active.
             if (!interactionFound && this.state.activeLayerId && !anyDropdownVisible) {
                 this.state.activeLayerId = null;
                 this.updateEditPanelsUI();
@@ -2062,31 +1711,65 @@ loadSpecificFonts(fontNames) {
 
             if (interactionFound) this.startRenderLoop();
         },
+        
         getLayerMetrics(layer) {
             if (!layer) return { dWidth: 0, dHeight: 0 };
-            let dWidth, dHeight;
-             if (layer.type === 'image') {
+
+            if (layer.type === 'image') {
+                if (!layer.contentFrame || !layer.proxyCanvas) return { dWidth: 0, dHeight: 0 };
+                const scale = layer.size / layer.proxyCanvas.width;
+                const dWidth = layer.contentFrame.width * scale;
+                const dHeight = layer.contentFrame.height * scale;
+                return { dWidth, dHeight };
+            } else if (layer.type === 'text') {
+                const metrics = this.getTextBlockMetrics(this.dom.controlsCtx, layer.text, layer.font, layer.fontSize);
+                layer.width = metrics.maxWidth;
+                layer.height = metrics.totalHeight;
+                return { dWidth: metrics.maxWidth, dHeight: metrics.totalHeight };
+            }
+             if (layer.type === 'image' && layer.asset) {
                 const assetWidth  = layer.proxyCanvas?.width  || layer.asset?.naturalWidth  || 0;
                 const assetHeight = layer.proxyCanvas?.height || layer.asset?.naturalHeight || 0;
                 if (!assetWidth || !assetHeight) return { dWidth: 0, dHeight: 0 };
-                dWidth = layer.size;
-                dHeight = layer.size * (assetHeight / assetWidth);
-            } else {
-                const metrics = this.getTextBlockMetrics(this.dom.controlsCtx, layer.text, layer.font, layer.fontSize);
-                dWidth = metrics.maxWidth;
-                dHeight = metrics.totalHeight;
-             }
-            return { dWidth, dHeight };
+                return { dWidth: layer.size, dHeight: layer.size * (assetHeight / assetWidth) };
+            }
+            return { dWidth: 0, dHeight: 0 };
         },
 
+        // =================================================================
+        // ==  DEFINITIVE FIX: isPointInMovieLayer =========================
+        // =================================================================
         isPointInMovieLayer(point, layer) {
             if (!layer) return false;
+
             const { dWidth, dHeight } = this.getLayerMetrics(layer);
-            const dx = point.x - layer.x, dy = point.y - layer.y;
+            if (dWidth === 0) return false;
+
+            const dx = point.x - layer.x;
+            const dy = point.y - layer.y;
+
+            let offsetX = 0;
+            let offsetY = 0;
+            if ((layer.type === 'image' || layer.type === 'rasterized-image') && layer.contentFrame) {
+                const fullWidth = layer.size;
+                const fullHeight = layer.size * (layer.proxyCanvas.height / layer.proxyCanvas.width);
+                const scale = fullWidth / layer.proxyCanvas.width;
+                
+                const frameCenterX = (layer.contentFrame.x + layer.contentFrame.width / 2) * scale;
+                const frameCenterY = (layer.contentFrame.y + layer.contentFrame.height / 2) * scale;
+                
+                offsetX = frameCenterX - (fullWidth / 2);
+                offsetY = frameCenterY - (fullHeight / 2);
+            }
+            
             const angle = -layer.rot * Math.PI / 180;
             const localX = dx * Math.cos(angle) - dy * Math.sin(angle);
             const localY = dx * Math.sin(angle) + dy * Math.cos(angle);
-            return (Math.abs(localX) < dWidth / 2 && Math.abs(localY) < dHeight / 2);
+
+            return (
+                Math.abs(localX - offsetX) < dWidth / 2 &&
+                Math.abs(localY - offsetY) < dHeight / 2
+            );
         },
 
         handleMovieInteractionMove(e) {
@@ -2220,7 +1903,7 @@ loadSpecificFonts(fontNames) {
                  stateChanged = true;
             }
             else if (key === 's' && !(e.metaKey || e.ctrlKey)) { e.preventDefault(); activeLayer.flipX = !activeLayer.flipX; stateChanged = true; } 
-            else if (key === 'delete' || key === 'backspace') { e.preventDefault(); this.deleteMovieLayer(activeLayer.id); this.toast('Layer deleted', 2000); return; } // deleteMovieLayer already saves state
+            else if (key === 'delete' || key === 'backspace') { e.preventDefault(); this.deleteMovieLayer(activeLayer.id); this.toast('Layer deleted', 2000); return; }
 
             if (stateChanged) {
                 this.drawFrame();
@@ -2249,12 +1932,8 @@ loadSpecificFonts(fontNames) {
 
                deactivateEraser(shouldCloseDropdown = false) {
             if (this.state.eraserMode === 'none') return;
-
-            // Reset the state machine
             this.state.eraserMode = 'none';
             this.state.isEraserArmed = false;
-
-            // Explicitly hide all eraser-related UI, including the HUD
             this.showEraserHUD(false);
             this.showEraserZoom(false);
             document.getElementById('eraser-controls-wrapper').classList.add('disabled');
@@ -2263,8 +1942,6 @@ loadSpecificFonts(fontNames) {
             this.dom.eraseToolBtn.classList.remove('active');
             this.dom.movieCanvas.classList.remove('erase-cursor');
             this.hideToast();
-            
-            // Redraw the canvas to restore the green selection box
             this.drawFrame();
 
             if (shouldCloseDropdown) {
@@ -2279,40 +1956,30 @@ loadSpecificFonts(fontNames) {
                 return;
             }
 
-            // If clicking the same button again, fully deactivate.
             if (this.state.eraserMode === mode) {
                 this.deactivateEraser();
                 return;
             }
 
-            // --- IMMEDIATE VISUAL ACTIVATION ---
             this.state.eraserMode = mode;
-            this.state.isEraserArmed = false; // It's visually active, but not "armed" for clicking yet.
-
-            // Immediately hide the system mouse cursor
+            this.state.isEraserArmed = false;
             this.dom.movieCanvas.classList.add('erase-cursor');
-
-            // Update button states
             this.dom.eraseBtn.classList.toggle('active', mode === 'erase');
             this.dom.uneraseBtn.classList.toggle('active', mode === 'unerase');
             this.dom.eraseToolBtn.classList.add('active');
             document.getElementById('eraser-controls-wrapper').classList.remove('disabled');
-
-            // Immediately redraw the canvas to show the eraser circle
             this.drawFrame();
         },
         
         armEraser() {
-            // Do nothing if no mode is selected or if it's already armed.
             if (this.state.eraserMode === 'none' || this.state.isEraserArmed) return;
-
             this.state.isEraserArmed = true;
             this.dom.eraseToolDropdown.classList.remove('visible');
             this.showEraserHUD(true);
             this.updateEraserHudState();
             this.dom.movieCanvas.classList.add('erase-cursor');
             this.toast(`${this.state.eraserMode === 'erase' ? 'Erase' : 'Unerase'} Mode Armed. Click to use.`, 2500);
-            this.drawFrame(); // Crucial: redraws the overlay immediately
+            this.drawFrame();
         },
 
         armEraserFromHUD(mode) {
@@ -2541,7 +2208,13 @@ loadSpecificFonts(fontNames) {
                     proxyCanvas.height = proxyImage.naturalHeight;
                     const proxyCtx = proxyCanvas.getContext('2d');
                     proxyCtx.drawImage(proxyImage, 0, 0);
+                    
                     const restoredLayer = { ...savedLayer, asset, proxyCanvas, proxyCtx, createdAt: Date.now() };
+                    
+                    if (!restoredLayer.contentFrame) {
+                        restoredLayer.contentFrame = this.calculateContentBounds(proxyCanvas);
+                    }
+
                     delete restoredLayer.proxyCanvasDataURL;
                     return restoredLayer;
                 } catch (error) {
@@ -2598,8 +2271,6 @@ loadSpecificFonts(fontNames) {
                 this.saveState();
             }
         },
-
-        // --- UNDO/REDO METHODS ---
 
         debounce(func, delay) {
             let timeout;
@@ -2747,39 +2418,26 @@ loadSpecificFonts(fontNames) {
             this.dom.visualsBtn.addEventListener('click', e => { e.stopPropagation(); this.deactivateEraser(true); this.dom.visualsDropdown.classList.toggle('visible'); if (this.dom.visualsDropdown.classList.contains('visible')) { if (this.getActiveLayer() && this.getActiveLayer().type === 'image') { this.switchVisualsTab('asset'); } else { this.switchVisualsTab('background'); } } this.dom.shortcutsDropdown.classList.remove('visible'); this.dom.textDropdown.classList.remove('visible'); this.dom.eraseToolDropdown.classList.remove('visible'); this.dom.aiToolsDropdown.classList.remove('visible'); this.closeFontDropdown(); });
             this.dom.visualsTabAssetBtn.addEventListener('click', () => { this.switchVisualsTab('asset'); if (!this.getActiveLayer() || this.getActiveLayer().type !== 'image') { this.toast('Select an image layer to enable asset editing.', 3000); } });
             this.dom.visualsTabBackgroundBtn.addEventListener('click', () => this.switchVisualsTab('background'));
-                        // (inside setupEventListeners)
-                               // (inside the setupEventListeners function)
-
-            // --- REPLACE THIS ENTIRE BLOCK ---
             this.dom.eraseToolBtn.addEventListener('click', e => {
                 e.stopPropagation();
                 const isDropdownVisible = this.dom.eraseToolDropdown.classList.contains('visible');
-
-                // Case 1: The tool is armed and active (HUD is visible).
-                // The user wants to exit eraser mode completely.
                 if (this.state.isEraserArmed) {
-                    this.deactivateEraser(true); // Call the master reset.
+                    this.deactivateEraser(true);
                 }
-                // Case 2: The dropdown is open.
-                // The user is confirming their choice to arm the tool.
                 else if (isDropdownVisible) {
                     if (this.state.eraserMode !== 'none') {
                         this.state.isEraserArmed = true;
-                        this.showEraserHUD(true); // Show the HUD
+                        this.showEraserHUD(true);
                         this.updateEraserHudState();
                         this.dom.movieCanvas.classList.add('erase-cursor');
                         this.toast(`${this.state.eraserMode === 'erase' ? 'Erase' : 'Unerase'} Mode Armed`, 2000);
                     }
                     this.dom.eraseToolDropdown.classList.remove('visible');
-                    this.drawFrame(); // Redraw immediately
+                    this.drawFrame();
                 }
-                // Case 3: The tool is completely off.
-                // The user wants to start the process.
                 else {
-                    this.deactivateEraser(); // Ensure clean state before opening
+                    this.deactivateEraser();
                     this.dom.eraseToolDropdown.classList.add('visible');
-                    
-                    // Close all other dropdowns
                     this.dom.shortcutsDropdown.classList.remove('visible');
                     this.dom.visualsDropdown.classList.remove('visible');
                     this.dom.textDropdown.classList.remove('visible');
@@ -2787,7 +2445,6 @@ loadSpecificFonts(fontNames) {
                     this.closeFontDropdown();
                 }
             });
-            // --- END OF REPLACEMENT ---
             this.dom.fontSelectTrigger.addEventListener('click', (e) => { e.stopPropagation(); if (this.dom.customFontSelect.classList.contains('open')) { this.closeFontDropdown(); } else { this.openFontDropdown(); } });
             this.dom.fontSelectDropdown.addEventListener('mouseleave', () => this.handleFontHoverEnd());
             this.dom.eraseBtn.addEventListener('click', () => this.toggleDropdownEraserMode('erase'));
@@ -2875,17 +2532,11 @@ loadSpecificFonts(fontNames) {
                 this.dom.eraseToolDropdown,
                 this.dom.eraserHud
             ];
-
-                        // (inside the setupEventListeners function)
-
             dropdownsToScrub.forEach(dropdownEl => {
                 if (!dropdownEl) return;
                 dropdownEl.querySelectorAll('input[type="range"]').forEach(slider => {
-                    
-                    // --- THIS IS THE MODIFIED LINE ---
-                    // Exclude the strength sliders from both the main dropdown AND the HUD.
                     if (slider.id === 'eraser-strength-dropdown' || slider.id === 'mg-eraser-strength-mini') {
-                        return; // Do not attach the scrubbing listener to strength sliders.
+                        return;
                     }
 
                     const sliderContainer = slider.closest('.slider-container, .row');
@@ -2910,7 +2561,6 @@ loadSpecificFonts(fontNames) {
                 });
             });
 
-            // (Inside setupEventListeners)
 window.addEventListener('click', (e) => {
     const dropdowns = [
         { el: this.dom.visualsDropdown, btn: this.dom.visualsBtn },
@@ -2922,8 +2572,6 @@ window.addEventListener('click', (e) => {
 
     dropdowns.forEach(item => {
         if (item.el && item.el.classList.contains('visible') && !item.el.contains(e.target) && !item.btn.contains(e.target)) {
-            // *** THIS IS THE MODIFIED PART ***
-            // If we are closing the erase dropdown via a click-off, arm the tool.
             if (item.el === this.dom.eraseToolDropdown) {
                 this.armEraser();
             }
@@ -3042,7 +2690,6 @@ window.addEventListener('click', (e) => {
 
             const savedThemeName = localStorage.getItem('selectedTheme') || 'classic light';
             
-            // FIX: Apply the theme immediately on load to prevent color flashing.
             this.applyTheme(savedThemeName);
             
             this.state.originalTheme = savedThemeName;
